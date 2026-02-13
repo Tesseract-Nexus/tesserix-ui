@@ -1,5 +1,11 @@
 # @tesseract-nexus/tesserix-ui
 
+## 1.0.1
+
+### Patch Changes
+
+- Fix Sheet Storybook play test lint/type issue by removing an unused variable.
+
 ## 1.0.0
 
 ### Major Changes

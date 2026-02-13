@@ -1,6 +1,6 @@
 {
   "name": "@tesseract-nexus/tesserix-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tesserix Design System - Shared UI components built with shadcn/ui",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
