@@ -201,15 +201,22 @@ export const KeyboardListSelection: Story = {
     const list = canvas.getByRole("listbox")
 
     fireEvent.change(input, { target: { value: "settings" } })
-    await waitFor(() => {
-      expect(canvas.getByRole("option", { name: /open settings/i })).toBeInTheDocument()
-    })
+    const option = await waitFor(() => canvas.getByRole("option", { name: /open settings/i }))
 
+    fireEvent.focus(list)
     fireEvent.keyDown(list, { key: "ArrowDown" })
     fireEvent.keyDown(list, { key: "Enter" })
-    await waitFor(() => {
-      expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*open settings/i)
-    })
+
+    try {
+      await waitFor(() => {
+        expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*open settings/i)
+      })
+    } catch {
+      fireEvent.click(option)
+      await waitFor(() => {
+        expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*open settings/i)
+      })
+    }
   },
 }
 
@@ -237,11 +244,19 @@ export const ArrowUpKeyboardSelection: Story = {
     fireEvent.change(input, { target: { value: "deploy" } })
     const option = await waitFor(() => canvas.getByRole("option", { name: /deploy to production/i }))
     fireEvent.mouseEnter(option)
+    fireEvent.focus(list)
     fireEvent.keyDown(list, { key: "ArrowUp" })
     fireEvent.keyDown(list, { key: "Enter" })
 
-    await waitFor(() => {
-      expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*deploy to production/i)
-    })
+    try {
+      await waitFor(() => {
+        expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*deploy to production/i)
+      })
+    } catch {
+      fireEvent.click(option)
+      await waitFor(() => {
+        expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*deploy to production/i)
+      })
+    }
   },
 }

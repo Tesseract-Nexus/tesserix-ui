@@ -199,3 +199,51 @@ export const EnterWithNoResults: Story = {
     await expect(input).toHaveValue("zzzz")
   },
 }
+
+export const KeyboardEnterSelection: Story = {
+  render: () => (
+    <div className="w-[420px]">
+      <Combobox aria-label="Keyboard enter combobox" options={frameworkOptions} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "ang" } })
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole("option", { name: /angular/i })).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(input, { key: "ArrowDown" })
+    fireEvent.keyDown(input, { key: "Enter" })
+
+    await waitFor(() => {
+      expect(input).toHaveValue("Angular")
+      expect(input).toHaveAttribute("aria-expanded", "false")
+    })
+  },
+}
+
+export const ArrowUpWrapSelection: Story = {
+  render: () => (
+    <div className="w-[420px]">
+      <Combobox aria-label="Arrow up wrap combobox" options={frameworkOptions} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.keyDown(input, { key: "ArrowDown" })
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "true")
+    })
+
+    fireEvent.keyDown(input, { key: "ArrowUp" })
+    fireEvent.keyDown(input, { key: "Enter" })
+
+    await waitFor(() => {
+      expect(input).toHaveValue("Angular")
+    })
+  },
+}
