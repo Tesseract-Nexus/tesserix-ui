@@ -1,7 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
 import { expect, fireEvent, waitFor, within } from "storybook/test"
-import { skipInChromatic } from "../../../.storybook/chromatic-skip-helper"
 
 import { DatePicker } from "./date-picker"
 
@@ -45,7 +44,7 @@ export const Default: Story = {
 
 export const SelectDate: Story = {
   render: () => <DatePickerDemo />,
-  play: skipInChromatic(async ({ canvas }) => {
+  play: async ({ canvas }) => {
     const trigger = canvas.getByRole("button", { name: /select date/i })
     fireEvent.click(trigger)
 
@@ -70,6 +69,6 @@ export const SelectDate: Story = {
     await waitFor(() => {
       expect(canvas.getByText(/selected value: \d{4}-\d{2}-\d{2}/i)).toBeInTheDocument()
     })
-  }),
+  },
 }
 
