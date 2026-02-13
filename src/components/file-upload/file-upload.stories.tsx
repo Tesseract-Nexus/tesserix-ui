@@ -112,7 +112,7 @@ const dispatchDrop = (target: HTMLElement, files: File[]) => {
   Object.defineProperty(dropEvent, "dataTransfer", {
     value: { files },
   })
-  target.dispatchEvent(dropEvent)
+  fireEvent(target, dropEvent)
 }
 
 export const DragAndKeyboardUpload: Story = {

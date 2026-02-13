@@ -95,7 +95,7 @@ export const KeyboardEditing: Story = {
     Object.defineProperty(pasteEvent, "clipboardData", {
       value: { getData: () => "987654" },
     })
-    second.dispatchEvent(pasteEvent)
+    fireEvent(second, pasteEvent)
 
     await waitFor(() => {
       expect(canvas.getByText(/code: 987654/i)).toBeInTheDocument()
