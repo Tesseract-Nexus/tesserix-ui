@@ -39,9 +39,9 @@ Each component should have, where applicable:
 - [x] `popover`
 - [x] `sheet`
 - [x] `toast`
-- [ ] `tooltip`
-- [ ] `pagination`
-- [ ] `data-table`
+- [x] `tooltip`
+- [x] `pagination`
+- [x] `data-table`
 
 ## Tier 3
 

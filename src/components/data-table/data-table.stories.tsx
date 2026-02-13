@@ -143,3 +143,11 @@ export const KeyboardAndA11y: Story = {
     await expect(ownerHeader).toHaveTextContent(/owner/i)
   },
 }
+
+export const EmptyState: Story = {
+  render: () => <DataTable columns={columns} data={[]} emptyMessage="No projects available." defaultPageSize={5} />,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText(/no projects available\./i)).toBeInTheDocument()
+    await expect(canvas.getByText(/showing 0 of 0 row\(s\)/i)).toBeInTheDocument()
+  },
+}

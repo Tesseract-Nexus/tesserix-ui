@@ -163,3 +163,24 @@ export const Right: Story = {
     </Tooltip>
   ),
 }
+
+export const FocusAccessible: Story = {
+  render: () => (
+    <Tooltip content="Focus tooltip content" side="top">
+      <Button>Focus me</Button>
+    </Tooltip>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /focus me/i })
+
+    fireEvent.focusIn(trigger)
+    await waitFor(() => {
+      expect(within(document.body).getByRole('tooltip')).toHaveTextContent(/focus tooltip content/i)
+    })
+
+    fireEvent.focusOut(trigger)
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('tooltip')).not.toBeInTheDocument()
+    })
+  },
+}

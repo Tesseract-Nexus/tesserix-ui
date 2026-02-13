@@ -67,6 +67,47 @@ const InteractivePagination = () => {
   )
 }
 
+const BoundaryPagination = () => {
+  const [page, setPage] = React.useState(1)
+
+  return (
+    <div className="space-y-4">
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              disabled={page === 1}
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink isActive={page === 1} onClick={() => setPage(1)}>
+              1
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink isActive={page === 2} onClick={() => setPage(2)}>
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink isActive={page === 3} onClick={() => setPage(3)}>
+              3
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              disabled={page === 3}
+              onClick={() => setPage((current) => Math.min(3, current + 1))}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <p className="text-center text-sm text-muted-foreground">Current page: {page}</p>
+    </div>
+  )
+}
+
 export const Default: Story = {
   render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">
@@ -96,6 +137,25 @@ export const KeyboardAndClick: Story = {
     fireEvent.click(page10)
     await waitFor(() => {
       expect(page10).toHaveAttribute("aria-current", "page")
+    })
+  },
+}
+
+export const BoundaryStates: Story = {
+  render: () => <BoundaryPagination />,
+  play: async ({ canvas }) => {
+    const prev = canvas.getByRole("button", { name: /go to previous page/i })
+    const next = canvas.getByRole("button", { name: /go to next page/i })
+
+    await expect(prev).toBeDisabled()
+    await expect(canvas.getByRole("button", { name: "1" })).toHaveAttribute("aria-current", "page")
+
+    fireEvent.click(next)
+    fireEvent.click(next)
+    await waitFor(() => {
+      expect(canvas.getByText(/current page: 3/i)).toBeInTheDocument()
+      expect(next).toBeDisabled()
+      expect(canvas.getByRole("button", { name: "3" })).toHaveAttribute("aria-current", "page")
     })
   },
 }
