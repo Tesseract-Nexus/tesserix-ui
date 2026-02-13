@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Skeleton } from './skeleton'
 
 const meta = {
@@ -113,4 +114,11 @@ export const Card: Story = {
       </div>
     </div>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

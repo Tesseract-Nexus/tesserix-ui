@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Radio } from './radio'
 import { Label } from '../label'
 
@@ -152,5 +153,12 @@ export const DisabledChecked: Story = {
   args: {
     disabled: true,
     defaultChecked: true,
+  },
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
   },
 }

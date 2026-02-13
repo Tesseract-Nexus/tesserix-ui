@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Text } from './text'
 
 const meta = {
@@ -168,5 +169,12 @@ export const AsSpan: Story = {
   args: {
     as: 'span',
     children: sampleText,
+  },
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
   },
 }

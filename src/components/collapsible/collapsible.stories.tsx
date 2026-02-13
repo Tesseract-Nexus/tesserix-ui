@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible'
 
 const ChevronDownIcon = ({ className }: { className?: string }) => (
@@ -191,4 +192,11 @@ export const WithList: Story = {
       </Collapsible>
     </div>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

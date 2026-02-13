@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Toggle } from './toggle'
 
 const meta = {
@@ -112,5 +113,12 @@ export const Large: Story = {
   args: {
     size: 'lg',
     children: 'Toggle',
+  },
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
   },
 }

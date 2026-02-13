@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Textarea } from './textarea'
 import { Label } from '../label'
 import { Button } from '../button'
@@ -135,4 +136,11 @@ export const WithMaxLength: Story = {
       <p className="text-xs text-muted-foreground">280 characters maximum</p>
     </div>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

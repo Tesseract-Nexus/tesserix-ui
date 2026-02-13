@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { AspectRatio } from './aspect-ratio'
 
 const meta = {
@@ -140,4 +141,11 @@ export const Portrait: Story = {
       </AspectRatio>
     </div>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

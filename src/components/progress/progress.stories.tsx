@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Progress } from './progress'
 
 const meta = {
@@ -156,4 +157,11 @@ export const Complete: Story = {
     value: 100,
   },
   render: (args) => <Progress {...args} className="w-[300px]" />,
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

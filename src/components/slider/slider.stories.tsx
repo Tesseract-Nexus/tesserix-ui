@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Slider } from './slider'
 import { Label } from '../label'
 
@@ -115,4 +116,11 @@ export const WithSteps: Story = {
 
 export const Disabled: Story = {
   render: () => <Slider defaultValue={50} disabled className="w-[300px]" />,
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

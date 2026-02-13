@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Alert, AlertTitle, AlertDescription } from './alert'
 
 const meta = {
@@ -143,4 +144,11 @@ export const WithoutTitle: Story = {
       </AlertDescription>
     </Alert>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

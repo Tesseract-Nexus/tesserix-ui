@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Heading } from './heading'
 
 const meta = {
@@ -136,5 +137,12 @@ export const H6: Story = {
   args: {
     size: 'h6',
     children: 'The quick brown fox jumps over the lazy dog',
+  },
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
   },
 }

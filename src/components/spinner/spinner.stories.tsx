@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Spinner } from './spinner'
 import { Button } from '../button'
 
@@ -140,4 +141,11 @@ export const InButton: Story = {
       Loading...
     </Button>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 import { Select } from './select'
 import { Label } from '../label'
 
@@ -157,4 +158,11 @@ export const WithOptgroups: Story = {
       </optgroup>
     </Select>
   ),
+}
+
+export const SmokeTest: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement).toBeTruthy()
+  },
 }
