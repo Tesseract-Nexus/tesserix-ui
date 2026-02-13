@@ -196,3 +196,28 @@ export const Disabled: Story = {
     await expect(args.onClick).not.toHaveBeenCalled()
   },
 }
+
+export const AsChildLink: Story = {
+  render: () => (
+    <Button asChild variant="link">
+      <a href="#account-settings">Open account settings</a>
+    </Button>
+  ),
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: /open account settings/i })
+    await expect(link).toHaveAttribute('href', '#account-settings')
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Button>Enabled</Button>
+      <Button disabled>Disabled</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="destructive">Destructive</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="ghost">Ghost</Button>
+    </div>
+  ),
+}

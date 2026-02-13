@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
@@ -46,6 +47,32 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledDialogDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline">Open controlled dialog</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Controlled dialog</DialogTitle>
+            <DialogDescription>Open state is managed by the story render function.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <p className="text-sm text-muted-foreground">Dialog open: {open ? 'yes' : 'no'}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: () => (
@@ -247,5 +274,26 @@ export const WithFooter: Story = {
       expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
     })
     await expect(trigger).toHaveFocus()
+  },
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledDialogDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open controlled dialog/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument()
+      expect(canvas.getByText(/dialog open: yes/i)).toBeInTheDocument()
+    })
+
+    const closeButton = within(dialog).getByRole('button', { name: /close/i })
+    fireEvent.click(closeButton)
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(canvas.getByText(/dialog open: no/i)).toBeInTheDocument()
+    })
   },
 }

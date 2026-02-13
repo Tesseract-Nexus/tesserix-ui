@@ -177,3 +177,38 @@ export const Basic: Story = {
     })
   },
 }
+
+export const WithDisabledTab: Story = {
+  render: () => (
+    <Tabs defaultValue="tab1" className="w-[420px]">
+      <TabsList>
+        <TabsTrigger value="tab1">Overview</TabsTrigger>
+        <TabsTrigger value="tab2" disabled>
+          Billing (Locked)
+        </TabsTrigger>
+        <TabsTrigger value="tab3">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="tab1">
+        <p className="text-sm">Overview content</p>
+      </TabsContent>
+      <TabsContent value="tab2">
+        <p className="text-sm">Billing content</p>
+      </TabsContent>
+      <TabsContent value="tab3">
+        <p className="text-sm">Settings content</p>
+      </TabsContent>
+    </Tabs>
+  ),
+  play: async ({ canvas }) => {
+    const overview = canvas.getByRole('tab', { name: /overview/i })
+    const locked = canvas.getByRole('tab', { name: /billing \(locked\)/i })
+
+    await expect(overview).toHaveAttribute('aria-selected', 'true')
+    await expect(locked).toBeDisabled()
+
+    fireEvent.click(locked)
+    await waitFor(() => {
+      expect(overview).toHaveAttribute('aria-selected', 'true')
+    })
+  },
+}

@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, userEvent } from 'storybook/test'
 import { Input } from './input'
@@ -92,6 +93,25 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const ControlledInputDemo = () => {
+  const [value, setValue] = React.useState('Initial value')
+
+  return (
+    <div className="w-[360px] space-y-3">
+      <label htmlFor="controlled-input" className="text-sm font-medium text-card-foreground">
+        Controlled input
+      </label>
+      <Input
+        id="controlled-input"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder="Type to update state"
+      />
+      <p className="text-sm text-muted-foreground">Current value: {value}</p>
+    </div>
+  )
+}
+
 export const Default: Story = {
   args: {
     placeholder: 'Enter text...',
@@ -176,5 +196,45 @@ export const Search: Story = {
   args: {
     type: 'search',
     placeholder: 'Search...',
+  },
+}
+
+export const ValidationStates: Story = {
+  render: () => (
+    <div className="w-[360px] space-y-4">
+      <div className="space-y-1.5">
+        <label htmlFor="required-input" className="text-sm font-medium">
+          Required field
+        </label>
+        <Input id="required-input" placeholder="Project title" required />
+      </div>
+      <div className="space-y-1.5">
+        <label htmlFor="invalid-input" className="text-sm font-medium">
+          Invalid field
+        </label>
+        <Input
+          id="invalid-input"
+          aria-invalid="true"
+          defaultValue="bad-email"
+          className="border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20"
+        />
+      </div>
+      <div className="space-y-1.5">
+        <label htmlFor="readonly-input" className="text-sm font-medium">
+          Read-only field
+        </label>
+        <Input id="readonly-input" defaultValue="Read-only value" readOnly />
+      </div>
+    </div>
+  ),
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledInputDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByLabelText(/controlled input/i)
+    await userEvent.clear(input)
+    await userEvent.type(input, 'Controlled from story')
+    await expect(canvas.getByText(/current value: controlled from story/i)).toBeInTheDocument()
   },
 }

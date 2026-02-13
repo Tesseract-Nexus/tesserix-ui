@@ -275,6 +275,7 @@ Optional capabilities:
 ## 📚 Documentation
 
 - **[PRD.md](./PRD.md)** - Product Requirements Document
+- **[STORY_COVERAGE_PLAN.md](./STORY_COVERAGE_PLAN.md)** - Storybook coverage checklist and rollout plan
 - **[Storybook](http://localhost:6006)** - Interactive component documentation (run `npm run storybook`)
 - **Docs Site Source** - `docs-site/` (build with `npm run docs:build`)
 
