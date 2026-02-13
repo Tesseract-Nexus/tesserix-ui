@@ -49,6 +49,12 @@ const meta = {
   title: "DataDisplay/DataTable",
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Feature-rich data table with search, sort, pagination, optional column filters, and row selection workflows.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta
@@ -89,6 +95,13 @@ export const FilterAndSort: Story = {
       expect(tasksHeader).toHaveTextContent("▲")
     })
     await expect(canvas.getByText(/legacy migration/i)).toBeInTheDocument()
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Validates global filtering and sortable headers with direction indicator updates.",
+      },
+    },
   },
 }
 
@@ -186,5 +199,88 @@ export const PaginationAndSelectionToggle: Story = {
     await waitFor(() => {
       expect(canvas.getByText(/page 1 of 3/i)).toBeInTheDocument()
     })
+  },
+}
+
+export const PageClampRowsPerPageAndSelectAll: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={rows}
+      defaultPageSize={2}
+      pageSizeOptions={[2, 5, 10]}
+      enableRowSelection
+      getRowId={(row) => row.name}
+    />
+  ),
+  play: async ({ canvas }) => {
+    const next = canvas.getByRole("button", { name: /next/i })
+    const search = canvas.getByRole("searchbox")
+    const rowsPerPage = canvas.getByRole("combobox", { name: /rows per page/i })
+    const selectAll = canvas.getByRole("checkbox", { name: /select all rows/i })
+
+    fireEvent.click(next)
+    fireEvent.click(next)
+    await waitFor(() => {
+      expect(canvas.getByText(/page 3 of 3/i)).toBeInTheDocument()
+    })
+
+    fireEvent.change(search, { target: { value: "legacy" } })
+    await waitFor(() => {
+      expect(canvas.getByText(/page 1 of 1/i)).toBeInTheDocument()
+      expect(canvas.getByText(/legacy migration/i)).toBeInTheDocument()
+    })
+
+    fireEvent.change(rowsPerPage, { target: { value: "5" } })
+    fireEvent.change(search, { target: { value: "" } })
+    await waitFor(() => {
+      expect(canvas.getByText(/showing 5 of 6 row\(s\)/i)).toBeInTheDocument()
+      expect(canvas.getByText(/page 1 of 2/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(selectAll)
+    await waitFor(() => {
+      expect(canvas.getByText(/• 6 selected/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(selectAll)
+    await waitFor(() => {
+      expect(canvas.getByText(/• 0 selected/i)).toBeInTheDocument()
+    })
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Covers pagination clamp, rows-per-page updates, and select-all toggle (including deselection) across a changing dataset.",
+      },
+    },
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[1080px] gap-4 md:grid-cols-2">
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">Default</p>
+        <DataTable columns={columns} data={rows} defaultPageSize={3} />
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">Selectable + Filters</p>
+        <DataTable columns={columns} data={rows} defaultPageSize={3} enableRowSelection columnFiltersEnabled />
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4 md:col-span-2">
+        <p className="text-sm font-medium">Empty</p>
+        <DataTable columns={columns} data={[]} emptyMessage="No projects available." defaultPageSize={3} />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "State matrix for visual QA: baseline table, selectable/filterable mode, and explicit empty-state rendering.",
+      },
+    },
   },
 }

@@ -23,6 +23,12 @@ const meta = {
   component: Combobox,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Searchable combobox with full keyboard support (Arrow keys, Enter, Escape), controlled/uncontrolled modes, and disabled option handling.",
+      },
+    },
   },
   tags: ["autodocs"],
   args: {
@@ -115,6 +121,14 @@ export const KeyboardSelection: Story = {
     await waitFor(() => {
       expect(input).toHaveAttribute("aria-expanded", "false")
     })
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exercises open/close behavior, keyboard opening, mouse selection, and Escape handling for accessible command-style selection.",
+      },
+    },
   },
 }
 
@@ -251,5 +265,68 @@ export const ArrowUpWrapSelection: Story = {
       expect(input).toHaveValue("Angular")
       expect(input).toHaveAttribute("aria-expanded", "false")
     })
+  },
+}
+
+export const OutsideClickAndQueryReset: Story = {
+  render: () => (
+    <div className="w-[420px]">
+      <Combobox aria-label="Outside click combobox" options={frameworkOptions} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox", { name: /outside click combobox/i })
+
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "vu" } })
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "true")
+      expect(input).toHaveValue("vu")
+      expect(within(document.body).getByRole("option", { name: /vue/i })).toBeInTheDocument()
+    })
+
+    fireEvent.mouseDown(document.body)
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "false")
+      expect(input).toHaveValue("")
+    })
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Verifies outside-click dismissal and query reset behavior when the popover is closed.",
+      },
+    },
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[880px] gap-4 md:grid-cols-2">
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">Default</p>
+        <Combobox aria-label="Matrix default combobox" options={frameworkOptions} placeholder="Select framework" />
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">Preset Value</p>
+        <Combobox aria-label="Matrix preset combobox" options={frameworkOptions} defaultValue="vue" />
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">Disabled</p>
+        <Combobox aria-label="Matrix disabled combobox" options={frameworkOptions} disabled placeholder="Unavailable" />
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4">
+        <p className="text-sm font-medium">No Options</p>
+        <Combobox aria-label="Matrix empty combobox" options={[]} placeholder="No options available" />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "State matrix for design review: default, preset value, disabled field, and empty-options surface in one view.",
+      },
+    },
   },
 }
