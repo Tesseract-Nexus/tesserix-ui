@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent, waitFor } from 'storybook/test'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
@@ -269,6 +270,59 @@ export const KeyboardNavigation: Story = {
     await waitFor(() => {
       expect(overview).toHaveAttribute('aria-selected', 'true')
       expect(overview).toHaveFocus()
+    })
+  },
+}
+
+const ClickHandlerTabsDemo = () => {
+  const [value, setValue] = React.useState('overview')
+  const [clicks, setClicks] = React.useState(0)
+
+  return (
+    <div className="w-[420px] space-y-3">
+      <Tabs value={value} onValueChange={setValue}>
+        <TabsList>
+          <TabsTrigger
+            value="overview"
+            onClick={() => {
+              setClicks((current) => current + 1)
+            }}
+          >
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <p className="text-sm">Overview content</p>
+        </TabsContent>
+        <TabsContent value="settings">
+          <p className="text-sm">Settings content</p>
+        </TabsContent>
+      </Tabs>
+      <p className="text-sm text-muted-foreground" data-testid="tab-state">
+        Active: {value} | Clicks: {clicks}
+      </p>
+    </div>
+  )
+}
+
+export const ControlledClickCallback: Story = {
+  render: () => <ClickHandlerTabsDemo />,
+  play: async ({ canvas }) => {
+    const overview = canvas.getByRole('tab', { name: /overview/i })
+    const settings = canvas.getByRole('tab', { name: /settings/i })
+
+    fireEvent.click(settings)
+    await waitFor(() => {
+      expect(settings).toHaveAttribute('aria-selected', 'true')
+      expect(canvas.getByRole('tabpanel')).toHaveTextContent(/settings content/i)
+      expect(canvas.getByTestId('tab-state')).toHaveTextContent(/active:\s*settings/i)
+    })
+
+    fireEvent.click(overview)
+    await waitFor(() => {
+      expect(overview).toHaveAttribute('aria-selected', 'true')
+      expect(canvas.getByTestId('tab-state')).toHaveTextContent(/clicks:\s*1/i)
     })
   },
 }

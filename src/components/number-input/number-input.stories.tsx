@@ -88,6 +88,7 @@ export const KeyboardAndValidation: Story = {
     fireEvent.change(input, { target: { value: "12abc" } })
     await expect(input).toHaveValue("2")
 
+    fireEvent.focus(input)
     fireEvent.change(input, { target: { value: "-" } })
     fireEvent.blur(input)
     await waitFor(() => {
@@ -110,5 +111,39 @@ export const DisabledState: Story = {
     await expect(input).toBeDisabled()
     await expect(increase).toBeDisabled()
     await expect(decrease).toBeDisabled()
+  },
+}
+
+export const UncontrolledBlurCommit: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <label className="text-sm font-medium text-card-foreground" htmlFor="budget-input">
+        Budget
+      </label>
+      <NumberInput id="budget-input" aria-label="Budget" defaultValue={3} min={0} max={10} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("textbox", { name: /budget/i })
+    const increase = canvas.getByRole("button", { name: /increase value/i })
+
+    fireEvent.click(increase)
+    await waitFor(() => {
+      expect(input).toHaveValue("4")
+    })
+
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "7" } })
+    fireEvent.focusOut(input)
+    await waitFor(() => {
+      expect(input).toHaveValue("7")
+    })
+
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "-" } })
+    fireEvent.focusOut(input)
+    await waitFor(() => {
+      expect(input).toHaveValue("7")
+    })
   },
 }

@@ -151,3 +151,40 @@ export const EmptyState: Story = {
     await expect(canvas.getByText(/showing 0 of 0 row\(s\)/i)).toBeInTheDocument()
   },
 }
+
+export const PaginationAndSelectionToggle: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={rows}
+      defaultPageSize={2}
+      enableRowSelection
+      getRowId={(row) => row.name}
+    />
+  ),
+  play: async ({ canvas }) => {
+    const next = canvas.getByRole("button", { name: /next/i })
+    const previous = canvas.getByRole("button", { name: /previous/i })
+
+    await expect(previous).toBeDisabled()
+    await expect(canvas.getByText(/page 1 of 3/i)).toBeInTheDocument()
+
+    const rowOne = canvas.getByRole("checkbox", { name: /select row 1/i })
+    fireEvent.click(rowOne)
+    await expect(canvas.getByText(/• 1 selected/i)).toBeInTheDocument()
+
+    fireEvent.click(rowOne)
+    await expect(canvas.getByText(/• 0 selected/i)).toBeInTheDocument()
+
+    fireEvent.click(next)
+    await waitFor(() => {
+      expect(canvas.getByText(/page 2 of 3/i)).toBeInTheDocument()
+      expect(previous).not.toBeDisabled()
+    })
+
+    fireEvent.click(previous)
+    await waitFor(() => {
+      expect(canvas.getByText(/page 1 of 3/i)).toBeInTheDocument()
+    })
+  },
+}
