@@ -28,13 +28,21 @@ export interface HeadingProps
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
 }
 
+const headingElements = ["h1", "h2", "h3", "h4", "h5", "h6"] as const
+type HeadingElement = (typeof headingElements)[number]
+
+const isHeadingElement = (value: unknown): value is HeadingElement =>
+  typeof value === "string" && (headingElements as readonly string[]).includes(value)
+
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ className, size, as, ...props }, ref) => {
-    const Comp = as || (size as "h1" | "h2" | "h3" | "h4" | "h5" | "h6") || "h1"
+    const derivedTag = isHeadingElement(size) ? size : undefined
+    const Comp = as || derivedTag || "h1"
+    const variantSize: HeadingElement = size ?? as ?? "h1"
 
     return (
       <Comp
-        className={cn(headingVariants({ size: size || (as as any) }), className)}
+        className={cn(headingVariants({ size: variantSize }), className)}
         ref={ref}
         {...props}
       />

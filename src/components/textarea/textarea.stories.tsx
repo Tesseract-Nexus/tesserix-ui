@@ -122,7 +122,7 @@ export const Disabled: Story = {
 
 export const WithValue: Story = {
   args: {
-    value: 'This is a pre-filled textarea with some content that spans multiple lines.\n\nYou can edit this text or replace it entirely.',
+    defaultValue: 'This is a pre-filled textarea with some content that spans multiple lines.\n\nYou can edit this text or replace it entirely.',
     readOnly: false,
   },
 }
