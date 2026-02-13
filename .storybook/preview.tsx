@@ -5,8 +5,9 @@ const isVitest = Boolean((globalThis as { vitest?: unknown }).vitest)
 
 if (!isVitest) {
   void import('../src/themes/default.css')
-  void import('../src/themes/charcoal.css')
-  void import('../src/themes/ocean.css')
+  void import('../src/themes/emerald.css')
+  void import('../src/themes/sapphire.css')
+  void import('../src/themes/rose.css')
 }
 
 const withTheme: Decorator = (Story, context) => {
@@ -60,8 +61,9 @@ const preview: Preview = {
         icon: 'paintbrush',
         items: [
           { value: 'default', title: 'Default', icon: 'circlehollow' },
-          { value: 'charcoal', title: 'Charcoal', icon: 'circle' },
-          { value: 'ocean', title: 'Ocean', icon: 'browser' },
+          { value: 'emerald', title: 'Emerald', icon: 'grow' },
+          { value: 'sapphire', title: 'Sapphire', icon: 'component' },
+          { value: 'rose', title: 'Rose', icon: 'heart' },
         ],
         dynamicTitle: true,
       },
