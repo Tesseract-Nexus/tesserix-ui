@@ -23,7 +23,7 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 ## 📊 Status
 
 **Current Version:** 0.1.0 (Alpha)
-**Components:** 38 components
+**Components:** 40 components
 **Story Tests:** 147 passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
@@ -170,7 +170,9 @@ module.exports = {
 - `Button`, `Card`, `Checkbox`, `Collapsible`, `Dialog`, `DropdownMenu`
 - `Combobox`
 - `Command`
+- `ContextMenu`
 - `DatePicker`
+- `EmptyState`
 - `FileUpload`
 - `Pagination`
 - `Stepper`
