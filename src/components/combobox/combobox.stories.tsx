@@ -90,16 +90,23 @@ export const KeyboardSelection: Story = {
     await waitFor(() => {
       expect(input).toHaveAttribute("aria-expanded", "true")
     })
+    await waitFor(() => {
+      expect(within(document.body).getByRole("option", { name: /react/i })).toBeInTheDocument()
+    })
     fireEvent.keyDown(input, { key: "Enter" })
 
-    await expect(input).toHaveValue("React")
+    await waitFor(() => {
+      expect(input).toHaveValue("React")
+    })
 
     fireEvent.focus(input)
     fireEvent.change(input, { target: { value: "next" } })
     await expect(within(document.body).getByRole("option", { name: /next\.js/i })).toBeInTheDocument()
 
     fireEvent.keyDown(input, { key: "Escape" })
-    await expect(input).toHaveAttribute("aria-expanded", "false")
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "false")
+    })
   },
 }
 

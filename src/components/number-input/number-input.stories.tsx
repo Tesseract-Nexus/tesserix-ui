@@ -59,9 +59,9 @@ export const StepAndClamp: Story = {
       expect(canvas.getByText(/quantity: 10/i)).toBeInTheDocument()
     })
 
-    for (let i = 0; i < 12; i += 1) {
-      fireEvent.click(decrement)
-    }
+    fireEvent.change(input, { target: { value: "-5" } })
+    fireEvent.keyDown(input, { key: "Enter" })
+    fireEvent.click(decrement)
     await waitFor(() => {
       expect(canvas.getByText(/quantity: 0/i)).toBeInTheDocument()
     })
