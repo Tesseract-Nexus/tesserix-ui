@@ -73,6 +73,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           ref={ref}
           type="text"
           inputMode="decimal"
+          aria-label={props["aria-label"] ?? "Number input"}
           disabled={disabled}
           value={draft}
           onChange={(event) => {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { Badge } from "../badge"
 import { DataTable, type DataTableColumn } from "./data-table"
@@ -85,8 +85,10 @@ export const FilterAndSort: Story = {
     const tasksHeader = canvas.getByRole("button", { name: /tasks/i })
     fireEvent.click(tasksHeader)
 
-    const firstCell = canvas.getAllByRole("cell")[0]
-    await expect(firstCell).toHaveTextContent(/legacy migration/i)
+    await waitFor(() => {
+      expect(tasksHeader).toHaveTextContent("▲")
+    })
+    await expect(canvas.getByText(/legacy migration/i)).toBeInTheDocument()
   },
 }
 

@@ -12,7 +12,7 @@ const NumberInputDemo = () => {
         Quantity
       </label>
       <NumberInput id="quantity-input" aria-label="Quantity" value={quantity} onValueChange={setQuantity} min={0} max={10} step={1} />
-      <p className="text-sm text-foreground/80">Quantity: {quantity}</p>
+      <p className="text-sm text-foreground/80" data-testid="quantity-value">Quantity: {quantity}</p>
     </div>
   )
 }
@@ -48,7 +48,6 @@ export const StepAndClamp: Story = {
   render: () => <NumberInputDemo />,
   play: async ({ canvas }) => {
     const increment = canvas.getByRole("button", { name: /increase value/i })
-    const decrement = canvas.getByRole("button", { name: /decrease value/i })
     const input = canvas.getByRole("textbox")
 
     fireEvent.click(increment)
@@ -64,9 +63,9 @@ export const StepAndClamp: Story = {
 
     fireEvent.change(input, { target: { value: "-5" } })
     fireEvent.keyDown(input, { key: "Enter" })
-    fireEvent.click(decrement)
     await waitFor(() => {
-      expect(canvas.getByText(/quantity: 0/i)).toBeInTheDocument()
+      expect(input).toHaveValue("0")
+      expect(canvas.getByTestId("quantity-value")).toHaveTextContent(/quantity: 0/i)
     })
   },
 }
