@@ -47,6 +47,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
+  parameters: {
+    chromatic: { delay: 300 },
+  },
   render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">
       <div className="mx-auto w-full max-w-5xl rounded-3xl border bg-card p-6 shadow-lg md:p-8">
