@@ -178,3 +178,74 @@ export const MinimalShell: Story = {
     await expect(canvas.getByText(/primary workspace/i)).toBeInTheDocument()
   },
 }
+
+export const SidebarWithSubItems: Story = {
+  render: () => (
+    <AppShell>
+      <AppShellSidebar>
+        <div className="mb-5 flex items-center justify-between">
+          <p className="text-sm font-semibold">Tesserix</p>
+          <Badge variant="outline">Team</Badge>
+        </div>
+        <SidebarNav>
+          <SidebarNavSection>
+            <SidebarNavLabel>Workspace</SidebarNavLabel>
+            <SidebarNavList>
+              <li>
+                <SidebarNavItem href="#" icon={<IconHome />} active>
+                  Projects
+                </SidebarNavItem>
+                <ul className="mt-1 space-y-1 pl-8">
+                  <li>
+                    <SidebarNavItem href="#" className="py-1.5 text-xs">
+                      Active
+                    </SidebarNavItem>
+                  </li>
+                  <li>
+                    <SidebarNavItem href="#" className="py-1.5 text-xs" active>
+                      Backlog
+                    </SidebarNavItem>
+                  </li>
+                  <li>
+                    <SidebarNavItem href="#" className="py-1.5 text-xs">
+                      Archived
+                    </SidebarNavItem>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <SidebarNavItem href="#" icon={<IconChart />}>
+                  Analytics
+                </SidebarNavItem>
+              </li>
+            </SidebarNavList>
+          </SidebarNavSection>
+        </SidebarNav>
+      </AppShellSidebar>
+
+      <AppShellMain>
+        <AppShellHeader>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">Project Workspace</p>
+            <Button size="sm">Create Project</Button>
+          </div>
+        </AppShellHeader>
+        <AppShellContent className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Backlog Board</CardTitle>
+              <CardDescription>Nested sidebar links keep parent and child navigation grouped.</CardDescription>
+            </CardHeader>
+            <CardContent>Choose a sub-item on the left to filter project lists.</CardContent>
+          </Card>
+        </AppShellContent>
+      </AppShellMain>
+    </AppShell>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /^projects$/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /^backlog$/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("button", { name: /create project/i })).toBeInTheDocument()
+  },
+}

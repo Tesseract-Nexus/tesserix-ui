@@ -240,10 +240,16 @@ export const ArrowUpWrapSelection: Story = {
     })
 
     fireEvent.keyDown(input, { key: "ArrowUp" })
+
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-activedescendant", expect.stringMatching(/angular$/))
+    })
+
     fireEvent.keyDown(input, { key: "Enter" })
 
     await waitFor(() => {
       expect(input).toHaveValue("Angular")
+      expect(input).toHaveAttribute("aria-expanded", "false")
     })
   },
 }

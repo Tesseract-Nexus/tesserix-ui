@@ -96,3 +96,50 @@ export const Compact: Story = {
     await expect(canvas.getByRole("link", { name: /team/i })).toBeInTheDocument()
   },
 }
+
+export const WithSubItems: Story = {
+  render: () => (
+    <div className="w-[300px] rounded-2xl border bg-card p-3">
+      <SidebarNav>
+        <SidebarNavSection>
+          <SidebarNavLabel>Projects</SidebarNavLabel>
+          <SidebarNavList>
+            <li>
+              <SidebarNavItem href="#" active icon={<IconGrid />}>
+                Platform
+              </SidebarNavItem>
+              <ul className="mt-1 space-y-1 pl-8">
+                <li>
+                  <SidebarNavItem href="#" className="py-1.5 text-xs">
+                    Overview
+                  </SidebarNavItem>
+                </li>
+                <li>
+                  <SidebarNavItem href="#" className="py-1.5 text-xs" active>
+                    Releases
+                  </SidebarNavItem>
+                </li>
+                <li>
+                  <SidebarNavItem href="#" className="py-1.5 text-xs">
+                    Environments
+                  </SidebarNavItem>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <SidebarNavItem href="#" icon={<IconUsers />}>
+                Team
+              </SidebarNavItem>
+            </li>
+          </SidebarNavList>
+        </SidebarNavSection>
+      </SidebarNav>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /^platform$/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /^releases$/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /^environments$/i })).toBeInTheDocument()
+  },
+}
