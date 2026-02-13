@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent } from 'storybook/test'
 import { Select } from './select'
@@ -53,6 +54,22 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledSelectDemo = () => {
+  const [value, setValue] = React.useState("medium")
+
+  return (
+    <div className="w-[320px] space-y-2">
+      <Label htmlFor="controlled-select">Priority</Label>
+      <Select id="controlled-select" value={value} onChange={(event) => setValue(event.target.value)}>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </Select>
+      <p className="text-sm text-muted-foreground">Current priority: {value}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: () => (
@@ -185,4 +202,29 @@ export const KeyboardAndA11y: Story = {
     fireEvent.change(select, { target: { value: "high" } })
     await expect(select).toHaveValue("high")
   },
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledSelectDemo />,
+  play: async ({ canvas }) => {
+    const select = canvas.getByLabelText(/priority/i) as HTMLSelectElement
+    await expect(select).toHaveValue("medium")
+    fireEvent.change(select, { target: { value: "high" } })
+    await expect(canvas.getByText(/current priority: high/i)).toBeInTheDocument()
+  },
+}
+
+export const InvalidState: Story = {
+  render: () => (
+    <div className="w-[320px] space-y-2">
+      <Label htmlFor="invalid-select">Environment</Label>
+      <Select id="invalid-select" aria-invalid="true" defaultValue="" className="border-destructive focus-visible:border-destructive">
+        <option value="">Select environment</option>
+        <option value="dev">Development</option>
+        <option value="staging">Staging</option>
+        <option value="prod">Production</option>
+      </Select>
+      <p className="text-xs text-destructive">Please select an environment.</p>
+    </div>
+  ),
 }

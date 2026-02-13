@@ -31,10 +31,10 @@ Each component should have, where applicable:
 
 ## Tier 2 (Next)
 
-- [ ] `select`
-- [ ] `combobox`
-- [ ] `command`
-- [ ] `dropdown-menu`
+- [x] `select`
+- [x] `combobox`
+- [x] `command`
+- [x] `dropdown-menu`
 - [ ] `context-menu`
 - [ ] `popover`
 - [ ] `sheet`

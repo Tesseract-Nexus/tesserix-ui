@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent, waitFor } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { Button } from "../button"
 import {
@@ -138,6 +138,34 @@ export const KeyboardSelection: Story = {
 
     await waitFor(() => {
       expect(canvas.getByText(/selected: deploy to production/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const EmptyResults: Story = {
+  render: () => <InlineCommandDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByPlaceholderText(/search commands/i)
+    fireEvent.change(input, { target: { value: "does-not-exist" } })
+    await waitFor(() => {
+      expect(canvas.queryAllByRole("option")).toHaveLength(0)
+    })
+  },
+}
+
+export const DialogInteraction: Story = {
+  render: () => <DialogCommandDemo />,
+  play: async ({ canvas }) => {
+    const openButton = canvas.getByRole("button", { name: /open command palette/i })
+    fireEvent.click(openButton)
+
+    const dialogInput = await waitFor(() => within(document.body).getByRole("textbox", { name: /type a command/i }))
+    fireEvent.change(dialogInput, { target: { value: "billing" } })
+    const billingOption = within(document.body).getByRole("option", { name: /go to billing/i })
+    fireEvent.click(billingOption)
+
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("textbox", { name: /type a command/i })).not.toBeInTheDocument()
     })
   },
 }

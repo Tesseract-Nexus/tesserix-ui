@@ -1,3 +1,4 @@
+import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
 import { expect, fireEvent, waitFor, within } from "storybook/test"
 
@@ -27,6 +28,24 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledComboboxDemo = () => {
+  const [value, setValue] = React.useState("nextjs")
+
+  return (
+    <div className="w-[420px] space-y-2">
+      <label className="text-sm font-medium text-card-foreground">Controlled framework</label>
+      <Combobox
+        options={frameworkOptions}
+        value={value}
+        onValueChange={setValue}
+        placeholder="Choose framework"
+        searchPlaceholder="Search framework..."
+      />
+      <p className="text-sm text-muted-foreground">Current value: {value}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: (args) => (
@@ -81,5 +100,34 @@ export const KeyboardSelection: Story = {
 
     fireEvent.keyDown(input, { key: "Escape" })
     await expect(input).toHaveAttribute("aria-expanded", "false")
+  },
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledComboboxDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "vue" } })
+
+    const vueOption = await waitFor(() => within(document.body).getByRole("option", { name: /vue/i }))
+    fireEvent.click(vueOption)
+
+    await waitFor(() => {
+      expect(canvas.getByText(/current value: vue/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="w-[420px] space-y-2">
+      <label className="text-sm font-medium text-card-foreground">Disabled combobox</label>
+      <Combobox options={frameworkOptions} disabled placeholder="Unavailable" />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    await expect(input).toBeDisabled()
   },
 }

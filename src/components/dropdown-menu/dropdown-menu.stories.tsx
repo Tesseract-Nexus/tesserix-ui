@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
@@ -45,6 +46,25 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledDropdownDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Open controlled menu</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <p className="text-sm text-muted-foreground">Menu open: {open ? 'yes' : 'no'}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: () => (
@@ -227,4 +247,48 @@ export const WithShortcuts: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledDropdownDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open controlled menu/i })
+    fireEvent.click(trigger)
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole('menu')).toBeInTheDocument()
+      expect(canvas.getByText(/menu open: yes/i)).toBeInTheDocument()
+    })
+
+    const profileItem = within(document.body).getByRole('menuitem', { name: /profile/i })
+    fireEvent.click(profileItem)
+
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
+      expect(canvas.getByText(/menu open: no/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const DisabledItem: Story = {
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline">Open disabled item menu</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem disabled>Archive (Unavailable)</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open disabled item menu/i })
+    fireEvent.click(trigger)
+
+    const disabledItem = await waitFor(() =>
+      within(document.body).getByRole('menuitem', { name: /archive \(unavailable\)/i })
+    )
+    await expect(disabledItem).toBeDisabled()
+  },
 }
