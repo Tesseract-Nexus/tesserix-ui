@@ -23,7 +23,7 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 ## 📊 Status
 
 **Current Version:** 0.1.3 (Alpha)
-**Components:** 47 components across 6 categories
+**Components:** 50 components across 6 categories
 **Story Tests:** 160+ passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
@@ -188,8 +188,8 @@ Generated files in `src/themes/` should be treated as build artifacts and not ed
 ### Navigation (4)
 `Breadcrumb`, `Pagination`, `Tabs`, `Stepper`
 
-### Layout (4)
-`Accordion`, `AspectRatio`, `Collapsible`, `Separator`
+### Layout (7)
+`Accordion`, `AppShell`, `AspectRatio`, `Collapsible`, `PageHeader`, `Separator`, `SidebarNav`
 
 ### Typography (3)
 `Heading`, `Label`, `Text`
