@@ -35,10 +35,10 @@ Each component should have, where applicable:
 - [x] `combobox`
 - [x] `command`
 - [x] `dropdown-menu`
-- [ ] `context-menu`
-- [ ] `popover`
-- [ ] `sheet`
-- [ ] `toast`
+- [x] `context-menu`
+- [x] `popover`
+- [x] `sheet`
+- [x] `toast`
 - [ ] `tooltip`
 - [ ] `pagination`
 - [ ] `data-table`

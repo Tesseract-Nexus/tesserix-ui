@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
@@ -46,6 +47,32 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledSheetDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline">Open controlled sheet</Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Controlled Sheet</SheetTitle>
+            <SheetDescription>Open state is controlled by the parent story.</SheetDescription>
+          </SheetHeader>
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">Close</Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+      <p className="text-sm text-muted-foreground">Sheet open: {open ? 'yes' : 'no'}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: () => (
@@ -289,4 +316,25 @@ export const WithForm: Story = {
       </SheetContent>
     </Sheet>
   ),
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledSheetDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open controlled sheet/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument()
+      expect(canvas.getByText(/sheet open: yes/i)).toBeInTheDocument()
+    })
+
+    const closeButtons = within(dialog).getAllByRole('button', { name: /close/i })
+    fireEvent.click(closeButtons[0])
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(canvas.getByText(/sheet open: no/i)).toBeInTheDocument()
+    })
+  },
 }

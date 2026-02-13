@@ -1,3 +1,4 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import { Popover, PopoverTrigger, PopoverContent } from './popover'
@@ -37,6 +38,24 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+const ControlledPopoverDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline">Open controlled popover</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <p className="text-sm">Controlled popover content.</p>
+        </PopoverContent>
+      </Popover>
+      <p className="text-sm text-muted-foreground">Popover open: {open ? 'yes' : 'no'}</p>
+    </div>
+  )
+}
 
 export const Default: Story = {
   render: () => (
@@ -241,4 +260,23 @@ export const WithActions: Story = {
       </PopoverContent>
     </Popover>
   ),
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledPopoverDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open controlled popover/i })
+    fireEvent.click(trigger)
+
+    await waitFor(() => {
+      expect(within(document.body).getByText(/controlled popover content\./i)).toBeInTheDocument()
+      expect(canvas.getByText(/popover open: yes/i)).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => {
+      expect(within(document.body).queryByText(/controlled popover content\./i)).not.toBeInTheDocument()
+      expect(canvas.getByText(/popover open: no/i)).toBeInTheDocument()
+    })
+  },
 }

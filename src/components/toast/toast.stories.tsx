@@ -1,3 +1,4 @@
+import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
 import { expect, fireEvent, waitFor, within } from "storybook/test"
 
@@ -72,6 +73,30 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const ActionToastDemo = () => {
+  const { toast } = useToast()
+  const [actionState, setActionState] = React.useState("none")
+
+  return (
+    <div className="space-y-3">
+      <Button
+        onClick={() =>
+          toast({
+            title: "Deployment available",
+            description: "Review release notes before rollout.",
+            variant: "info",
+            actionLabel: "View",
+            onAction: () => setActionState("view"),
+          })
+        }
+      >
+        Open Action Toast
+      </Button>
+      <p className="text-sm text-muted-foreground">Action clicked: {actionState}</p>
+    </div>
+  )
+}
+
 export const Default: Story = {
   render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">
@@ -110,6 +135,28 @@ export const Simple: Story = {
     const closeButton = within(status).getByRole("button", { name: /close notification/i })
     fireEvent.click(closeButton)
     await waitFor(() => {
+      expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    })
+  },
+}
+
+export const ActionCallback: Story = {
+  render: () => (
+    <ToastProvider>
+      <ActionToastDemo />
+      <ToastViewport />
+    </ToastProvider>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole("button", { name: /open action toast/i })
+    fireEvent.click(trigger)
+
+    const status = await waitFor(() => within(document.body).getByRole("status"))
+    const actionButton = within(status).getByRole("button", { name: /view/i })
+    fireEvent.click(actionButton)
+
+    await waitFor(() => {
+      expect(canvas.getByText(/action clicked: view/i)).toBeInTheDocument()
       expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
     })
   },

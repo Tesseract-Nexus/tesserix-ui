@@ -43,6 +43,25 @@ const InteractiveContextMenu = () => {
   )
 }
 
+const ControlledContextMenuDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-4">
+      <ContextMenu open={open} onOpenChange={setOpen}>
+        <ContextMenuTrigger className="rounded-xl border bg-card p-6 text-sm text-card-foreground">
+          Controlled menu trigger
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem onClick={() => setOpen(false)}>Inspect</ContextMenuItem>
+          <ContextMenuItem onClick={() => setOpen(false)}>Copy link</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+      <p className="text-sm text-foreground">Menu open: {open ? "yes" : "no"}</p>
+    </div>
+  )
+}
+
 const meta = {
   title: "Navigation/ContextMenu",
   component: ContextMenu,
@@ -84,6 +103,26 @@ export const RightClickAction: Story = {
 
     await waitFor(() => {
       expect(canvas.getByText(/last action: rename/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledContextMenuDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByText(/controlled menu trigger/i)
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: "F10", shiftKey: true })
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole("menu")).toBeInTheDocument()
+      expect(canvas.getByText(/menu open: yes/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(within(document.body).getByRole("menuitem", { name: /inspect/i }))
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("menu")).not.toBeInTheDocument()
+      expect(canvas.getByText(/menu open: no/i)).toBeInTheDocument()
     })
   },
 }
