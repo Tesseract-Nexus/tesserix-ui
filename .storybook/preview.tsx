@@ -10,7 +10,7 @@ if (!isVitest) {
   void import('../src/themes/rose.css')
   void import('../src/themes/amber.css')
   void import('../src/themes/violet.css')
-  void import('../src/themes/slate.css')
+  void import('../src/themes/teal.css')
 }
 
 const withTheme: Decorator = (Story, context) => {
@@ -69,7 +69,7 @@ const preview: Preview = {
           { value: 'rose', title: 'Rose', icon: 'heart' },
           { value: 'amber', title: 'Amber', icon: 'starhollow' },
           { value: 'violet', title: 'Violet', icon: 'beaker' },
-          { value: 'slate', title: 'Slate', icon: 'sidebar' },
+          { value: 'teal', title: 'Teal', icon: 'water' },
         ],
         dynamicTitle: true,
       },
