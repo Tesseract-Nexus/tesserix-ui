@@ -69,3 +69,46 @@ export const StepAndClamp: Story = {
     })
   },
 }
+
+export const KeyboardAndValidation: Story = {
+  render: () => <NumberInputDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("textbox")
+
+    fireEvent.keyDown(input, { key: "ArrowUp" })
+    await waitFor(() => {
+      expect(canvas.getByTestId("quantity-value")).toHaveTextContent(/quantity: 3/i)
+    })
+
+    fireEvent.keyDown(input, { key: "ArrowDown" })
+    await waitFor(() => {
+      expect(canvas.getByTestId("quantity-value")).toHaveTextContent(/quantity: 2/i)
+    })
+
+    fireEvent.change(input, { target: { value: "12abc" } })
+    await expect(input).toHaveValue("2")
+
+    fireEvent.change(input, { target: { value: "-" } })
+    fireEvent.blur(input)
+    await waitFor(() => {
+      expect(canvas.getByTestId("quantity-value")).toHaveTextContent(/quantity: 2/i)
+    })
+  },
+}
+
+export const DisabledState: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <NumberInput aria-label="Disabled quantity" defaultValue={4} disabled />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("textbox", { name: /disabled quantity/i })
+    const increase = canvas.getByRole("button", { name: /increase value/i })
+    const decrease = canvas.getByRole("button", { name: /decrease value/i })
+
+    await expect(input).toBeDisabled()
+    await expect(increase).toBeDisabled()
+    await expect(decrease).toBeDisabled()
+  },
+}

@@ -100,3 +100,51 @@ export const ValidationAndLimits: Story = {
     })
   },
 }
+
+const UncontrolledFileUploadDemo = () => (
+  <div className="space-y-3">
+    <FileUpload helperText="Use keyboard or drag and drop." maxFiles={3} />
+  </div>
+)
+
+export const DragAndKeyboardUpload: Story = {
+  render: () => <UncontrolledFileUploadDemo />,
+  play: async ({ canvas }) => {
+    const dropzone = canvas.getByRole("button")
+    const input = canvas.getByLabelText(/upload files/i, { selector: "input" })
+
+    fireEvent.keyDown(dropzone, { key: " " })
+    fireEvent.keyDown(dropzone, { key: "Enter" })
+    fireEvent.dragOver(dropzone)
+    fireEvent.dragLeave(dropzone)
+
+    const dragFile = new File(["alpha"], "drag.txt", { type: "text/plain" })
+    fireEvent.drop(dropzone, { dataTransfer: { files: [dragFile] } })
+    await waitFor(() => {
+      expect(canvas.getByRole("button", { name: /remove drag\.txt/i })).toBeInTheDocument()
+    })
+
+    const pickedFile = new File(["beta"], "pick.txt", { type: "text/plain" })
+    fireEvent.change(input, { target: { files: [pickedFile] } })
+    await waitFor(() => {
+      expect(canvas.getByRole("button", { name: /remove pick\.txt/i })).toBeInTheDocument()
+    })
+  },
+}
+
+export const DisabledDropzone: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <FileUpload disabled helperText="Disabled uploader" />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const dropzone = canvas.getByRole("button")
+    const disabledFile = new File(["x"], "disabled.txt", { type: "text/plain" })
+    fireEvent.dragOver(dropzone)
+    fireEvent.drop(dropzone, { dataTransfer: { files: [disabledFile] } })
+
+    await expect(dropzone).toHaveAttribute("aria-disabled", "true")
+    await expect(canvas.queryByRole("button", { name: /remove disabled\.txt/i })).not.toBeInTheDocument()
+  },
+}

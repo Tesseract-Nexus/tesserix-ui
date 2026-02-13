@@ -12,6 +12,12 @@ const frameworkOptions = [
   { value: "angular", label: "Angular" },
 ]
 
+const frameworkOptionsWithDisabled = [
+  { value: "react", label: "React" },
+  { value: "legacy", label: "Legacy Framework", disabled: true },
+  { value: "vue", label: "Vue" },
+]
+
 const meta = {
   title: "Forms/Combobox",
   component: Combobox,
@@ -138,5 +144,59 @@ export const Disabled: Story = {
   play: async ({ canvas }) => {
     const input = canvas.getByRole("combobox")
     await expect(input).toBeDisabled()
+  },
+}
+
+export const DisabledOptionAndMouseInteractions: Story = {
+  render: () => (
+    <div className="w-[420px] space-y-2">
+      <Combobox
+        aria-label="Framework with disabled option"
+        options={frameworkOptionsWithDisabled}
+        placeholder="Select framework"
+      />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.keyDown(input, { key: "ArrowDown" })
+
+    const legacyOption = await waitFor(() =>
+      within(document.body).getByRole("option", { name: /legacy framework/i })
+    )
+    const vueOption = within(document.body).getByRole("option", { name: /vue/i })
+
+    fireEvent.mouseEnter(vueOption)
+    fireEvent.mouseDown(legacyOption)
+    fireEvent.click(legacyOption)
+    await expect(input).toHaveValue("")
+
+    fireEvent.keyDown(input, { key: "ArrowUp" })
+    fireEvent.keyDown(input, { key: "Enter" })
+    await waitFor(() => {
+      expect(input).toHaveValue("Vue")
+      expect(input).toHaveAttribute("aria-expanded", "false")
+    })
+  },
+}
+
+export const EnterWithNoResults: Story = {
+  render: () => (
+    <div className="w-[420px]">
+      <Combobox aria-label="No result combobox" options={frameworkOptions} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "zzzz" } })
+
+    await waitFor(() => {
+      expect(within(document.body).getByText(/no results found\./i)).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(input, { key: "Enter" })
+    await expect(input).toHaveValue("zzzz")
   },
 }
