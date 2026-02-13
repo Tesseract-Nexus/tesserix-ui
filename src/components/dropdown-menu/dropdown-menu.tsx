@@ -19,7 +19,7 @@ const useDropdownMenu = () => {
   return context
 }
 
-interface DropdownMenuProps {
+export interface DropdownMenuProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void

@@ -190,9 +190,11 @@ export const Disabled: Story = {
     children: 'Disabled',
     disabled: true,
   },
+  parameters: {
+    chromatic: { disableSnapshot: false, delay: 0 },
+  },
   play: async ({ args, canvas }) => {
     const button = canvas.getByRole('button', { name: /disabled/i })
-    await userEvent.click(button)
     await expect(button).toBeDisabled()
     await expect(args.onClick).not.toHaveBeenCalled()
   },

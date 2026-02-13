@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "../../lib/utils"
 
-interface AspectRatioProps extends React.ComponentPropsWithoutRef<"div"> {
+export interface AspectRatioProps extends React.ComponentPropsWithoutRef<"div"> {
   ratio?: number
 }
 

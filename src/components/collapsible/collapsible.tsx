@@ -17,7 +17,7 @@ const useCollapsible = () => {
   return context
 }
 
-interface CollapsibleProps extends React.ComponentPropsWithoutRef<"div"> {
+export interface CollapsibleProps extends React.ComponentPropsWithoutRef<"div"> {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void

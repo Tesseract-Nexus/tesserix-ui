@@ -20,7 +20,7 @@ const useDialog = () => {
   return context
 }
 
-interface DialogProps {
+export interface DialogProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void

@@ -20,7 +20,7 @@ const useSheet = () => {
   return context
 }
 
-interface SheetProps {
+export interface SheetProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void

@@ -20,7 +20,7 @@ const usePopover = () => {
   return context
 }
 
-interface PopoverProps {
+export interface PopoverProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void

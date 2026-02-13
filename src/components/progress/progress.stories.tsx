@@ -42,7 +42,7 @@ export const Default: Story = {
   args: {
     value: 33,
   },
-  render: (args) => (
+  render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">
       <div className="mx-auto w-full max-w-3xl rounded-3xl border bg-card p-6 shadow-lg md:p-8">
         <div className="mb-6 space-y-1">
