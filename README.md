@@ -260,7 +260,7 @@ CI:
 - `.github/workflows/storybook-ci.yml` runs `build-storybook` and `test:storybook` on PRs and pushes to `main`.
 
 Optional capabilities:
-- Accessibility checks: install and enable `@storybook/addon-a11y`, then run `test:storybook` to include a11y assertions in Storybook test runs.
+- Accessibility checks: `@storybook/addon-a11y` is enabled globally with `a11y.test: "error"` in `.storybook/preview.tsx`, so `npm run test:storybook` fails on accessibility violations.
 - Coverage reporting: run `npm run test:storybook:coverage` (requires a Vitest coverage provider such as `@vitest/coverage-v8`).
 
 ## 📚 Documentation
@@ -284,9 +284,9 @@ We're following a phased approach to build a production-ready design system:
 ### 🚧 Phase 2: Infrastructure (In Progress)
 - [x] Design tokens system (`npm run generate:themes`)
 - [x] CI/CD pipeline (GitHub Actions - automated publishing)
-- [ ] Accessibility testing (axe-core)
-- [ ] Changeset versioning
-- [ ] Bundle size monitoring
+- [x] Accessibility testing (Storybook a11y + axe checks in CI)
+- [x] Changeset versioning
+- [x] Bundle size monitoring
 
 ### ✅ Phase 3: Component Library (Completed)
 - [x] Form components (15 components)
@@ -318,28 +318,28 @@ We welcome contributions! Please see our [contribution guidelines](./CONTRIBUTIN
 
 ## 📦 Publishing
 
-The package is automatically published to GitHub Packages when a new release is created:
+The package uses Changesets for versioning and automated publishing to GitHub Packages:
 
-1. **Create Release (Recommended):**
+1. **Create a changeset for user-facing changes:**
    ```bash
-   # Bump version and create tag
-   npm version patch  # or minor/major
-   git push --follow-tags
-
-   # Create GitHub release (triggers automatic publish)
-   gh release create v0.1.4 --title "Release Title" --notes "Release notes"
+   npm run changeset
    ```
 
-2. **Automated Publishing:**
-   - The GitHub Actions workflow (`.github/workflows/publish.yml`) runs automatically
-   - Tests are run before publishing
-   - Package is published to GitHub Packages
+2. **Merge to `main`:**
+   - `.github/workflows/changesets-release.yml` creates/updates a Version PR
+   - Merging the Version PR publishes the package to GitHub Packages
 
 3. **Manual Publish (if needed):**
    ```bash
    npm run build
    npm publish
    ```
+
+## ✅ Branch Protection Policy
+
+Require these checks before merging PRs to `main`:
+- `Quality CI`
+- `Storybook CI`
 
 ## 🏗️ Architecture
 
