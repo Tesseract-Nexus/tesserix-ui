@@ -321,6 +321,8 @@ export const KeyboardAndDismissal: Story = {
     await expect(openItem).toHaveFocus()
     fireEvent.keyDown(menu, { key: 'ArrowDown' })
     await expect(renameItem).toHaveFocus()
+    fireEvent.keyDown(menu, { key: 'ArrowUp' })
+    await expect(openItem).toHaveFocus()
     fireEvent.keyDown(menu, { key: 'End' })
     await expect(deleteItem).toHaveFocus()
     fireEvent.keyDown(menu, { key: 'Home' })
@@ -337,6 +339,35 @@ export const KeyboardAndDismissal: Story = {
     await waitFor(() => {
       expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
       expect(trigger).toHaveFocus()
+    })
+  },
+}
+
+export const OutsideClickDismissal: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <button type="button">Outside target</button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Open outside dismiss menu</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open outside dismiss menu/i })
+    fireEvent.click(trigger)
+    await waitFor(() => {
+      expect(within(document.body).getByRole('menu')).toBeInTheDocument()
+    })
+
+    fireEvent.mouseDown(canvas.getByRole('button', { name: /outside target/i }))
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
     })
   },
 }

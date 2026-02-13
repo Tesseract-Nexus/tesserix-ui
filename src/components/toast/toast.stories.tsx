@@ -97,6 +97,48 @@ const ActionToastDemo = () => {
   )
 }
 
+const ToastControlDemo = () => {
+  const { toast, dismiss, clear } = useToast()
+  const [lastId, setLastId] = React.useState("")
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button
+        variant="outline"
+        onClick={() => {
+          const id = toast({
+            title: "Auto close",
+            description: "This should disappear quickly.",
+            duration: 20,
+          })
+          setLastId(id)
+        }}
+      >
+        Short Duration Toast
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() => {
+          const id = toast({
+            title: "Manual close only",
+            description: "Duration disabled.",
+            duration: 0,
+          })
+          setLastId(id)
+        }}
+      >
+        No Auto Dismiss Toast
+      </Button>
+      <Button variant="outline" onClick={() => dismiss(lastId)} disabled={!lastId}>
+        Dismiss Last
+      </Button>
+      <Button variant="outline" onClick={clear}>
+        Clear All
+      </Button>
+    </div>
+  )
+}
+
 export const Default: Story = {
   render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">
@@ -157,6 +199,42 @@ export const ActionCallback: Story = {
 
     await waitFor(() => {
       expect(canvas.getByText(/action clicked: view/i)).toBeInTheDocument()
+      expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    })
+  },
+}
+
+export const DurationAndControls: Story = {
+  render: () => (
+    <ToastProvider>
+      <ToastControlDemo />
+      <ToastViewport />
+    </ToastProvider>
+  ),
+  play: async ({ canvas }) => {
+    fireEvent.click(canvas.getByRole("button", { name: /short duration toast/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByRole("status")).toBeInTheDocument()
+    })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    })
+
+    fireEvent.click(canvas.getByRole("button", { name: /no auto dismiss toast/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByRole("status")).toBeInTheDocument()
+    })
+    fireEvent.click(canvas.getByRole("button", { name: /dismiss last/i }))
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    })
+
+    fireEvent.click(canvas.getByRole("button", { name: /no auto dismiss toast/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByRole("status")).toBeInTheDocument()
+    })
+    fireEvent.click(canvas.getByRole("button", { name: /clear all/i }))
+    await waitFor(() => {
       expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
     })
   },

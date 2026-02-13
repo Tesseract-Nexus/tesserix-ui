@@ -63,6 +63,29 @@ const InlineCommandDemo = () => {
   )
 }
 
+const CommandWithDisabledDemo = () => {
+  const [selected, setSelected] = React.useState("")
+  return (
+    <div className="space-y-3">
+      <Command className="w-full" onValueChange={setSelected}>
+        <CommandInput aria-label="Disabled command input" placeholder="Filter commands..." />
+        <CommandList>
+          <CommandGroup>
+            <div data-command-group-heading="">Actions</div>
+            <CommandItem value="enabled-item">Enabled Item</CommandItem>
+            <CommandItem value="disabled-item" disabled>
+              Disabled Item
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+      <p className="text-sm text-foreground" data-testid="disabled-selected">
+        Selected disabled demo: {selected || "None"}
+      </p>
+    </div>
+  )
+}
+
 const DialogCommandDemo = () => {
   const [open, setOpen] = React.useState(false)
 
@@ -142,10 +165,15 @@ export const EmptyResults: Story = {
   render: () => <InlineCommandDemo />,
   play: async ({ canvas }) => {
     const input = canvas.getByPlaceholderText(/search commands/i)
+    const list = canvas.getByRole("listbox")
     fireEvent.change(input, { target: { value: "does-not-exist" } })
     await waitFor(() => {
       expect(canvas.queryAllByRole("option")).toHaveLength(0)
     })
+    fireEvent.keyDown(list, { key: "ArrowDown" })
+    fireEvent.keyDown(list, { key: "ArrowUp" })
+    fireEvent.keyDown(list, { key: "Enter" })
+    await expect(canvas.queryAllByRole("option")).toHaveLength(0)
   },
 }
 
@@ -162,6 +190,58 @@ export const DialogInteraction: Story = {
 
     await waitFor(() => {
       expect(within(document.body).queryByRole("textbox", { name: /type a command/i })).not.toBeInTheDocument()
+    })
+  },
+}
+
+export const KeyboardListSelection: Story = {
+  render: () => <InlineCommandDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByPlaceholderText(/search commands/i)
+    const list = canvas.getByRole("listbox")
+
+    fireEvent.change(input, { target: { value: "settings" } })
+    await waitFor(() => {
+      expect(canvas.getByRole("option", { name: /open settings/i })).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(list, { key: "ArrowDown" })
+    fireEvent.keyDown(list, { key: "Enter" })
+    await waitFor(() => {
+      expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*open settings/i)
+    })
+  },
+}
+
+export const DisabledItemBehavior: Story = {
+  render: () => <CommandWithDisabledDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole("textbox", { name: /disabled command input/i })
+
+    fireEvent.change(input, { target: { value: "disabled" } })
+    const disabledOption = await waitFor(() => canvas.getByRole("option", { name: /disabled item/i }))
+    await expect(disabledOption).toBeDisabled()
+    fireEvent.click(disabledOption)
+    await waitFor(() => {
+      expect(canvas.getByTestId("disabled-selected")).toHaveTextContent(/selected disabled demo:\s*none/i)
+    })
+  },
+}
+
+export const ArrowUpKeyboardSelection: Story = {
+  render: () => <InlineCommandDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByPlaceholderText(/search commands/i)
+    const list = canvas.getByRole("listbox")
+
+    fireEvent.change(input, { target: { value: "deploy" } })
+    const option = await waitFor(() => canvas.getByRole("option", { name: /deploy to production/i }))
+    fireEvent.mouseEnter(option)
+    fireEvent.keyDown(list, { key: "ArrowUp" })
+    fireEvent.keyDown(list, { key: "Enter" })
+
+    await waitFor(() => {
+      expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*deploy to production/i)
     })
   },
 }
