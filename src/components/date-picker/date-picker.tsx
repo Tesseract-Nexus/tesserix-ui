@@ -182,6 +182,7 @@ const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
             id={dialogId}
             role="dialog"
             aria-modal="false"
+            aria-label="Date picker calendar"
             className="absolute z-50 mt-2 w-[320px] rounded-xl border bg-popover p-3 text-popover-foreground shadow-lg"
             onKeyDown={(event) => {
               if (event.key === "Escape") {
@@ -290,36 +291,42 @@ const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
               </button>
             </div>
 
-            <div className="grid grid-cols-7 gap-1">
-              {WEEKDAY_LABELS.map((weekday) => (
-                <span key={weekday} className="flex h-8 items-center justify-center text-xs font-medium text-muted-foreground">
-                  {weekday}
-                </span>
-              ))}
-              {monthDays.map(({ date, inCurrentMonth }) => {
-                const dateKey = toDateKey(date)
-                const isSelected = dateKey === selectedKey
-                const isFocused = dateKey === focusKey
+            <div role="grid" aria-label="Calendar" className="w-full">
+              <div role="row" className="grid grid-cols-7 gap-1 mb-1">
+                {WEEKDAY_LABELS.map((weekday) => (
+                  <span key={weekday} role="columnheader" className="flex h-8 items-center justify-center text-xs font-medium text-muted-foreground">
+                    {weekday}
+                  </span>
+                ))}
+              </div>
+              {Array.from({ length: Math.ceil(monthDays.length / 7) }, (_, weekIndex) => (
+                <div key={weekIndex} role="row" className="grid grid-cols-7 gap-1">
+                  {monthDays.slice(weekIndex * 7, weekIndex * 7 + 7).map(({ date, inCurrentMonth }) => {
+                    const dateKey = toDateKey(date)
+                    const isSelected = dateKey === selectedKey
+                    const isFocused = dateKey === focusKey
 
-                return (
-                  <button
-                    key={dateKey}
-                    type="button"
-                    role="gridcell"
-                    aria-selected={isSelected}
-                    className={cn(
-                      "flex h-9 w-9 items-center justify-center rounded-md text-sm transition-colors",
-                      inCurrentMonth ? "text-foreground" : "text-muted-foreground/60",
-                      isFocused && "ring-2 ring-ring ring-offset-2 ring-offset-background",
-                      isSelected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"
-                    )}
-                    onMouseEnter={() => setFocusDate(date)}
-                    onClick={() => selectDate(date)}
-                  >
-                    {date.getDate()}
-                  </button>
-                )
-              })}
+                    return (
+                      <button
+                        key={dateKey}
+                        type="button"
+                        role="gridcell"
+                        aria-selected={isSelected}
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-md text-sm transition-colors",
+                          inCurrentMonth ? "text-foreground" : "text-muted-foreground/60",
+                          isFocused && "ring-2 ring-ring ring-offset-2 ring-offset-background",
+                          isSelected ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"
+                        )}
+                        onMouseEnter={() => setFocusDate(date)}
+                        onClick={() => selectDate(date)}
+                      >
+                        {date.getDate()}
+                      </button>
+                    )
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         ) : null}
