@@ -23,7 +23,7 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 ## 📊 Status
 
 **Current Version:** 0.1.0 (Alpha)
-**Components:** 37 components
+**Components:** 38 components
 **Story Tests:** 147 passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
@@ -173,6 +173,7 @@ module.exports = {
 - `DatePicker`
 - `FileUpload`
 - `Pagination`
+- `Stepper`
 - `Heading`, `Input`, `Label`, `Popover`, `Progress`, `Radio`, `Select`
 - `Separator`, `Sheet`, `Skeleton`, `Slider`, `Spinner`, `Switch`
 - `Table`, `Tabs`, `Text`, `Textarea`, `Toggle`, `Tooltip`
