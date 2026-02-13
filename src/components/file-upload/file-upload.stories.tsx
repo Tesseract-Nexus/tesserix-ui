@@ -60,3 +60,43 @@ export const SelectAndRemove: Story = {
     })
   },
 }
+
+const FileUploadValidationDemo = () => {
+  const [files, setFiles] = React.useState<File[]>([])
+  return (
+    <div className="space-y-3">
+      <FileUpload value={files} onValueChange={setFiles} maxFiles={2} maxSizeBytes={5} />
+      <p className="text-sm text-muted-foreground" data-testid="selected-files-count">
+        Selected files: {files.length}
+      </p>
+    </div>
+  )
+}
+
+export const ValidationAndLimits: Story = {
+  render: () => <FileUploadValidationDemo />,
+  play: async ({ canvas }) => {
+    const input = canvas.getByLabelText(/upload files/i, { selector: "input" })
+
+    const duplicate = new File(["abc"], "duplicate.txt", { type: "text/plain", lastModified: 1 })
+    fireEvent.change(input, { target: { files: [duplicate, duplicate] } })
+    await waitFor(() => {
+      expect(canvas.getByTestId("selected-files-count")).toHaveTextContent(/selected files: 1/i)
+    })
+
+    const tooLarge = new File(["123456"], "big.txt", { type: "text/plain" })
+    fireEvent.change(input, { target: { files: [tooLarge] } })
+    await waitFor(() => {
+      expect(canvas.getByText(/exceeds/i)).toBeInTheDocument()
+    })
+
+    const one = new File(["1"], "one.txt", { type: "text/plain" })
+    const two = new File(["2"], "two.txt", { type: "text/plain" })
+    const three = new File(["3"], "three.txt", { type: "text/plain" })
+    fireEvent.change(input, { target: { files: [one, two, three] } })
+    await waitFor(() => {
+      expect(canvas.getByText(/only 2 files are allowed\./i)).toBeInTheDocument()
+      expect(canvas.getByTestId("selected-files-count")).toHaveTextContent(/selected files: 2/i)
+    })
+  },
+}

@@ -212,3 +212,63 @@ export const WithDisabledTab: Story = {
     })
   },
 }
+
+export const KeyboardNavigation: Story = {
+  render: () => (
+    <Tabs defaultValue="overview" className="w-[420px]">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="billing" disabled>
+          Billing (Locked)
+        </TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsTrigger value="security">Security</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <p className="text-sm">Overview content</p>
+      </TabsContent>
+      <TabsContent value="billing">
+        <p className="text-sm">Billing content</p>
+      </TabsContent>
+      <TabsContent value="settings">
+        <p className="text-sm">Settings content</p>
+      </TabsContent>
+      <TabsContent value="security">
+        <p className="text-sm">Security content</p>
+      </TabsContent>
+    </Tabs>
+  ),
+  play: async ({ canvas }) => {
+    const overview = canvas.getByRole('tab', { name: /overview/i })
+    const settings = canvas.getByRole('tab', { name: /settings/i })
+    const security = canvas.getByRole('tab', { name: /security/i })
+
+    await expect(overview).toHaveAttribute('aria-selected', 'true')
+    overview.focus()
+
+    fireEvent.keyDown(overview, { key: 'ArrowRight' })
+    await waitFor(() => {
+      expect(settings).toHaveAttribute('aria-selected', 'true')
+      expect(settings).toHaveFocus()
+      expect(canvas.getByRole('tabpanel')).toHaveTextContent(/settings content/i)
+    })
+
+    fireEvent.keyDown(settings, { key: 'ArrowLeft' })
+    await waitFor(() => {
+      expect(overview).toHaveAttribute('aria-selected', 'true')
+      expect(overview).toHaveFocus()
+    })
+
+    fireEvent.keyDown(overview, { key: 'End' })
+    await waitFor(() => {
+      expect(security).toHaveAttribute('aria-selected', 'true')
+      expect(security).toHaveFocus()
+    })
+
+    fireEvent.keyDown(security, { key: 'Home' })
+    await waitFor(() => {
+      expect(overview).toHaveAttribute('aria-selected', 'true')
+      expect(overview).toHaveFocus()
+    })
+  },
+}

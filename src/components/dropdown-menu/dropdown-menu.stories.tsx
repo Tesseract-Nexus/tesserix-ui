@@ -292,3 +292,51 @@ export const DisabledItem: Story = {
     await expect(disabledItem).toBeDisabled()
   },
 }
+
+export const KeyboardAndDismissal: Story = {
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline">Open keyboard menu</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Open</DropdownMenuItem>
+        <DropdownMenuItem>Rename</DropdownMenuItem>
+        <DropdownMenuItem disabled>Archive</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Delete</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open keyboard menu/i })
+
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: 'Enter' })
+    const menu = await waitFor(() => within(document.body).getByRole('menu'))
+    const openItem = within(menu).getByRole('menuitem', { name: /open/i })
+    const renameItem = within(menu).getByRole('menuitem', { name: /rename/i })
+    const deleteItem = within(menu).getByRole('menuitem', { name: /delete/i })
+
+    await expect(openItem).toHaveFocus()
+    fireEvent.keyDown(menu, { key: 'ArrowDown' })
+    await expect(renameItem).toHaveFocus()
+    fireEvent.keyDown(menu, { key: 'End' })
+    await expect(deleteItem).toHaveFocus()
+    fireEvent.keyDown(menu, { key: 'Home' })
+    await expect(openItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: 'Tab' })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
+    })
+
+    fireEvent.click(trigger)
+    const reopened = await waitFor(() => within(document.body).getByRole('menu'))
+    fireEvent.keyDown(reopened, { key: 'Escape' })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
+      expect(trigger).toHaveFocus()
+    })
+  },
+}
