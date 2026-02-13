@@ -1,11 +1,12 @@
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "../../lib/utils"
 
 interface DropdownMenuContextValue {
   open: boolean
   onOpenChange: (open: boolean) => void
-  triggerRef: React.RefObject<HTMLButtonElement>
+  triggerRef: React.RefObject<HTMLElement | null>
 }
 
 const DropdownMenuContext = React.createContext<DropdownMenuContextValue | undefined>(undefined)
@@ -22,7 +23,7 @@ interface DropdownMenuProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const DropdownMenu = ({
@@ -32,7 +33,7 @@ const DropdownMenu = ({
   children,
 }: DropdownMenuProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
-  const triggerRef = React.useRef<HTMLButtonElement>(null)
+  const triggerRef = React.useRef<HTMLElement | null>(null)
   const isControlled = controlledOpen !== undefined
   const open = isControlled ? controlledOpen : uncontrolledOpen
 
@@ -53,25 +54,30 @@ const DropdownMenu = ({
   )
 }
 
+interface DropdownMenuTriggerProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const DropdownMenuTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  DropdownMenuTriggerProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange, open, triggerRef } = useDropdownMenu()
+  const Comp = asChild ? Slot : "button"
 
-  React.useImperativeHandle(ref, () => triggerRef.current!)
+  React.useImperativeHandle(ref, () => triggerRef.current as HTMLButtonElement)
 
   return (
-    <button
-      ref={triggerRef}
-      type="button"
+    <Comp
+      ref={triggerRef as React.RefObject<HTMLButtonElement>}
+      {...(!asChild && { type: "button" })}
       onClick={(e) => {
         onOpenChange(!open)
         onClick?.(e)
       }}
       className={className}
       aria-expanded={open}
-      aria-haspopup="true"
+      aria-haspopup="menu"
       {...props}
     />
   )

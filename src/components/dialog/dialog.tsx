@@ -1,5 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import ReactDOM from "react-dom"
+import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "../../lib/utils"
 
@@ -22,7 +24,7 @@ interface DialogProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Dialog = ({ open: controlledOpen, defaultOpen = false, onOpenChange, children }: DialogProps) => {
@@ -47,16 +49,21 @@ const Dialog = ({ open: controlledOpen, defaultOpen = false, onOpenChange, child
   )
 }
 
+interface DialogTriggerProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const DialogTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  DialogTriggerProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange } = useDialog()
+  const Comp = asChild ? Slot : "button"
 
   return (
-    <button
+    <Comp
       ref={ref}
-      type="button"
+      {...(!asChild && { type: "button" })}
       onClick={(e) => {
         onOpenChange(true)
         onClick?.(e)
@@ -121,18 +128,49 @@ interface DialogContentProps
     VariantProps<typeof dialogContentVariants> {}
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ className, size, children, ...props }, ref) => (
-    <DialogPortal>
-      <DialogOverlay />
-      <div
-        ref={ref}
-        className={cn(dialogContentVariants({ size }), className)}
-        {...props}
-      >
-        {children}
-      </div>
-    </DialogPortal>
-  )
+  ({ className, size, children, ...props }, ref) => {
+    const { open, onOpenChange } = useDialog()
+    const contentRef = React.useRef<HTMLDivElement>(null)
+    const previousFocusRef = React.useRef<HTMLElement | null>(null)
+
+    React.useImperativeHandle(ref, () => contentRef.current as HTMLDivElement)
+
+    React.useEffect(() => {
+      if (!open || !contentRef.current) return
+
+      previousFocusRef.current = document.activeElement as HTMLElement
+      contentRef.current.focus()
+
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          onOpenChange(false)
+        }
+      }
+
+      document.addEventListener("keydown", handleKeyDown)
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown)
+        previousFocusRef.current?.focus()
+      }
+    }, [open, onOpenChange])
+
+    return (
+      <DialogPortal>
+        <DialogOverlay />
+        <div
+          ref={contentRef}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+          className={cn(dialogContentVariants({ size }), className)}
+          {...props}
+        >
+          {children}
+        </div>
+      </DialogPortal>
+    )
+  }
 )
 DialogContent.displayName = "DialogContent"
 
@@ -182,14 +220,33 @@ const DialogDescription = React.forwardRef<
 ))
 DialogDescription.displayName = "DialogDescription"
 
+interface DialogCloseProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const DialogClose = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  DialogCloseProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange } = useDialog()
+  const Comp = asChild ? Slot : "button"
+
+  if (asChild) {
+    return (
+      <Comp
+        ref={ref}
+        className={className}
+        onClick={(e) => {
+          onOpenChange(false)
+          onClick?.(e)
+        }}
+        {...props}
+      />
+    )
+  }
 
   return (
-    <button
+    <Comp
       ref={ref}
       type="button"
       className={cn(
@@ -218,13 +275,10 @@ const DialogClose = React.forwardRef<
         <path d="m6 6 12 12" />
       </svg>
       <span className="sr-only">Close</span>
-    </button>
+    </Comp>
   )
 })
 DialogClose.displayName = "DialogClose"
-
-// ReactDOM import for portal
-import ReactDOM from "react-dom"
 
 export {
   Dialog,

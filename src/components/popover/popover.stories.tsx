@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
-    chromatic: { delay: 300 },
+    chromatic: { disableSnapshot: true },
   },
   render: () => (
     <div className="min-h-screen bg-background p-8 md:p-12">

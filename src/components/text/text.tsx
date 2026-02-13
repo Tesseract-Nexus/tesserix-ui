@@ -36,18 +36,20 @@ const textVariants = cva(
   }
 )
 
+type TextElement = "p" | "span" | "div" | "label"
+
 export interface TextProps
-  extends React.HTMLAttributes<HTMLParagraphElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, "as">,
     VariantProps<typeof textVariants> {
-  as?: "p" | "span" | "div" | "label"
+  as?: TextElement
 }
 
-const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
+const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ className, size, variant, weight, as: Comp = "p", ...props }, ref) => {
     return (
       <Comp
         className={cn(textVariants({ size, variant, weight }), className)}
-        ref={ref as any}
+        ref={ref as never}
         {...props}
       />
     )

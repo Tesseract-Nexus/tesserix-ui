@@ -1,6 +1,7 @@
 import * as React from "react"
 import ReactDOM from "react-dom"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "../../lib/utils"
 
@@ -23,7 +24,7 @@ interface SheetProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Sheet = ({ open: controlledOpen, defaultOpen = false, onOpenChange, children }: SheetProps) => {
@@ -48,16 +49,21 @@ const Sheet = ({ open: controlledOpen, defaultOpen = false, onOpenChange, childr
   )
 }
 
+interface SheetTriggerProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const SheetTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  SheetTriggerProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange } = useSheet()
+  const Comp = asChild ? Slot : "button"
 
   return (
-    <button
+    <Comp
       ref={ref}
-      type="button"
+      {...(!asChild && { type: "button" })}
       onClick={(e) => {
         onOpenChange(true)
         onClick?.(e)
@@ -123,19 +129,50 @@ interface SheetContentProps
     VariantProps<typeof sheetContentVariants> {}
 
 const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
-  ({ side, className, children, ...props }, ref) => (
-    <SheetPortal>
-      <SheetOverlay />
-      <div
-        ref={ref}
-        className={cn(sheetContentVariants({ side }), className)}
-        {...props}
-      >
-        {children}
-        <SheetClose />
-      </div>
-    </SheetPortal>
-  )
+  ({ side, className, children, ...props }, ref) => {
+    const { open, onOpenChange } = useSheet()
+    const contentRef = React.useRef<HTMLDivElement>(null)
+    const previousFocusRef = React.useRef<HTMLElement | null>(null)
+
+    React.useImperativeHandle(ref, () => contentRef.current as HTMLDivElement)
+
+    React.useEffect(() => {
+      if (!open || !contentRef.current) return
+
+      previousFocusRef.current = document.activeElement as HTMLElement
+      contentRef.current.focus()
+
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          onOpenChange(false)
+        }
+      }
+
+      document.addEventListener("keydown", handleKeyDown)
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown)
+        previousFocusRef.current?.focus()
+      }
+    }, [open, onOpenChange])
+
+    return (
+      <SheetPortal>
+        <SheetOverlay />
+        <div
+          ref={contentRef}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+          className={cn(sheetContentVariants({ side }), className)}
+          {...props}
+        >
+          {children}
+          <SheetClose />
+        </div>
+      </SheetPortal>
+    )
+  }
 )
 SheetContent.displayName = "SheetContent"
 
@@ -185,14 +222,33 @@ const SheetDescription = React.forwardRef<
 ))
 SheetDescription.displayName = "SheetDescription"
 
+interface SheetCloseProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const SheetClose = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  SheetCloseProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange } = useSheet()
+  const Comp = asChild ? Slot : "button"
+
+  if (asChild) {
+    return (
+      <Comp
+        ref={ref}
+        className={className}
+        onClick={(e) => {
+          onOpenChange(false)
+          onClick?.(e)
+        }}
+        {...props}
+      />
+    )
+  }
 
   return (
-    <button
+    <Comp
       ref={ref}
       type="button"
       className={cn(
@@ -221,7 +277,7 @@ const SheetClose = React.forwardRef<
         <path d="m6 6 12 12" />
       </svg>
       <span className="sr-only">Close</span>
-    </button>
+    </Comp>
   )
 })
 SheetClose.displayName = "SheetClose"

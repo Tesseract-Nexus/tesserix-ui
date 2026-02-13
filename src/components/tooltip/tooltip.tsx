@@ -21,19 +21,21 @@ const tooltipVariants = cva(
 )
 
 export interface TooltipProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "content" | "children">,
     VariantProps<typeof tooltipVariants> {
-  content: React.ReactNode
-  children: React.ReactNode
+  content?: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
   ({ className, side, content, children, ...props }, ref) => {
     const [isVisible, setIsVisible] = React.useState(false)
+    const tooltipId = React.useId()
 
     return (
       <div className="relative inline-block" ref={ref} {...props}>
         <div
+          aria-describedby={isVisible && content ? tooltipId : undefined}
           onMouseEnter={() => setIsVisible(true)}
           onMouseLeave={() => setIsVisible(false)}
           onFocus={() => setIsVisible(true)}
@@ -43,6 +45,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
         </div>
         {isVisible && (
           <div
+            id={tooltipId}
             role="tooltip"
             className={cn(tooltipVariants({ side }), className)}
           >

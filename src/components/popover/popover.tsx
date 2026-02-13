@@ -1,12 +1,13 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "../../lib/utils"
 
 interface PopoverContextValue {
   open: boolean
   onOpenChange: (open: boolean) => void
-  triggerRef: React.RefObject<HTMLButtonElement>
+  triggerRef: React.RefObject<HTMLElement | null>
 }
 
 const PopoverContext = React.createContext<PopoverContextValue | undefined>(undefined)
@@ -23,12 +24,12 @@ interface PopoverProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Popover = ({ open: controlledOpen, defaultOpen = false, onOpenChange, children }: PopoverProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
-  const triggerRef = React.useRef<HTMLButtonElement>(null)
+  const triggerRef = React.useRef<HTMLElement | null>(null)
   const isControlled = controlledOpen !== undefined
   const open = isControlled ? controlledOpen : uncontrolledOpen
 
@@ -49,24 +50,30 @@ const Popover = ({ open: controlledOpen, defaultOpen = false, onOpenChange, chil
   )
 }
 
+interface PopoverTriggerProps extends React.ComponentPropsWithoutRef<"button"> {
+  asChild?: boolean
+}
+
 const PopoverTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, onClick, ...props }, ref) => {
+  PopoverTriggerProps
+>(({ className, onClick, asChild = false, ...props }, ref) => {
   const { onOpenChange, open, triggerRef } = usePopover()
+  const Comp = asChild ? Slot : "button"
 
-  React.useImperativeHandle(ref, () => triggerRef.current!)
+  React.useImperativeHandle(ref, () => triggerRef.current as HTMLButtonElement)
 
   return (
-    <button
-      ref={triggerRef}
-      type="button"
+    <Comp
+      ref={triggerRef as React.RefObject<HTMLButtonElement>}
+      {...(!asChild && { type: "button" })}
       onClick={(e) => {
         onOpenChange(!open)
         onClick?.(e)
       }}
       className={className}
       aria-expanded={open}
+      aria-haspopup="dialog"
       {...props}
     />
   )
