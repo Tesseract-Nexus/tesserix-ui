@@ -89,3 +89,27 @@ export const FilterAndSort: Story = {
     await expect(firstCell).toHaveTextContent(/legacy migration/i)
   },
 }
+
+export const FiltersAndSelection: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={rows}
+      defaultPageSize={5}
+      enableRowSelection
+      columnFiltersEnabled
+      getRowId={(row) => row.name}
+    />
+  ),
+  play: async ({ canvas }) => {
+    const ownerFilter = canvas.getByPlaceholderText(/filter owner/i)
+    fireEvent.change(ownerFilter, { target: { value: "anya" } })
+
+    await expect(canvas.getByText(/onboarding revamp/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/showing 1 of 1 row\(s\) • 0 selected/i)).toBeInTheDocument()
+
+    const selectRow = canvas.getByRole("checkbox", { name: /select row 1/i })
+    fireEvent.click(selectRow)
+    await expect(canvas.getByText(/• 1 selected/i)).toBeInTheDocument()
+  },
+}
