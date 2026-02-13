@@ -297,10 +297,10 @@ We're following a phased approach to build a production-ready design system:
 - [x] Typography components (3 components)
 
 ### 📋 Phase 4: Advanced Features (Planned)
-- [ ] Hooks library
+- [x] Hooks library
 - [ ] Visual regression testing
 - [ ] Documentation website
-- [ ] Component generator CLI
+- [x] Component generator CLI
 - [ ] Performance monitoring
 
 See [ROADMAP.md](./ROADMAP.md) for detailed timeline and requirements.
@@ -315,6 +315,34 @@ We welcome contributions! Please see our [contribution guidelines](./CONTRIBUTIN
 3. Make your changes
 4. Add tests and documentation
 5. Submit a pull request
+
+## Hooks Library
+
+The package now exports reusable hooks from `src/hooks`:
+- `useDebounce`
+- `useLocalStorage`
+- `useMediaQuery`
+- `useToggle`
+
+Example:
+
+```tsx
+import { useToggle, useDebounce } from '@tesseract-nexus/tesserix-ui'
+```
+
+## Component Generator CLI
+
+Scaffold a new component with tests and stories:
+
+```bash
+npm run generate:component -- --name MyComponent
+```
+
+Preview generated files without writing:
+
+```bash
+npm run generate:component -- --name MyComponent --dry-run
+```
 
 ## 📦 Publishing
 

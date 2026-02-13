@@ -26,6 +26,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "npm run build && npm publish",
+    "generate:component": "node scripts/generate-component.mjs",
     "generate:themes": "node scripts/generate-themes.mjs",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "prebuild": "npm run generate:themes",
