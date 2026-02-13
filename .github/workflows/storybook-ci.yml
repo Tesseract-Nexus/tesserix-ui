@@ -34,8 +34,10 @@ jobs:
         run: npm run test:storybook
 
       - name: Publish to Chromatic
+        if: ${{ secrets.CHROMATIC_PROJECT_TOKEN != '' }}
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           onlyChanged: true
+          exitZeroOnChanges: true

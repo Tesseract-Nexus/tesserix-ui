@@ -5,6 +5,7 @@ dist
 .env
 .env.local
 storybook-static
+docs-dist
 coverage
 .nyc_output
 .vitest

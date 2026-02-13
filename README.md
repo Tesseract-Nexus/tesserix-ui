@@ -27,7 +27,7 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 **Story Tests:** 217+ passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
-**CI/CD:** Storybook CI + Quality CI + automated publishing to GitHub Packages
+**CI/CD:** Storybook CI + Quality CI + Performance CI + automated publishing to GitHub Packages
 
 See [PRD.md](./PRD.md) for complete product requirements and roadmap.
 
@@ -226,6 +226,14 @@ npm run build-storybook     # Production build
 npm run test:storybook      # Run Storybook stories as tests
 npm run test:storybook:watch
 npm run test:storybook:ui
+
+# Docs website
+npm run docs:dev
+npm run docs:build
+npm run docs:preview
+
+# Performance report
+npm run perf:report
 ```
 
 ## Storybook Component Testing
@@ -258,6 +266,7 @@ SB_SKIP_TAGS="flaky" npm run test:storybook
 
 CI:
 - `.github/workflows/storybook-ci.yml` runs `build-storybook` and `test:storybook` on PRs and pushes to `main`.
+- Chromatic upload runs when `CHROMATIC_PROJECT_TOKEN` is configured and uses `onlyChanged` with non-blocking visual diffs.
 
 Optional capabilities:
 - Accessibility checks: `@storybook/addon-a11y` is enabled globally with `a11y.test: "error"` in `.storybook/preview.tsx`, so `npm run test:storybook` fails on accessibility violations.
@@ -298,10 +307,10 @@ We're following a phased approach to build a production-ready design system:
 
 ### 📋 Phase 4: Advanced Features (Planned)
 - [x] Hooks library
-- [ ] Visual regression testing
-- [ ] Documentation website
+- [x] Visual regression testing
+- [x] Documentation website
 - [x] Component generator CLI
-- [ ] Performance monitoring
+- [x] Performance monitoring
 
 See [ROADMAP.md](./ROADMAP.md) for detailed timeline and requirements.
 
