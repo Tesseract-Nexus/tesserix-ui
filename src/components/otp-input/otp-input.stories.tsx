@@ -59,3 +59,46 @@ export const TypeAndPaste: Story = {
     })
   },
 }
+
+export const KeyboardEditing: Story = {
+  render: () => <OTPDemo />,
+  play: async ({ canvas }) => {
+    const first = canvas.getByRole("textbox", { name: /digit 1/i })
+    const second = canvas.getByRole("textbox", { name: /digit 2/i })
+    const third = canvas.getByRole("textbox", { name: /digit 3/i })
+
+    fireEvent.change(first, { target: { value: "1" } })
+    fireEvent.change(second, { target: { value: "2" } })
+    fireEvent.change(third, { target: { value: "3" } })
+
+    await waitFor(() => {
+      expect(canvas.getByText(/code: 123/i)).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(third, { key: "Backspace" })
+    await waitFor(() => {
+      expect(canvas.getByText(/code: 12/i)).toBeInTheDocument()
+    })
+
+    fireEvent.keyDown(third, { key: "Backspace" })
+    await waitFor(() => {
+      expect(canvas.getByText(/code: 1/i)).toBeInTheDocument()
+      expect(second).toHaveFocus()
+    })
+
+    fireEvent.keyDown(second, { key: "ArrowRight" })
+    await expect(third).toHaveFocus()
+    fireEvent.keyDown(third, { key: "ArrowLeft" })
+    await expect(second).toHaveFocus()
+
+    const pasteEvent = new Event("paste", { bubbles: true, cancelable: true })
+    Object.defineProperty(pasteEvent, "clipboardData", {
+      value: { getData: () => "987654" },
+    })
+    second.dispatchEvent(pasteEvent)
+
+    await waitFor(() => {
+      expect(canvas.getByText(/code: 987654/i)).toBeInTheDocument()
+    })
+  },
+}

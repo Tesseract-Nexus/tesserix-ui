@@ -126,3 +126,44 @@ export const Controlled: Story = {
     })
   },
 }
+
+export const KeyboardNavigation: Story = {
+  render: () => <InteractiveContextMenu />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByText(/right-click this panel/i)
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: "F10", shiftKey: true })
+
+    const menu = await waitFor(() => within(document.body).getByRole("menu"))
+    const openItem = within(document.body).getByRole("menuitem", { name: /open/i })
+    const renameItem = within(document.body).getByRole("menuitem", { name: /rename/i })
+    const deleteItem = within(document.body).getByRole("menuitem", { name: /delete/i })
+
+    await expect(openItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: "ArrowDown" })
+    await expect(renameItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: "ArrowUp" })
+    await expect(openItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: "End" })
+    await expect(deleteItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: "Home" })
+    await expect(openItem).toHaveFocus()
+
+    fireEvent.keyDown(menu, { key: "Tab" })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("menu")).not.toBeInTheDocument()
+    })
+
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: "F10", shiftKey: true })
+    const reopenedMenu = await waitFor(() => within(document.body).getByRole("menu"))
+    fireEvent.keyDown(reopenedMenu, { key: "Escape" })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("menu")).not.toBeInTheDocument()
+    })
+  },
+}

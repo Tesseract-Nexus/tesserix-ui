@@ -72,3 +72,42 @@ export const SelectDate: Story = {
   },
 }
 
+export const KeyboardAndMonthNavigation: Story = {
+  render: () => <DatePickerDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole("button", { name: /select date/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole("dialog"))
+    const monthLabel = within(dialog).getByText(/\w+\s+\d{4}/i).textContent
+
+    fireEvent.click(within(dialog).getByRole("button", { name: /next month/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByRole("dialog")).toBeInTheDocument()
+      expect(within(document.body).queryByText(monthLabel ?? "")).not.toBeInTheDocument()
+    })
+
+    fireEvent.click(within(document.body).getByRole("button", { name: /previous month/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByText(monthLabel ?? "")).toBeInTheDocument()
+    })
+
+    const activeDialog = within(document.body).getByRole("dialog")
+    fireEvent.keyDown(activeDialog, { key: "ArrowRight" })
+    fireEvent.keyDown(activeDialog, { key: "ArrowLeft" })
+    fireEvent.keyDown(activeDialog, { key: "ArrowUp" })
+    fireEvent.keyDown(activeDialog, { key: "ArrowDown" })
+    fireEvent.keyDown(activeDialog, { key: "Enter" })
+
+    await waitFor(() => {
+      expect(canvas.getByText(/selected value: \d{4}-\d{2}-\d{2}/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(trigger)
+    const reopened = await waitFor(() => within(document.body).getByRole("dialog"))
+    fireEvent.keyDown(reopened, { key: "Escape" })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("dialog")).not.toBeInTheDocument()
+    })
+  },
+}

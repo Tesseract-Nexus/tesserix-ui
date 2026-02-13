@@ -1,5 +1,6 @@
+import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect } from 'storybook/test'
+import { expect, fireEvent, fn, waitFor } from 'storybook/test'
 import { Toggle } from './toggle'
 
 const meta = {
@@ -120,5 +121,73 @@ export const SmokeTest: Story = {
   render: Default.render,
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeTruthy()
+  },
+}
+
+export const Interaction: Story = {
+  render: () => {
+    const Demo = () => {
+      const [count, setCount] = React.useState(0)
+      return (
+        <div className="space-y-2">
+          <Toggle onPressedChange={() => setCount((current) => current + 1)}>Bold</Toggle>
+          <p className="text-sm text-muted-foreground">Pressed change count: {count}</p>
+        </div>
+      )
+    }
+    return <Demo />
+  },
+  play: async ({ canvas }) => {
+    const toggle = canvas.getByRole('button', { name: /bold/i })
+
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+    fireEvent.click(toggle)
+    await waitFor(() => {
+      expect(toggle).toHaveAttribute('aria-pressed', 'true')
+      expect(canvas.getByText(/pressed change count: 1/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const ControlledPressed: Story = {
+  render: () => {
+    const Controlled = () => {
+      const [pressed, setPressed] = React.useState(true)
+      return (
+        <div className="space-y-2">
+          <Toggle pressed={pressed} onPressedChange={setPressed}>
+            Pin
+          </Toggle>
+          <p className="text-sm text-muted-foreground">Pinned: {pressed ? 'yes' : 'no'}</p>
+        </div>
+      )
+    }
+
+    return <Controlled />
+  },
+  play: async ({ canvas }) => {
+    const toggle = canvas.getByRole('button', { name: /pin/i })
+    fireEvent.click(toggle)
+
+    await waitFor(() => {
+      expect(toggle).toHaveAttribute('aria-pressed', 'false')
+      expect(canvas.getByText(/pinned: no/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const DisabledInteraction: Story = {
+  args: {
+    children: 'Disabled toggle',
+    disabled: true,
+    onPressedChange: fn(),
+    onClick: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    const toggle = canvas.getByRole('button', { name: /disabled toggle/i })
+    await expect(toggle).toBeDisabled()
+    fireEvent.click(toggle)
+    await expect(args.onPressedChange).not.toHaveBeenCalled()
+    await expect(args.onClick).not.toHaveBeenCalled()
   },
 }
