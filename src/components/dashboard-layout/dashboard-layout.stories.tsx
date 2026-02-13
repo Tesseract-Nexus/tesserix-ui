@@ -74,6 +74,9 @@ export const AnalyticsWorkspace: Story = {
     </DashboardLayout>
   ),
   play: async ({ canvas }) => {
+    await expect(canvas.getByRole("banner")).toBeInTheDocument()
+    await expect(canvas.getByRole("main")).toBeInTheDocument()
+    await expect(canvas.getByRole("complementary")).toBeInTheDocument()
     await expect(canvas.getByText(/analytics workspace/i)).toBeInTheDocument()
     await expect(canvas.getByText(/\$182,420/i)).toBeInTheDocument()
   },

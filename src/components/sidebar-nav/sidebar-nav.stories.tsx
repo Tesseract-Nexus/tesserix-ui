@@ -62,6 +62,7 @@ export const Default: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
     await expect(canvas.getByRole("link", { name: /overview/i })).toBeInTheDocument()
     await expect(canvas.getByRole("link", { name: /team/i })).toBeInTheDocument()
   },

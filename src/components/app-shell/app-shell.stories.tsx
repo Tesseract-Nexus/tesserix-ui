@@ -130,6 +130,10 @@ export const Default: Story = {
     </AppShell>
   ),
   play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
+    await expect(canvas.getByRole("banner")).toBeInTheDocument()
+    await expect(canvas.getByRole("main")).toBeInTheDocument()
+    await expect(canvas.getByRole("contentinfo")).toBeInTheDocument()
     await expect(canvas.getByRole("heading", { name: /operations overview/i })).toBeInTheDocument()
     await expect(canvas.getByRole("button", { name: /publish/i })).toBeInTheDocument()
   },
