@@ -118,6 +118,12 @@ const meta = {
   component: Command,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Command palette with searchable items, keyboard selection, disabled item support, and dialog-based usage.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof Command>
@@ -259,4 +265,19 @@ export const ArrowUpKeyboardSelection: Story = {
       })
     }
   },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[860px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Inline</p>
+        <InlineCommandDemo />
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Disabled Item Behavior</p>
+        <CommandWithDisabledDemo />
+      </div>
+    </div>
+  ),
 }

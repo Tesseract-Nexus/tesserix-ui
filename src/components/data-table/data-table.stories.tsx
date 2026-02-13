@@ -1,3 +1,4 @@
+import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
 import { expect, fireEvent, waitFor } from "storybook/test"
 
@@ -18,6 +19,12 @@ const rows: ProjectRow[] = [
   { name: "Legacy Migration", owner: "Ravi", status: "Archived", tasks: 4 },
   { name: "Billing V2", owner: "Sara", status: "Active", tasks: 14 },
   { name: "Release Automation", owner: "Leo", status: "Paused", tasks: 11 },
+]
+
+const equalTaskRows: ProjectRow[] = [
+  { name: "Alpha", owner: "Anya", status: "Active", tasks: 10 },
+  { name: "Beta", owner: "Dev", status: "Paused", tasks: 10 },
+  { name: "Gamma", owner: "Mina", status: "Active", tasks: 8 },
 ]
 
 const columns: DataTableColumn<ProjectRow>[] = [
@@ -282,5 +289,55 @@ export const StateMatrix: Story = {
           "State matrix for visual QA: baseline table, selectable/filterable mode, and explicit empty-state rendering.",
       },
     },
+  },
+}
+
+export const SortWithEqualValues: Story = {
+  render: () => <DataTable columns={columns} data={equalTaskRows} defaultPageSize={5} />,
+  play: async ({ canvas }) => {
+    const tasksHeader = canvas.getByRole("button", { name: /tasks/i })
+    fireEvent.click(tasksHeader)
+
+    await waitFor(() => {
+      expect(tasksHeader).toHaveTextContent("▲")
+      expect(canvas.getByText(/alpha/i)).toBeInTheDocument()
+      expect(canvas.getByText(/beta/i)).toBeInTheDocument()
+    })
+  },
+}
+
+const ClampOnDataChangeDemo = () => {
+  const [compact, setCompact] = React.useState(false)
+  const data = compact ? rows.slice(0, 1) : rows
+
+  return (
+    <div className="space-y-3">
+      <button
+        type="button"
+        className="rounded-md border px-3 py-1.5 text-sm"
+        onClick={() => setCompact(true)}
+      >
+        Shrink data
+      </button>
+      <DataTable columns={columns} data={data} defaultPageSize={2} />
+    </div>
+  )
+}
+
+export const ClampOnExternalDataChange: Story = {
+  render: () => <ClampOnDataChangeDemo />,
+  play: async ({ canvas }) => {
+    const next = canvas.getByRole("button", { name: /next/i })
+    fireEvent.click(next)
+    fireEvent.click(next)
+    await waitFor(() => {
+      expect(canvas.getByText(/page 3 of 3/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(canvas.getByRole("button", { name: /shrink data/i }))
+    await waitFor(() => {
+      expect(canvas.getByText(/page 1 of 1/i)).toBeInTheDocument()
+      expect(canvas.getByText(/showing 1 of 1 row\(s\)/i)).toBeInTheDocument()
+    })
   },
 }

@@ -9,6 +9,12 @@ const meta = {
   component: Popover,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Popover provides lightweight floating content with controlled/uncontrolled state, keyboard dismissal, and alignment options.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -340,6 +346,35 @@ export const Glassmorphism: Story = {
                 </Button>
               </div>
             </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </div>
+  ),
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[860px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Default</p>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open Popover</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <p className="text-sm">Standard popover content.</p>
+          </PopoverContent>
+        </Popover>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Glass</p>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="glass">Open Glass</Button>
+          </PopoverTrigger>
+          <PopoverContent variant="glass">
+            <p className="text-sm">Glass variant content.</p>
           </PopoverContent>
         </Popover>
       </div>

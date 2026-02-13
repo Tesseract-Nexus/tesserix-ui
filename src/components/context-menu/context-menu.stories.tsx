@@ -227,3 +227,39 @@ export const StateMatrix: Story = {
     </div>
   ),
 }
+
+export const NativeContextMenuKeyOpen: Story = {
+  render: () => <InteractiveContextMenu />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByText(/right-click this panel/i)
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: "ContextMenu" })
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole("menu")).toBeInTheDocument()
+      expect(within(document.body).getByRole("menuitem", { name: /open/i })).toHaveFocus()
+    })
+  },
+}
+
+export const OutsideClickDismissal: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <button type="button">Outside target</button>
+      <InteractiveContextMenu />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByText(/right-click this panel/i)
+    fireEvent.contextMenu(trigger, { clientX: 120, clientY: 120 })
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole("menu")).toBeInTheDocument()
+    })
+
+    fireEvent.mouseDown(canvas.getByRole("button", { name: /outside target/i }))
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("menu")).not.toBeInTheDocument()
+    })
+  },
+}

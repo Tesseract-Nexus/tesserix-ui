@@ -29,8 +29,6 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 **Documentation:** Storybook + API Reference
 **CI/CD:** Storybook CI + Quality CI + Performance CI + automated publishing to GitHub Packages
 
-See [PRD.md](./PRD.md) for product requirements and open product decisions.
-
 ## Installation
 
 ### From GitHub Packages
@@ -272,10 +270,49 @@ Optional capabilities:
 - Accessibility checks: `@storybook/addon-a11y` is enabled globally with `a11y.test: "error"` in `.storybook/preview.tsx`, so `npm run test:storybook` fails on accessibility violations.
 - Coverage reporting: run `npm run test:storybook:coverage` (requires a Vitest coverage provider such as `@vitest/coverage-v8`).
 
+## Testing Guide
+
+### 1) Local Storybook Tests
+
+```bash
+# Run all stories as tests
+npm run test:storybook
+
+# Target specific stories/files while iterating
+npm run test:storybook -- src/components/combobox/combobox.stories.tsx
+```
+
+### 2) Coverage (Global + Per-File Gates)
+
+```bash
+# Generate Storybook coverage report
+npm run test:storybook:coverage
+
+# Enforce global + targeted per-file thresholds
+npm run test:storybook:coverage:gate
+```
+
+Coverage gate checks:
+- global thresholds for statements/branches/functions/lines
+- targeted thresholds for critical files:
+  - `src/components/data-table/data-table.tsx`
+  - `src/components/context-menu/context-menu.tsx`
+  - `src/components/dialog/dialog.tsx`
+  - `src/components/sheet/sheet.tsx`
+
+### 3) Chromatic Workflow
+
+```bash
+# Local publish (token required)
+npx chromatic --project-token=<your_token> --exit-once-uploaded
+```
+
+CI behavior:
+- `.github/workflows/storybook-ci.yml` builds Storybook, runs Storybook tests, and uploads to Chromatic.
+- `Quality CI` enforces Storybook coverage thresholds via `npm run test:storybook:coverage:gate`.
+
 ## 📚 Documentation
 
-- **[PRD.md](./PRD.md)** - Product Requirements Document
-- **[STORY_COVERAGE_PLAN.md](./STORY_COVERAGE_PLAN.md)** - Storybook coverage checklist and rollout plan
 - **[Storybook](http://localhost:6006)** - Interactive component documentation (run `npm run storybook`)
 - **Docs Site Source** - `docs-site/` (build with `npm run docs:build`)
 

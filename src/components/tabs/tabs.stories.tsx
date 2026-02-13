@@ -9,6 +9,12 @@ const meta = {
   component: Tabs,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Tabs supports controlled and uncontrolled selection with keyboard navigation (Arrow keys, Home/End) and accessible tab semantics.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -325,4 +331,37 @@ export const ControlledClickCallback: Story = {
       expect(canvas.getByTestId('tab-state')).toHaveTextContent(/clicks:\s*1/i)
     })
   },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[860px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Default</p>
+        <Tabs defaultValue="one">
+          <TabsList>
+            <TabsTrigger value="one">One</TabsTrigger>
+            <TabsTrigger value="two">Two</TabsTrigger>
+          </TabsList>
+          <TabsContent value="one">Default tab content</TabsContent>
+          <TabsContent value="two">Second tab content</TabsContent>
+        </Tabs>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Disabled Option</p>
+        <Tabs defaultValue="overview">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="locked" disabled>
+              Locked
+            </TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview">Overview</TabsContent>
+          <TabsContent value="locked">Locked</TabsContent>
+          <TabsContent value="settings">Settings</TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  ),
 }

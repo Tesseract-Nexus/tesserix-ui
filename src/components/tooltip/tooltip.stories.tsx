@@ -8,6 +8,12 @@ const meta = {
   component: Tooltip,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Tooltip supports hover and focus triggers with configurable placement for concise contextual hints.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -183,4 +189,28 @@ export const FocusAccessible: Story = {
       expect(within(document.body).queryByRole('tooltip')).not.toBeInTheDocument()
     })
   },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[860px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Action Tooltips</p>
+        <div className="flex gap-3">
+          <Tooltip content="Save changes" side="top">
+            <Button>Save</Button>
+          </Tooltip>
+          <Tooltip content="Discard changes" side="bottom">
+            <Button variant="outline">Cancel</Button>
+          </Tooltip>
+        </div>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Inline Hints</p>
+        <Tooltip content="Keyboard shortcut: Cmd+K" side="right">
+          <span className="cursor-help text-sm underline decoration-dotted">Command Palette</span>
+        </Tooltip>
+      </div>
+    </div>
+  ),
 }

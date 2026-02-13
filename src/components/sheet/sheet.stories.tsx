@@ -467,3 +467,45 @@ export const StateMatrix: Story = {
     </div>
   ),
 }
+
+const ControlledNoTriggerSheetDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <button
+        type="button"
+        className="rounded-md border px-3 py-2 text-sm"
+        onClick={() => setOpen(true)}
+      >
+        Open sheet without trigger
+      </button>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>No Trigger Sheet</SheetTitle>
+            <SheetDescription>Opened externally without SheetTrigger.</SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+    </div>
+  )
+}
+
+export const ControlledWithoutTrigger: Story = {
+  render: () => <ControlledNoTriggerSheetDemo />,
+  play: async ({ canvas }) => {
+    const openButton = canvas.getByRole('button', { name: /open sheet without trigger/i })
+    openButton.focus()
+    fireEvent.click(openButton)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await expect(dialog).toBeInTheDocument()
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(openButton).toHaveFocus()
+    })
+  },
+}

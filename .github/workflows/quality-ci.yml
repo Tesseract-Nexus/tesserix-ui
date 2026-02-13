@@ -34,8 +34,8 @@ jobs:
       - name: Unit tests
         run: npm run test:run
 
-      - name: Storybook tests
-        run: npm run test:storybook
+      - name: Storybook coverage gate
+        run: npm run test:storybook:coverage:gate
 
       - name: Build package
         run: npm run build

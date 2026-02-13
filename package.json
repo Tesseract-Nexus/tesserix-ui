@@ -51,6 +51,7 @@
     "test:storybook:watch": "vitest --project storybook",
     "test:storybook:ui": "vitest --ui --project storybook",
     "test:storybook:coverage": "vitest run --project storybook --coverage",
+    "test:storybook:coverage:gate": "npm run test:storybook:coverage && node scripts/check-storybook-coverage.mjs",
     "test:coverage": "vitest run --coverage",
     "prestorybook": "npm run generate:themes",
     "storybook": "storybook dev -p 6006",

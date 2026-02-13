@@ -452,3 +452,45 @@ export const StateMatrix: Story = {
     </div>
   ),
 }
+
+const ControlledNoTriggerDialogDemo = () => {
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <div className="space-y-3">
+      <button
+        type="button"
+        className="rounded-md border px-3 py-2 text-sm"
+        onClick={() => setOpen(true)}
+      >
+        Open without trigger
+      </button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>No Trigger Dialog</DialogTitle>
+            <DialogDescription>Dialog opened externally (no DialogTrigger component).</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+export const ControlledWithoutTrigger: Story = {
+  render: () => <ControlledNoTriggerDialogDemo />,
+  play: async ({ canvas }) => {
+    const openButton = canvas.getByRole('button', { name: /open without trigger/i })
+    openButton.focus()
+    fireEvent.click(openButton)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await expect(dialog).toBeInTheDocument()
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(openButton).toHaveFocus()
+    })
+  },
+}

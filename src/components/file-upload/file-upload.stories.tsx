@@ -19,6 +19,12 @@ const meta = {
   component: FileUpload,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "FileUpload supports drag-and-drop, keyboard trigger, validation limits, and controlled/uncontrolled file lists.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof FileUpload>
@@ -155,4 +161,23 @@ export const DisabledDropzone: Story = {
     await expect(dropzone).toHaveAttribute("aria-disabled", "true")
     await expect(canvas.queryByRole("button", { name: /remove disabled\.txt/i })).not.toBeInTheDocument()
   },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[900px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Default</p>
+        <FileUpload helperText="Drop files or click to browse." />
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Validation Limits</p>
+        <FileUpload maxFiles={2} maxSizeBytes={1024} helperText="Max 2 files, 1KB each." />
+      </div>
+      <div className="rounded-xl border bg-card p-4 md:col-span-2">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Disabled</p>
+        <FileUpload disabled helperText="Uploader disabled" />
+      </div>
+    </div>
+  ),
 }

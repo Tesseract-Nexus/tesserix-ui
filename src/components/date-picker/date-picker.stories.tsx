@@ -19,6 +19,12 @@ const meta = {
   component: DatePicker,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "DatePicker supports controlled/uncontrolled modes, month navigation, keyboard date navigation, and outside-dismiss behavior.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof DatePicker>
@@ -110,4 +116,23 @@ export const KeyboardAndMonthNavigation: Story = {
       expect(within(document.body).queryByRole("dialog")).not.toBeInTheDocument()
     })
   },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[860px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Default</p>
+        <DatePicker />
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Preset Value</p>
+        <DatePicker defaultValue="2026-01-15" />
+      </div>
+      <div className="rounded-xl border bg-card p-4 md:col-span-2">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Disabled</p>
+        <DatePicker disabled placeholder="Unavailable" />
+      </div>
+    </div>
+  ),
 }
