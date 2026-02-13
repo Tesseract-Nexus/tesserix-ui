@@ -13,8 +13,12 @@
     },
     "./styles": "./dist/themes/default.css",
     "./themes/default": "./dist/themes/default.css",
-    "./themes/charcoal": "./dist/themes/charcoal.css",
-    "./themes/ocean": "./dist/themes/ocean.css",
+    "./themes/emerald": "./dist/themes/emerald.css",
+    "./themes/sapphire": "./dist/themes/sapphire.css",
+    "./themes/rose": "./dist/themes/rose.css",
+    "./themes/amber": "./dist/themes/amber.css",
+    "./themes/violet": "./dist/themes/violet.css",
+    "./themes/teal": "./dist/themes/teal.css",
     "./tailwind": "./tailwind.config.js"
   },
   "files": [
