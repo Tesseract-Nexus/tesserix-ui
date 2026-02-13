@@ -138,3 +138,43 @@ export const Default: Story = {
     await expect(canvas.getByRole("button", { name: /publish/i })).toBeInTheDocument()
   },
 }
+
+export const MinimalShell: Story = {
+  render: () => (
+    <AppShell className="lg:grid-cols-[220px_1fr]">
+      <AppShellSidebar>
+        <SidebarNav>
+          <SidebarNavSection>
+            <SidebarNavLabel>Primary</SidebarNavLabel>
+            <SidebarNavList>
+              <li>
+                <SidebarNavItem href="#" active icon={<IconHome />}>
+                  Home
+                </SidebarNavItem>
+              </li>
+            </SidebarNavList>
+          </SidebarNavSection>
+        </SidebarNav>
+      </AppShellSidebar>
+      <AppShellMain>
+        <AppShellHeader>
+          <p className="text-sm font-medium">Minimal Shell</p>
+        </AppShellHeader>
+        <AppShellContent>
+          <Card>
+            <CardHeader>
+              <CardTitle>Primary Workspace</CardTitle>
+              <CardDescription>Reduced chrome for focused tasks.</CardDescription>
+            </CardHeader>
+            <CardContent>Core content area</CardContent>
+          </Card>
+        </AppShellContent>
+      </AppShellMain>
+    </AppShell>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
+    await expect(canvas.getByRole("main")).toBeInTheDocument()
+    await expect(canvas.getByText(/primary workspace/i)).toBeInTheDocument()
+  },
+}

@@ -45,7 +45,7 @@ Each component should have, where applicable:
 
 ## Tier 3
 
-- [ ] Layout components (`app-shell`, `dashboard-layout`, `auth-layout`, `sidebar-nav`, `top-nav`)
+- [x] Layout components (`app-shell`, `dashboard-layout`, `auth-layout`, `sidebar-nav`, `top-nav`)
 - [ ] Marketing/layout blocks (`hero-section`, `feature-grid`, `bento-grid`, `section`, `page-header`)
 - [ ] Remaining visual/utility components
 

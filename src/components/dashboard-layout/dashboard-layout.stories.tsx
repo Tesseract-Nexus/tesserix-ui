@@ -81,3 +81,33 @@ export const AnalyticsWorkspace: Story = {
     await expect(canvas.getByText(/\$182,420/i)).toBeInTheDocument()
   },
 }
+
+export const MainOnly: Story = {
+  render: () => (
+    <DashboardLayout>
+      <DashboardLayoutHeader>
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+          <p className="text-sm font-semibold">Main Only</p>
+          <Badge variant="outline">Preview</Badge>
+        </div>
+      </DashboardLayoutHeader>
+      <DashboardLayoutBody className="lg:grid-cols-1">
+        <DashboardLayoutMain>
+          <Card>
+            <CardHeader>
+              <CardTitle>Single Column Flow</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Optimized layout when no right rail widgets are required.
+            </CardContent>
+          </Card>
+        </DashboardLayoutMain>
+      </DashboardLayoutBody>
+    </DashboardLayout>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("banner")).toBeInTheDocument()
+    await expect(canvas.getByRole("main")).toBeInTheDocument()
+    await expect(canvas.getByText(/single column flow/i)).toBeInTheDocument()
+  },
+}

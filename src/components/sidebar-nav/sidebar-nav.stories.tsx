@@ -67,3 +67,32 @@ export const Default: Story = {
     await expect(canvas.getByRole("link", { name: /team/i })).toBeInTheDocument()
   },
 }
+
+export const Compact: Story = {
+  render: () => (
+    <div className="w-[88px] rounded-2xl border bg-card p-3">
+      <SidebarNav>
+        <SidebarNavSection>
+          <SidebarNavLabel>Compact</SidebarNavLabel>
+          <SidebarNavList>
+            <li>
+              <SidebarNavItem href="#" active compact icon={<IconGrid />}>
+                Overview
+              </SidebarNavItem>
+            </li>
+            <li>
+              <SidebarNavItem href="#" compact icon={<IconUsers />}>
+                Team
+              </SidebarNavItem>
+            </li>
+          </SidebarNavList>
+        </SidebarNavSection>
+      </SidebarNav>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("navigation")).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /overview/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("link", { name: /team/i })).toBeInTheDocument()
+  },
+}

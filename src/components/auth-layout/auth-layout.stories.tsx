@@ -68,3 +68,30 @@ export const SignIn: Story = {
     await expect(canvas.getByRole("button", { name: /continue/i })).toBeInTheDocument()
   },
 }
+
+export const ContentOnly: Story = {
+  render: () => (
+    <AuthLayout className="lg:grid-cols-1">
+      <AuthLayoutContent>
+        <AuthCard>
+          <AuthCardHeader>
+            <AuthCardTitle>Reset password</AuthCardTitle>
+            <AuthCardDescription>Enter your email to receive reset instructions.</AuthCardDescription>
+          </AuthCardHeader>
+          <form className="space-y-4" aria-label="Reset password form">
+            <div className="space-y-2">
+              <Label htmlFor="reset-email">Email</Label>
+              <Input id="reset-email" type="email" placeholder="you@tesserix.com" />
+            </div>
+            <Button className="w-full">Send reset link</Button>
+          </form>
+        </AuthCard>
+      </AuthLayoutContent>
+    </AuthLayout>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("main")).toBeInTheDocument()
+    await expect(canvas.getByRole("form", { name: /reset password form/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("button", { name: /send reset link/i })).toBeInTheDocument()
+  },
+}

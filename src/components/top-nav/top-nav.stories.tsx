@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect } from "storybook/test"
+import { expect, fireEvent } from "storybook/test"
 
 import { Avatar } from "../avatar"
 import { Badge } from "../badge"
@@ -54,5 +54,30 @@ export const AppNavigation: Story = {
     await expect(canvas.getByRole("banner")).toBeInTheDocument()
     await expect(canvas.getByText(/tesserix/i)).toBeInTheDocument()
     await expect(canvas.getByRole("link", { name: /overview/i })).toBeInTheDocument()
+  },
+}
+
+export const MinimalTopNav: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background">
+      <TopNav>
+        <TopNavContainer>
+          <TopNavBrand>
+            <span>Tesserix</span>
+          </TopNavBrand>
+          <TopNavActions>
+            <Button variant="outline" size="sm">
+              Help
+            </Button>
+          </TopNavActions>
+        </TopNavContainer>
+      </TopNav>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const help = canvas.getByRole("button", { name: /help/i })
+    await expect(canvas.getByRole("banner")).toBeInTheDocument()
+    fireEvent.click(help)
+    await expect(help).toBeInTheDocument()
   },
 }
