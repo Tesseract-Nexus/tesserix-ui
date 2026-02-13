@@ -315,6 +315,8 @@ CI behavior:
 
 - **[Storybook](http://localhost:6006)** - Interactive component documentation (run `npm run storybook`)
 - **Docs Site Source** - `docs-site/` (build with `npm run docs:build`)
+- **[Support Policy](./SUPPORT_POLICY.md)** - supported dependency/runtime matrix and accessibility expectations
+- **[Release Policy](./RELEASE_POLICY.md)** - semantic versioning, deprecation, and release gates
 
 ## 🤝 Contributing
 
@@ -373,6 +375,10 @@ The package uses Changesets for versioning and automated publishing to GitHub Pa
    npm run build
    npm publish
    ```
+
+Release governance:
+- Follow `RELEASE_POLICY.md` for versioning/deprecation rules and required release gates.
+- Follow `SUPPORT_POLICY.md` for supported React/Tailwind/browser/Node matrix.
 
 ## ✅ Branch Protection Policy
 
