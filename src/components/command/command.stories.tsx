@@ -133,6 +133,7 @@ export const KeyboardSelection: Story = {
 
     await waitFor(() => {
       expect(canvas.getByText(/selected: deploy to production/i)).toBeInTheDocument()
+      expect(option).toHaveAttribute("aria-selected", "true")
     })
   },
 }

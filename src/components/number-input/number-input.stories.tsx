@@ -8,8 +8,11 @@ const NumberInputDemo = () => {
   const [quantity, setQuantity] = React.useState(2)
   return (
     <div className="space-y-3">
-      <NumberInput value={quantity} onValueChange={setQuantity} min={0} max={10} step={1} />
-      <p className="text-sm text-muted-foreground">Quantity: {quantity}</p>
+      <label className="text-sm font-medium text-card-foreground" htmlFor="quantity-input">
+        Quantity
+      </label>
+      <NumberInput id="quantity-input" aria-label="Quantity" value={quantity} onValueChange={setQuantity} min={0} max={10} step={1} />
+      <p className="text-sm text-foreground/80">Quantity: {quantity}</p>
     </div>
   )
 }

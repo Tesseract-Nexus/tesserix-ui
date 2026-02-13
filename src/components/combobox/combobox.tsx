@@ -31,6 +31,8 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
       searchPlaceholder = "Search...",
       emptyText = "No results found.",
       disabled = false,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       ...props
     },
     ref
@@ -101,6 +103,8 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
           ref={inputRef}
           type="text"
           role="combobox"
+          aria-label={ariaLabel ?? "Combobox input"}
+          aria-labelledby={ariaLabelledBy}
           aria-expanded={open}
           aria-controls={open ? listId : undefined}
           aria-activedescendant={open && activeOption ? `${listId}-${activeOption.value}` : undefined}
@@ -167,7 +171,7 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
             className="absolute z-50 mt-2 max-h-64 w-full overflow-auto rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg"
           >
             {filteredOptions.length === 0 ? (
-              <div className="px-3 py-2 text-sm text-muted-foreground">{emptyText}</div>
+              <div className="px-3 py-2 text-sm text-foreground/80">{emptyText}</div>
             ) : (
               filteredOptions.map((option, index) => {
                 const selected = option.value === selectedValue

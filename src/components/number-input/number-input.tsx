@@ -65,7 +65,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           aria-label="Decrease value"
           disabled={disabled || (min != null && value <= min)}
           onClick={decrement}
-          className="inline-flex w-10 items-center justify-center border-r text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex w-10 items-center justify-center border-r text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           -
         </button>
@@ -116,7 +116,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           aria-label="Increase value"
           disabled={disabled || (max != null && value >= max)}
           onClick={increment}
-          className="inline-flex w-10 items-center justify-center border-l text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex w-10 items-center justify-center border-l text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           +
         </button>

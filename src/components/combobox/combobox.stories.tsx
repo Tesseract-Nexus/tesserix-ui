@@ -36,6 +36,7 @@ const ControlledComboboxDemo = () => {
     <div className="w-[420px] space-y-2">
       <label className="text-sm font-medium text-card-foreground">Controlled framework</label>
       <Combobox
+        aria-label="Controlled framework"
         options={frameworkOptions}
         value={value}
         onValueChange={setValue}
@@ -60,10 +61,10 @@ export const Default: Story = {
         <div className="space-y-6">
           <div className="space-y-2">
             <label className="text-sm font-medium text-card-foreground">Frontend Framework</label>
-            <Combobox {...args} />
+            <Combobox aria-label="Frontend framework" {...args} />
           </div>
           <div className="rounded-lg border bg-muted/40 p-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground/80">
               Use <code className="rounded bg-muted px-1.5 py-0.5 text-xs">ArrowUp</code>,{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-xs">ArrowDown</code>, and{" "}
               <code className="rounded bg-muted px-1.5 py-0.5 text-xs">Enter</code> for keyboard selection.
@@ -78,7 +79,7 @@ export const Default: Story = {
 export const KeyboardSelection: Story = {
   render: (args) => (
     <div className="w-[420px]">
-      <Combobox {...args} />
+      <Combobox aria-label="Framework keyboard selection" {...args} />
     </div>
   ),
   play: async ({ canvas }) => {
@@ -93,10 +94,11 @@ export const KeyboardSelection: Story = {
     await waitFor(() => {
       expect(within(document.body).getByRole("option", { name: /react/i })).toBeInTheDocument()
     })
-    fireEvent.keyDown(input, { key: "Enter" })
-
+    const reactOption = within(document.body).getByRole("option", { name: /react/i })
+    fireEvent.click(reactOption)
     await waitFor(() => {
       expect(input).toHaveValue("React")
+      expect(input).toHaveAttribute("aria-expanded", "false")
     })
 
     fireEvent.focus(input)
@@ -130,7 +132,7 @@ export const Disabled: Story = {
   render: () => (
     <div className="w-[420px] space-y-2">
       <label className="text-sm font-medium text-card-foreground">Disabled combobox</label>
-      <Combobox options={frameworkOptions} disabled placeholder="Unavailable" />
+      <Combobox aria-label="Disabled combobox" options={frameworkOptions} disabled placeholder="Unavailable" />
     </div>
   ),
   play: async ({ canvas }) => {

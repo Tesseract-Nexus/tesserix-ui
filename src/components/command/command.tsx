@@ -262,7 +262,7 @@ const CommandItem = React.forwardRef<HTMLButtonElement, CommandItemProps>(
 CommandItem.displayName = "CommandItem"
 
 const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => (
-  <span className={cn("ml-auto text-xs tracking-widest text-muted-foreground", className)} {...props} />
+  <span className={cn("ml-auto text-xs tracking-widest text-foreground/80", className)} {...props} />
 )
 CommandShortcut.displayName = "CommandShortcut"
 
