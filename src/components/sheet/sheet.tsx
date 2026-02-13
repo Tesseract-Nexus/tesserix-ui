@@ -150,9 +150,14 @@ const SheetOverlay = React.forwardRef<HTMLDivElement, React.ComponentPropsWithou
 SheetOverlay.displayName = "SheetOverlay"
 
 const sheetContentVariants = cva(
-  "fixed z-50 gap-4 bg-card p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+  "fixed z-50 gap-4 p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
   {
     variants: {
+      variant: {
+        default: "bg-card",
+        glass:
+          "bg-white/10 backdrop-blur-md dark:bg-black/20 supports-[backdrop-filter]:bg-white/10 supports-[backdrop-filter]:dark:bg-black/20",
+      },
       side: {
         top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
         bottom:
@@ -163,6 +168,7 @@ const sheetContentVariants = cva(
       },
     },
     defaultVariants: {
+      variant: "default",
       side: "right",
     },
   }
@@ -173,7 +179,7 @@ interface SheetContentProps
     VariantProps<typeof sheetContentVariants> {}
 
 const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
-  ({ side, className, children, onKeyDown, ...props }, ref) => {
+  ({ variant, side, className, children, onKeyDown, ...props }, ref) => {
     const { open, onOpenChange, triggerRef, titleId, descriptionId } = useSheet()
     const contentRef = React.useRef<HTMLDivElement>(null)
     const previousFocusRef = React.useRef<HTMLElement | null>(null)
@@ -243,7 +249,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
           aria-describedby={descriptionId}
           tabIndex={-1}
           data-state={open ? "open" : "closed"}
-          className={cn(sheetContentVariants({ side }), className)}
+          className={cn(sheetContentVariants({ variant, side }), className)}
           onKeyDown={handleKeyDown}
           {...props}
         >

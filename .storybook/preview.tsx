@@ -8,6 +8,9 @@ if (!isVitest) {
   void import('../src/themes/emerald.css')
   void import('../src/themes/sapphire.css')
   void import('../src/themes/rose.css')
+  void import('../src/themes/amber.css')
+  void import('../src/themes/violet.css')
+  void import('../src/themes/slate.css')
 }
 
 const withTheme: Decorator = (Story, context) => {
@@ -64,6 +67,9 @@ const preview: Preview = {
           { value: 'emerald', title: 'Emerald', icon: 'grow' },
           { value: 'sapphire', title: 'Sapphire', icon: 'component' },
           { value: 'rose', title: 'Rose', icon: 'heart' },
+          { value: 'amber', title: 'Amber', icon: 'starhollow' },
+          { value: 'violet', title: 'Violet', icon: 'beaker' },
+          { value: 'slate', title: 'Slate', icon: 'sidebar' },
         ],
         dynamicTitle: true,
       },

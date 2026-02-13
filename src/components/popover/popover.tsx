@@ -81,9 +81,14 @@ const PopoverTrigger = React.forwardRef<
 PopoverTrigger.displayName = "PopoverTrigger"
 
 const popoverContentVariants = cva(
-  "absolute z-50 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+  "absolute z-50 rounded-md p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
   {
     variants: {
+      variant: {
+        default: "border bg-popover",
+        glass:
+          "border border-white/20 bg-white/10 backdrop-blur-md dark:border-white/10 dark:bg-black/20 supports-[backdrop-filter]:bg-white/10 supports-[backdrop-filter]:dark:bg-black/20",
+      },
       side: {
         top: "bottom-full mb-2",
         right: "left-full ml-2",
@@ -111,6 +116,7 @@ const popoverContentVariants = cva(
       { side: "right", align: "end", class: "bottom-0" },
     ],
     defaultVariants: {
+      variant: "default",
       side: "bottom",
       align: "center",
     },
@@ -122,7 +128,7 @@ interface PopoverContentProps
     VariantProps<typeof popoverContentVariants> {}
 
 const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
-  ({ className, side, align, children, ...props }, ref) => {
+  ({ className, variant, side, align, children, ...props }, ref) => {
     const { open, onOpenChange, triggerRef } = usePopover()
     const contentRef = React.useRef<HTMLDivElement>(null)
 
@@ -163,7 +169,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
       <div className="relative inline-block">
         <div
           ref={contentRef}
-          className={cn(popoverContentVariants({ side, align }), className)}
+          className={cn(popoverContentVariants({ variant, side, align }), className)}
           data-state={open ? "open" : "closed"}
           {...props}
         >
