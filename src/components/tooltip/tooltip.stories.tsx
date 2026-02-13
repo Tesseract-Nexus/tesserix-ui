@@ -128,10 +128,10 @@ export const Top: Story = {
   play: async ({ canvas }) => {
     const trigger = canvas.getByRole('button', { name: /hover me/i })
 
-    fireEvent.focus(trigger)
+    fireEvent.focusIn(trigger)
     await expect(within(document.body).getByRole('tooltip')).toBeInTheDocument()
 
-    fireEvent.blur(trigger)
+    fireEvent.focusOut(trigger)
     await expect(within(document.body).queryByRole('tooltip')).not.toBeInTheDocument()
   },
 }
