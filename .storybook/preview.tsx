@@ -1,8 +1,13 @@
 import type { Preview, Decorator } from '@storybook/react'
 import { useEffect } from 'react'
-import '../src/themes/default.css'
-import '../src/themes/charcoal.css'
-import '../src/themes/ocean.css'
+
+const isVitest = Boolean((globalThis as { vitest?: unknown }).vitest)
+
+if (!isVitest) {
+  void import('../src/themes/default.css')
+  void import('../src/themes/charcoal.css')
+  void import('../src/themes/ocean.css')
+}
 
 const withTheme: Decorator = (Story, context) => {
   const theme = context.globals.theme || 'default'
