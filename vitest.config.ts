@@ -22,6 +22,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    coverage: {
+      exclude: [
+        '.storybook/**',
+        'src/test/**',
+        '**/*.stories.{ts,tsx}',
+        '**/*.test.{ts,tsx}',
+        '**/node_modules/**',
+        '**/dist/**',
+      ],
+    },
     projects: [
       {
         extends: true,
