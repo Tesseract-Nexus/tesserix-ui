@@ -1,0 +1,61 @@
+import * as React from "react"
+import type { Meta, StoryObj } from "@storybook/react"
+import { expect, fireEvent } from "storybook/test"
+
+import { DatePicker } from "./date-picker"
+
+const DatePickerDemo = () => {
+  const [value, setValue] = React.useState<string>("")
+  return (
+    <div className="space-y-3">
+      <DatePicker value={value} onValueChange={setValue} />
+      <p className="text-sm text-muted-foreground">Selected value: {value || "None"}</p>
+    </div>
+  )
+}
+
+const meta = {
+  title: "Forms/DatePicker",
+  component: DatePicker,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+} satisfies Meta<typeof DatePicker>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background p-8 md:p-12">
+      <div className="mx-auto w-full max-w-3xl rounded-3xl border bg-card p-6 shadow-lg md:p-8">
+        <div className="mb-6 space-y-1">
+          <p className="text-sm font-medium text-primary">Forms</p>
+          <h2 className="text-2xl font-bold tracking-tight text-card-foreground">Date Picker Showcase</h2>
+          <p className="text-sm text-muted-foreground">Calendar-based date selection with keyboard navigation.</p>
+        </div>
+
+        <DatePickerDemo />
+      </div>
+    </div>
+  ),
+}
+
+export const SelectDate: Story = {
+  render: () => <DatePickerDemo />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole("button", { name: /select date/i })
+    fireEvent.click(trigger)
+
+    const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date())
+    await expect(canvas.getByText(monthLabel)).toBeInTheDocument()
+
+    const today = new Date().getDate().toString()
+    const todayButton = canvas.getAllByRole("gridcell", { name: today })[0]
+    fireEvent.click(todayButton)
+
+    await expect(canvas.getByText(/selected value: \d{4}-\d{2}-\d{2}/i)).toBeInTheDocument()
+  },
+}
+

@@ -1,0 +1,112 @@
+import type { Meta, StoryObj } from "@storybook/react"
+import { expect, fireEvent, within } from "storybook/test"
+
+import { Button } from "../button"
+import { ToastProvider, ToastViewport, useToast } from "./toast"
+
+const ToastDemo = () => {
+  const { toast } = useToast()
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <Button
+        onClick={() =>
+          toast({
+            title: "Profile updated",
+            description: "Your account settings were saved successfully.",
+            variant: "success",
+          })
+        }
+      >
+        Success Toast
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast({
+            title: "Connection unstable",
+            description: "Network latency is higher than expected.",
+            variant: "warning",
+          })
+        }
+      >
+        Warning Toast
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={() =>
+          toast({
+            title: "Action failed",
+            description: "Unable to save changes. Try again in a few moments.",
+            variant: "destructive",
+          })
+        }
+      >
+        Error Toast
+      </Button>
+      <Button
+        variant="secondary"
+        onClick={() =>
+          toast({
+            title: "New deployment ready",
+            description: "A new release is available for production.",
+            variant: "info",
+            actionLabel: "View",
+          })
+        }
+      >
+        Action Toast
+      </Button>
+    </div>
+  )
+}
+
+const meta = {
+  title: "Feedback/Toast",
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+} satisfies Meta
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background p-8 md:p-12">
+      <div className="mx-auto w-full max-w-5xl rounded-3xl border bg-card p-6 shadow-lg md:p-8">
+        <div className="mb-6 space-y-1">
+          <p className="text-sm font-medium text-primary">Feedback</p>
+          <h2 className="text-2xl font-bold tracking-tight text-card-foreground">Toast Showcase</h2>
+          <p className="text-sm text-muted-foreground">Non-blocking notifications for status and actions.</p>
+        </div>
+
+        <ToastProvider>
+          <ToastDemo />
+          <ToastViewport />
+        </ToastProvider>
+      </div>
+    </div>
+  ),
+}
+
+export const Simple: Story = {
+  render: () => (
+    <ToastProvider>
+      <ToastDemo />
+      <ToastViewport />
+    </ToastProvider>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole("button", { name: /success toast/i })
+    fireEvent.click(trigger)
+
+    const status = within(document.body).getByRole("status")
+    await expect(status).toHaveTextContent(/profile updated/i)
+
+    const closeButton = within(status).getByRole("button", { name: /close notification/i })
+    fireEvent.click(closeButton)
+    await expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+  },
+}
