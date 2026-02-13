@@ -280,3 +280,33 @@ export const Controlled: Story = {
     })
   },
 }
+
+export const OutsideClickAndTriggerMode: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <button type="button">Outside target</button>
+      <Popover>
+        <PopoverTrigger>Toggle Inline Trigger</PopoverTrigger>
+        <PopoverContent>
+          <p className="text-sm">Dismiss me by clicking outside.</p>
+        </PopoverContent>
+      </Popover>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /toggle inline trigger/i })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    fireEvent.click(trigger)
+    await waitFor(() => {
+      expect(trigger).toHaveAttribute('aria-expanded', 'true')
+      expect(within(document.body).getByText(/dismiss me by clicking outside\./i)).toBeInTheDocument()
+    })
+
+    fireEvent.mouseDown(canvas.getByRole('button', { name: /outside target/i }))
+    await waitFor(() => {
+      expect(within(document.body).queryByText(/dismiss me by clicking outside\./i)).not.toBeInTheDocument()
+      expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    })
+  },
+}

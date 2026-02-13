@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect } from 'storybook/test'
+import * as React from 'react'
+import { expect, fireEvent, waitFor } from 'storybook/test'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible'
 
 const ChevronDownIcon = ({ className }: { className?: string }) => (
@@ -198,5 +199,68 @@ export const SmokeTest: Story = {
   render: Default.render,
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeTruthy()
+  },
+}
+
+export const Interaction: Story = {
+  render: () => (
+    <div className="w-[350px] space-y-2">
+      <Collapsible>
+        <CollapsibleTrigger className="rounded-md bg-muted px-4 py-2 text-sm font-medium hover:bg-muted/80">
+          Toggle section
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="rounded-md bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+            Hidden details
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /toggle section/i })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    fireEvent.click(trigger)
+    await waitFor(() => {
+      expect(trigger).toHaveAttribute('aria-expanded', 'true')
+      expect(canvas.getByText(/hidden details/i)).toBeInTheDocument()
+    })
+
+    fireEvent.click(trigger)
+    await waitFor(() => {
+      expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    })
+  },
+}
+
+export const Controlled: Story = {
+  render: () => {
+    const Demo = () => {
+      const [open, setOpen] = React.useState(false)
+      return (
+        <div className="w-[350px] space-y-2">
+          <Collapsible open={open} onOpenChange={setOpen}>
+            <CollapsibleTrigger className="rounded-md bg-muted px-4 py-2 text-sm font-medium hover:bg-muted/80">
+              Controlled section
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="rounded-md bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
+                Controlled details
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+          <p className="text-sm text-muted-foreground">Open: {open ? 'yes' : 'no'}</p>
+        </div>
+      )
+    }
+    return <Demo />
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /controlled section/i })
+    fireEvent.click(trigger)
+    await waitFor(() => {
+      expect(canvas.getByText(/open: yes/i)).toBeInTheDocument()
+    })
   },
 }

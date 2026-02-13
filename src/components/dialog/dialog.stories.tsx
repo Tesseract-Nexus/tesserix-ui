@@ -297,3 +297,57 @@ export const Controlled: Story = {
     })
   },
 }
+
+export const FocusTrapAndOverlayClose: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open trap dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Trap test</DialogTitle>
+          <DialogDescription>Focus should stay inside until closed.</DialogDescription>
+        </DialogHeader>
+        <input
+          aria-label="First field"
+          defaultValue="A"
+          className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+        />
+        <input
+          aria-label="Second field"
+          defaultValue="B"
+          className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+        />
+        <DialogFooter>
+          <Button>Action</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open trap dialog/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    const first = within(dialog).getByRole('textbox', { name: /first field/i })
+    const action = within(dialog).getByRole('button', { name: /action/i })
+
+    await expect(first).toHaveFocus()
+    action.focus()
+    await expect(action).toHaveFocus()
+    fireEvent.keyDown(dialog, { key: 'Tab' })
+    await expect(first).toHaveFocus()
+    fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true })
+    await expect(action).toHaveFocus()
+
+    const overlay = document.querySelector('.backdrop-blur-sm') as HTMLElement | null
+    if (overlay) {
+      fireEvent.mouseDown(overlay)
+    }
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(trigger).toHaveFocus()
+    })
+  },
+}

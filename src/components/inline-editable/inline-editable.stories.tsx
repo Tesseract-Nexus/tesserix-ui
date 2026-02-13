@@ -56,3 +56,47 @@ export const EditValue: Story = {
     })
   },
 }
+
+export const CancelAndBlur: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <InlineEditable defaultValue="Initial Name" label="Project name" />
+      <p className="text-sm text-muted-foreground">Uncontrolled editable field</p>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: /project name/i })
+    fireEvent.click(button)
+
+    const input = await waitFor(() => canvas.getByRole("textbox", { name: /project name/i }))
+    fireEvent.change(input, { target: { value: "Temp Name" } })
+    fireEvent.keyDown(input, { key: "Escape" })
+
+    await waitFor(() => {
+      expect(canvas.getByRole("button", { name: /project name/i })).toHaveTextContent(/initial name/i)
+    })
+
+    fireEvent.click(canvas.getByRole("button", { name: /project name/i }))
+    const inputAgain = await waitFor(() => canvas.getByRole("textbox", { name: /project name/i }))
+    fireEvent.change(inputAgain, { target: { value: "Blur Save" } })
+    fireEvent.click(canvas.getByRole("button", { name: /save value/i }))
+    await waitFor(() => {
+      expect(canvas.getByRole("button", { name: /project name/i })).toHaveTextContent(/blur save/i)
+    })
+  },
+}
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="space-y-3">
+      <InlineEditable value="Read Only Name" label="Project name" disabled />
+      <p className="text-sm text-muted-foreground">No editing expected</p>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: /project name/i })
+    await expect(button).toBeDisabled()
+    fireEvent.click(button)
+    await expect(canvas.queryByRole("textbox", { name: /project name/i })).not.toBeInTheDocument()
+  },
+}

@@ -338,3 +338,63 @@ export const Controlled: Story = {
     })
   },
 }
+
+export const FocusTrapAndOverlayClose: Story = {
+  render: () => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline">Open trap sheet</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Sheet trap test</SheetTitle>
+          <SheetDescription>Focus should cycle inside the sheet.</SheetDescription>
+        </SheetHeader>
+        <div className="space-y-2">
+          <input
+            aria-label="First input"
+            defaultValue="One"
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          />
+          <input
+            aria-label="Second input"
+            defaultValue="Two"
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          />
+        </div>
+        <SheetFooter>
+          <Button>Save</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open trap sheet/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    const first = within(dialog).getByRole('textbox', { name: /first input/i })
+    const save = within(dialog).getByRole('button', { name: /save/i })
+    const close = within(dialog).getByRole('button', { name: /close/i })
+
+    await expect(first).toHaveFocus()
+    close.focus()
+    await expect(close).toHaveFocus()
+    fireEvent.keyDown(dialog, { key: 'Tab' })
+    await expect(first).toHaveFocus()
+    fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true })
+    await expect(close).toHaveFocus()
+
+    const overlay = document.querySelector('.backdrop-blur-sm') as HTMLElement | null
+    if (overlay) {
+      fireEvent.mouseDown(overlay)
+    } else {
+      fireEvent.mouseDown(document.body)
+    }
+
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+      expect(trigger).toHaveFocus()
+    })
+  },
+}
