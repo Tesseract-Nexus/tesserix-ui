@@ -380,7 +380,6 @@ export const FocusTrapAndOverlayClose: Story = {
 
     const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
     const first = within(dialog).getByRole('textbox', { name: /first input/i })
-    const save = within(dialog).getByRole('button', { name: /save/i })
     const close = within(dialog).getByRole('button', { name: /close/i })
 
     await expect(first).toHaveFocus()
