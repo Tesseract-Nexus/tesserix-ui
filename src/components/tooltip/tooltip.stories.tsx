@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, fireEvent, within } from 'storybook/test'
 import { Tooltip } from './tooltip'
 import { Button } from '../button'
 
@@ -124,6 +125,15 @@ export const Top: Story = {
       <Button>Hover me</Button>
     </Tooltip>
   ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /hover me/i })
+
+    fireEvent.focus(trigger)
+    await expect(within(document.body).getByRole('tooltip')).toBeInTheDocument()
+
+    fireEvent.blur(trigger)
+    await expect(within(document.body).queryByRole('tooltip')).not.toBeInTheDocument()
+  },
 }
 
 export const Bottom: Story = {

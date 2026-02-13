@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, fireEvent } from 'storybook/test'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './accordion'
 
 const meta = {
@@ -105,6 +106,17 @@ export const Single: Story = {
       </AccordionItem>
     </Accordion>
   ),
+  play: async ({ canvas }) => {
+    const section1 = canvas.getByRole('button', { name: /section 1/i })
+    const section2 = canvas.getByRole('button', { name: /section 2/i })
+
+    await expect(canvas.getByText(/content for section 1/i)).toBeInTheDocument()
+    fireEvent.click(section2)
+    await expect(canvas.getByText(/content for section 2/i)).toBeInTheDocument()
+    await expect(canvas.queryByText(/content for section 1/i)).not.toBeInTheDocument()
+    await expect(section2).toHaveAttribute('aria-expanded', 'true')
+    await expect(section1).toHaveAttribute('aria-expanded', 'false')
+  },
 }
 
 export const Multiple: Story = {

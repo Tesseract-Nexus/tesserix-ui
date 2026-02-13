@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, fireEvent } from 'storybook/test'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../card'
 
@@ -160,4 +161,15 @@ export const Basic: Story = {
       </TabsContent>
     </Tabs>
   ),
+  play: async ({ canvas }) => {
+    const tab1 = canvas.getByRole('tab', { name: /tab 1/i })
+    const tab2 = canvas.getByRole('tab', { name: /tab 2/i })
+
+    await expect(tab1).toHaveAttribute('aria-selected', 'true')
+    tab1.focus()
+
+    fireEvent.keyDown(tab1, { key: 'ArrowRight' })
+    await expect(tab2).toHaveAttribute('aria-selected', 'true')
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent(/content for tab 2/i)
+  },
 }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, fireEvent, within } from 'storybook/test'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -180,6 +181,20 @@ export const Simple: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+  play: async ({ canvas }) => {
+    const openButton = canvas.getByRole('button', { name: /open/i })
+
+    openButton.focus()
+    fireEvent.keyDown(openButton, { key: 'ArrowDown' })
+
+    const menu = within(document.body).getByRole('menu')
+    const editItem = within(menu).getByRole('menuitem', { name: /edit/i })
+    const duplicateItem = within(menu).getByRole('menuitem', { name: /duplicate/i })
+
+    await expect(editItem).toHaveFocus()
+    fireEvent.keyDown(menu, { key: 'ArrowDown' })
+    await expect(duplicateItem).toHaveFocus()
+  },
 }
 
 export const WithShortcuts: Story = {

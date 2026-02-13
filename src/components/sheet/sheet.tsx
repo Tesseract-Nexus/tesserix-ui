@@ -8,6 +8,11 @@ import { cn } from "../../lib/utils"
 interface SheetContextValue {
   open: boolean
   onOpenChange: (open: boolean) => void
+  triggerRef: React.RefObject<HTMLElement | null>
+  titleId?: string
+  descriptionId?: string
+  setTitleId: (id?: string) => void
+  setDescriptionId: (id?: string) => void
 }
 
 const SheetContext = React.createContext<SheetContextValue | undefined>(undefined)
@@ -20,6 +25,31 @@ const useSheet = () => {
   return context
 }
 
+const setRef = <T,>(ref: React.ForwardedRef<T>, value: T) => {
+  if (typeof ref === "function") {
+    ref(value)
+    return
+  }
+  if (ref) {
+    ref.current = value
+  }
+}
+
+const getFocusableElements = (element: HTMLElement) => {
+  const selector = [
+    "a[href]",
+    "button:not([disabled])",
+    "textarea:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])",
+  ].join(",")
+
+  return Array.from(element.querySelectorAll<HTMLElement>(selector)).filter(
+    (node) => !node.hasAttribute("disabled") && node.getAttribute("aria-hidden") !== "true"
+  )
+}
+
 export interface SheetProps {
   open?: boolean
   defaultOpen?: boolean
@@ -29,6 +59,10 @@ export interface SheetProps {
 
 const Sheet = ({ open: controlledOpen, defaultOpen = false, onOpenChange, children }: SheetProps) => {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
+  const [titleId, setTitleId] = React.useState<string | undefined>(undefined)
+  const [descriptionId, setDescriptionId] = React.useState<string | undefined>(undefined)
+  const triggerRef = React.useRef<HTMLElement | null>(null)
+
   const isControlled = controlledOpen !== undefined
   const open = isControlled ? controlledOpen : uncontrolledOpen
 
@@ -43,7 +77,17 @@ const Sheet = ({ open: controlledOpen, defaultOpen = false, onOpenChange, childr
   )
 
   return (
-    <SheetContext.Provider value={{ open, onOpenChange: handleOpenChange }}>
+    <SheetContext.Provider
+      value={{
+        open,
+        onOpenChange: handleOpenChange,
+        triggerRef,
+        titleId,
+        descriptionId,
+        setTitleId,
+        setDescriptionId,
+      }}
+    >
       {children}
     </SheetContext.Provider>
   )
@@ -53,26 +97,28 @@ interface SheetTriggerProps extends React.ComponentPropsWithoutRef<"button"> {
   asChild?: boolean
 }
 
-const SheetTrigger = React.forwardRef<
-  HTMLButtonElement,
-  SheetTriggerProps
->(({ className, onClick, asChild = false, ...props }, ref) => {
-  const { onOpenChange } = useSheet()
-  const Comp = asChild ? Slot : "button"
+const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
+  ({ className, onClick, asChild = false, ...props }, ref) => {
+    const { onOpenChange, triggerRef } = useSheet()
+    const Comp = asChild ? Slot : "button"
 
-  return (
-    <Comp
-      ref={ref}
-      {...(!asChild && { type: "button" })}
-      onClick={(e) => {
-        onOpenChange(true)
-        onClick?.(e)
-      }}
-      className={className}
-      {...props}
-    />
-  )
-})
+    return (
+      <Comp
+        ref={(node: HTMLButtonElement | null) => {
+          triggerRef.current = node
+          setRef(ref, node)
+        }}
+        {...(!asChild && { type: "button" })}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          onOpenChange(true)
+          onClick?.(e)
+        }}
+        className={className}
+        {...props}
+      />
+    )
+  }
+)
 SheetTrigger.displayName = "SheetTrigger"
 
 const SheetPortal = ({ children }: { children: React.ReactNode }) => {
@@ -80,29 +126,27 @@ const SheetPortal = ({ children }: { children: React.ReactNode }) => {
 
   if (!open) return null
 
-  return typeof document !== 'undefined'
-    ? ReactDOM.createPortal(children, document.body)
-    : null
+  return typeof document !== "undefined" ? ReactDOM.createPortal(children, document.body) : null
 }
 
-const SheetOverlay = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => {
-  const { onOpenChange } = useSheet()
+const SheetOverlay = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => {
+    const { onOpenChange, open } = useSheet()
 
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        className
-      )}
-      onClick={() => onOpenChange(false)}
-      {...props}
-    />
-  )
-})
+    return (
+      <div
+        ref={ref}
+        data-state={open ? "open" : "closed"}
+        className={cn(
+          "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          className
+        )}
+        onMouseDown={() => onOpenChange(false)}
+        {...props}
+      />
+    )
+  }
+)
 SheetOverlay.displayName = "SheetOverlay"
 
 const sheetContentVariants = cva(
@@ -129,8 +173,8 @@ interface SheetContentProps
     VariantProps<typeof sheetContentVariants> {}
 
 const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
-  ({ side, className, children, ...props }, ref) => {
-    const { open, onOpenChange } = useSheet()
+  ({ side, className, children, onKeyDown, ...props }, ref) => {
+    const { open, onOpenChange, triggerRef, titleId, descriptionId } = useSheet()
     const contentRef = React.useRef<HTMLDivElement>(null)
     const previousFocusRef = React.useRef<HTMLElement | null>(null)
 
@@ -140,21 +184,53 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
       if (!open || !contentRef.current) return
 
       previousFocusRef.current = document.activeElement as HTMLElement
-      contentRef.current.focus()
+      const focusableElements = getFocusableElements(contentRef.current)
+      ;(focusableElements[0] || contentRef.current).focus()
 
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape") {
-          onOpenChange(false)
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = "hidden"
+
+      return () => {
+        document.body.style.overflow = originalOverflow
+        triggerRef.current?.focus()
+        if (triggerRef.current == null) {
+          previousFocusRef.current?.focus()
+        }
+      }
+    }, [open, triggerRef])
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        onOpenChange(false)
+        return
+      }
+
+      if (event.key === "Tab" && contentRef.current) {
+        const focusableElements = getFocusableElements(contentRef.current)
+        if (focusableElements.length === 0) {
+          event.preventDefault()
+          return
+        }
+
+        const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement)
+
+        if (event.shiftKey) {
+          if (currentIndex <= 0) {
+            event.preventDefault()
+            focusableElements[focusableElements.length - 1]?.focus()
+          }
+          return
+        }
+
+        if (currentIndex === focusableElements.length - 1) {
+          event.preventDefault()
+          focusableElements[0]?.focus()
         }
       }
 
-      document.addEventListener("keydown", handleKeyDown)
-
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown)
-        previousFocusRef.current?.focus()
-      }
-    }, [open, onOpenChange])
+      onKeyDown?.(event)
+    }
 
     return (
       <SheetPortal>
@@ -163,8 +239,12 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
           ref={contentRef}
           role="dialog"
           aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
           tabIndex={-1}
+          data-state={open ? "open" : "closed"}
           className={cn(sheetContentVariants({ side }), className)}
+          onKeyDown={handleKeyDown}
           {...props}
         >
           {children}
@@ -180,10 +260,7 @@ const SheetHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
-    {...props}
-  />
+  <div className={cn("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
 )
 SheetHeader.displayName = "SheetHeader"
 
@@ -198,88 +275,102 @@ const SheetFooter = ({
 )
 SheetFooter.displayName = "SheetFooter"
 
-const SheetTitle = React.forwardRef<
-  HTMLHeadingElement,
-  React.ComponentPropsWithoutRef<"h2">
->(({ className, ...props }, ref) => (
-  <h2
-    ref={ref}
-    className={cn("text-lg font-semibold text-card-foreground", className)}
-    {...props}
-  />
-))
+const SheetTitle = React.forwardRef<HTMLHeadingElement, React.ComponentPropsWithoutRef<"h2">>(
+  ({ className, id, ...props }, ref) => {
+    const { setTitleId } = useSheet()
+    const generatedId = React.useId()
+    const titleId = id || generatedId
+
+    React.useEffect(() => {
+      setTitleId(titleId)
+      return () => setTitleId(undefined)
+    }, [setTitleId, titleId])
+
+    return (
+      <h2
+        ref={ref}
+        id={titleId}
+        className={cn("text-lg font-semibold text-card-foreground", className)}
+        {...props}
+      />
+    )
+  }
+)
 SheetTitle.displayName = "SheetTitle"
 
-const SheetDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.ComponentPropsWithoutRef<"p">
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
+const SheetDescription = React.forwardRef<HTMLParagraphElement, React.ComponentPropsWithoutRef<"p">>(
+  ({ className, id, ...props }, ref) => {
+    const { setDescriptionId } = useSheet()
+    const generatedId = React.useId()
+    const descriptionId = id || generatedId
+
+    React.useEffect(() => {
+      setDescriptionId(descriptionId)
+      return () => setDescriptionId(undefined)
+    }, [setDescriptionId, descriptionId])
+
+    return <p ref={ref} id={descriptionId} className={cn("text-sm text-muted-foreground", className)} {...props} />
+  }
+)
 SheetDescription.displayName = "SheetDescription"
 
 interface SheetCloseProps extends React.ComponentPropsWithoutRef<"button"> {
   asChild?: boolean
 }
 
-const SheetClose = React.forwardRef<
-  HTMLButtonElement,
-  SheetCloseProps
->(({ className, onClick, asChild = false, ...props }, ref) => {
-  const { onOpenChange } = useSheet()
-  const Comp = asChild ? Slot : "button"
+const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
+  ({ className, onClick, asChild = false, ...props }, ref) => {
+    const { onOpenChange } = useSheet()
+    const Comp = asChild ? Slot : "button"
 
-  if (asChild) {
+    if (asChild) {
+      return (
+        <Comp
+          ref={ref}
+          className={className}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            onOpenChange(false)
+            onClick?.(e)
+          }}
+          {...props}
+        />
+      )
+    }
+
     return (
       <Comp
         ref={ref}
-        className={className}
-        onClick={(e) => {
+        type="button"
+        className={cn(
+          "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none",
+          className
+        )}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           onOpenChange(false)
           onClick?.(e)
         }}
         {...props}
-      />
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+        <span className="sr-only">Close</span>
+      </Comp>
     )
   }
-
-  return (
-    <Comp
-      ref={ref}
-      type="button"
-      className={cn(
-        "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none",
-        className
-      )}
-      onClick={(e) => {
-        onOpenChange(false)
-        onClick?.(e)
-      }}
-      {...props}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-4 w-4"
-      >
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
-      <span className="sr-only">Close</span>
-    </Comp>
-  )
-})
+)
 SheetClose.displayName = "SheetClose"
 
 export {

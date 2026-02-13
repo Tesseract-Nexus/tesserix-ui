@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, fireEvent, within } from 'storybook/test'
 import {
   Dialog,
   DialogTrigger,
@@ -195,6 +196,17 @@ export const Simple: Story = {
       </DialogContent>
     </Dialog>
   ),
+  play: async ({ canvas }) => {
+    const openButton = canvas.getByRole('button', { name: /open/i })
+
+    fireEvent.click(openButton)
+    const dialog = within(document.body).getByRole('dialog')
+    await expect(dialog).toBeInTheDocument()
+
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    await expect(openButton).toHaveFocus()
+  },
 }
 
 export const WithFooter: Story = {

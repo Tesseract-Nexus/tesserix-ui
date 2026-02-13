@@ -1,8 +1,8 @@
-# @tesserix/ui
+# @tesseract-nexus/tesserix-ui
 
 > Production-ready design system for Tesserix applications
 
-[![Version](https://img.shields.io/npm/v/@tesserix/ui.svg)](https://www.npmjs.com/package/@tesserix/ui)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Tesseract-Nexus/tesserix-ui/packages)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
 
@@ -14,22 +14,44 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 - 🎨 **Fully Customizable** - CSS variables + Tailwind config theming
 - 📦 **Optimized Bundles** - Tree-shakeable ESM and CJS builds
 - 🎯 **Type-Safe** - 100% TypeScript with complete type definitions
-- ♿ **Accessible** - WCAG 2.1 AA compliant, powered by Radix UI
+- ♿ **Accessibility-First** - Semantic HTML, keyboard support, and Storybook a11y checks
 - 🌙 **Dark Mode** - Built-in dark mode support
 - 📚 **Well Documented** - Comprehensive Storybook + API docs
-- ✅ **Tested** - 100% test coverage with Vitest
+- ✅ **Tested** - Storybook interaction tests with Vitest + coverage reporting
 - 🚀 **Production Ready** - Used across Tesserix products
 
 ## 📊 Status
 
 **Current Version:** 0.1.0 (Alpha)
-**Components:** 3 (Button, Card, Input)
-**Test Coverage:** 100% (52 tests passing)
+**Components:** 31 components
+**Story Tests:** 147 passing (Vitest Storybook project)
+**Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
 
 See [PRD.md](./PRD.md) for complete product requirements and roadmap.
 
 ## Installation
+
+### From GitHub Packages
+
+1. Create or update `.npmrc` in your project root:
+
+```bash
+@tesseract-nexus:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+2. Install the package:
+
+```bash
+npm install @tesseract-nexus/tesserix-ui
+```
+
+**Note:** You'll need a GitHub Personal Access Token with `read:packages` scope. Set it as an environment variable:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+```
 
 ### Local Development
 
@@ -38,13 +60,7 @@ See [PRD.md](./PRD.md) for complete product requirements and roadmap.
 npm link
 
 # In your Next.js app
-npm link @tesserix/ui
-```
-
-### From GitHub Packages (Production)
-
-```bash
-npm install @tesserix/ui
+npm link @tesseract-nexus/tesserix-ui
 ```
 
 ## Usage
@@ -60,11 +76,11 @@ npm install tailwindcss@^4.1.0 @tailwindcss/postcss
 ```javascript
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  presets: [require('@tesserix/ui/tailwind')],
+  presets: [require('@tesseract-nexus/tesserix-ui/tailwind')],
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
-    './node_modules/@tesserix/ui/dist/**/*.{js,mjs}',
+    './node_modules/@tesseract-nexus/tesserix-ui/dist/**/*.{js,mjs}',
   ],
 }
 ```
@@ -83,7 +99,7 @@ module.exports = {
 
 ```typescript
 // app/layout.tsx
-import '@tesserix/ui/styles'
+import '@tesseract-nexus/tesserix-ui/styles'
 import './globals.css'
 
 export default function RootLayout({ children }) {
@@ -98,7 +114,7 @@ export default function RootLayout({ children }) {
 ### 5. Use components
 
 ```typescript
-import { Button, Card, CardHeader, CardTitle, CardContent, Input } from '@tesserix/ui'
+import { Button, Card, CardHeader, CardTitle, CardContent, Input } from '@tesseract-nexus/tesserix-ui'
 
 export default function Page() {
   return (
@@ -121,7 +137,7 @@ Override theme colors in your app's CSS:
 
 ```css
 /* app/globals.css */
-@import '@tesserix/ui/styles';
+@import '@tesseract-nexus/tesserix-ui/styles';
 
 :root {
   --primary: 10 80% 50%; /* Custom primary color */
@@ -134,7 +150,7 @@ Or using Tailwind config:
 ```javascript
 // tailwind.config.js
 module.exports = {
-  presets: [require('@tesserix/ui/tailwind')],
+  presets: [require('@tesseract-nexus/tesserix-ui/tailwind')],
   theme: {
     extend: {
       colors: {
@@ -150,11 +166,11 @@ module.exports = {
 
 ## Available Components
 
-- `Button` - Versatile button component with multiple variants
-- `Card` - Card container with Header, Title, Description, Content, and Footer
-- `Input` - Styled input field
-
-More components coming soon!
+- `Accordion`, `Alert`, `AspectRatio`, `Avatar`, `Badge`, `Breadcrumb`
+- `Button`, `Card`, `Checkbox`, `Collapsible`, `Dialog`, `DropdownMenu`
+- `Heading`, `Input`, `Label`, `Popover`, `Progress`, `Radio`, `Select`
+- `Separator`, `Sheet`, `Skeleton`, `Slider`, `Spinner`, `Switch`
+- `Table`, `Tabs`, `Text`, `Textarea`, `Toggle`, `Tooltip`
 
 ## Development
 
@@ -276,24 +292,33 @@ We welcome contributions! Please see our [contribution guidelines](./CONTRIBUTIN
 
 ## 📦 Publishing
 
-Publishing to GitHub Packages:
+The package is automatically published to GitHub Packages when a new release is created:
 
-```bash
-# 1. Build the package
-npm run build
+1. **Manual Release:**
+   ```bash
+   # Create and push a tag
+   npm version patch  # or minor/major
+   git push --follow-tags
 
-# 2. Update version (using changesets)
-npx changeset
-npx changeset version
+   # Create a release on GitHub
+   gh release create v0.1.1 --generate-notes
+   ```
 
-# 3. Publish
-npm publish
-```
+2. **Automated Publishing:**
+   - The GitHub Actions workflow (`.github/workflows/publish.yml`) runs automatically
+   - Tests are run before publishing
+   - Package is published to GitHub Packages
+
+3. **Manual Publish (if needed):**
+   ```bash
+   npm run build
+   npm publish
+   ```
 
 ## 🏗️ Architecture
 
 ```
-@tesserix/ui/
+@tesseract-nexus/tesserix-ui/
 ├── src/
 │   ├── components/          # UI components
 │   │   ├── button/
@@ -318,6 +343,6 @@ MIT © Tesserix
 
 ---
 
-**Maintained by the Tesserix Engineering Team**
+**Maintained by the Tesseract Nexus Team**
 
-For questions or support, please [open an issue](https://github.com/tesserix/tesserix-ui/issues).
+For questions or support, please [open an issue](https://github.com/Tesseract-Nexus/tesserix-ui/issues).
