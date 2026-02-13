@@ -24,12 +24,12 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 
 **Current Version:** 0.1.3 (Alpha)
 **Components:** 57 components across 6 categories
-**Story Tests:** 217+ passing (Vitest Storybook project)
+**Story Tests:** 219+ passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
 **CI/CD:** Storybook CI + Quality CI + Performance CI + automated publishing to GitHub Packages
 
-See [PRD.md](./PRD.md) for complete product requirements and roadmap.
+See [PRD.md](./PRD.md) for product requirements and open product decisions.
 
 ## Installation
 
@@ -275,48 +275,12 @@ Optional capabilities:
 ## 📚 Documentation
 
 - **[PRD.md](./PRD.md)** - Product Requirements Document
-- **[ROADMAP.md](./ROADMAP.md)** - Detailed implementation roadmap
 - **[Storybook](http://localhost:6006)** - Interactive component documentation (run `npm run storybook`)
-
-## 🗺️ Roadmap
-
-We're following a phased approach to build a production-ready design system:
-
-### ✅ Phase 1: Foundation (Completed)
-- [x] Component folder structure
-- [x] Build system (tsup)
-- [x] Testing setup (Vitest + Testing Library)
-- [x] Storybook documentation
-- [x] Core components (Button, Card, Input)
-- [x] Theme system with CSS variables
-
-### 🚧 Phase 2: Infrastructure (In Progress)
-- [x] Design tokens system (`npm run generate:themes`)
-- [x] CI/CD pipeline (GitHub Actions - automated publishing)
-- [x] Accessibility testing (Storybook a11y + axe checks in CI)
-- [x] Changeset versioning
-- [x] Bundle size monitoring
-
-### ✅ Phase 3: Component Library (Completed)
-- [x] Form components (15 components)
-- [x] Feedback components (10 components)
-- [x] Navigation components (4 components)
-- [x] Layout components (4 components)
-- [x] Data display (8 components)
-- [x] Typography components (3 components)
-
-### 📋 Phase 4: Advanced Features (Planned)
-- [x] Hooks library
-- [x] Visual regression testing
-- [x] Documentation website
-- [x] Component generator CLI
-- [x] Performance monitoring
-
-See [ROADMAP.md](./ROADMAP.md) for detailed timeline and requirements.
+- **Docs Site Source** - `docs-site/` (build with `npm run docs:build`)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [contribution guidelines](./CONTRIBUTING.md) for details.
+We welcome contributions.
 
 **Quick start:**
 1. Fork the repository
@@ -398,7 +362,8 @@ Require these checks before merging PRs to `main`:
 │   └── index.ts
 ├── .storybook/            # Storybook config
 ├── dist/                  # Build output
-└── docs/                  # Documentation
+├── docs-site/             # Documentation website source
+└── docs-dist/             # Documentation website build output
 ```
 
 ## 📄 License
