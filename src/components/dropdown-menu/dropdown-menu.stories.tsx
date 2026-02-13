@@ -17,6 +17,12 @@ const meta = {
   component: DropdownMenu,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'DropdownMenu supports controlled/uncontrolled open state, keyboard navigation, outside click dismissal, and disabled items.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -370,4 +376,77 @@ export const OutsideClickDismissal: Story = {
       expect(within(document.body).queryByRole('menu')).not.toBeInTheDocument()
     })
   },
+}
+
+export const KeyboardOpenWithSpace: Story = {
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="inline-flex h-10 items-center rounded-md border px-4 text-sm">
+        Plain Trigger
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Inspect</DropdownMenuItem>
+        <DropdownMenuItem>Duplicate</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /plain trigger/i })
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: ' ' })
+
+    const menu = await waitFor(() => within(document.body).getByRole('menu'))
+    await expect(menu).toBeInTheDocument()
+    await expect(within(menu).getByRole('menuitem', { name: /inspect/i })).toHaveFocus()
+  },
+}
+
+export const DisabledItemNoClose: Story = {
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline">Open disabled behavior menu</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem disabled>Archive</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open disabled behavior menu/i })
+    fireEvent.click(trigger)
+
+    const menu = await waitFor(() => within(document.body).getByRole('menu'))
+    const disabledItem = within(menu).getByRole('menuitem', { name: /archive/i })
+    await expect(disabledItem).toBeDisabled()
+    fireEvent.click(disabledItem)
+
+    await waitFor(() => {
+      expect(within(document.body).getByRole('menu')).toBeInTheDocument()
+    })
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[760px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Uncontrolled</p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Open Menu</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Controlled</p>
+        <ControlledDropdownDemo />
+      </div>
+    </div>
+  ),
 }

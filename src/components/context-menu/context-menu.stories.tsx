@@ -67,6 +67,12 @@ const meta = {
   component: ContextMenu,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "ContextMenu supports right-click and keyboard invocation, roving focus, and close-on-dismiss interactions.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta
@@ -166,4 +172,58 @@ export const KeyboardNavigation: Story = {
       expect(within(document.body).queryByRole("menu")).not.toBeInTheDocument()
     })
   },
+}
+
+export const DisabledItemBehavior: Story = {
+  render: () => {
+    const DisabledDemo = () => {
+      const [lastAction, setLastAction] = React.useState("None")
+      return (
+        <div className="space-y-4">
+          <ContextMenu>
+            <ContextMenuTrigger className="rounded-xl border bg-card p-6 text-sm text-card-foreground">
+              Disabled context action panel
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+              <ContextMenuItem onClick={() => setLastAction("Open")}>Open</ContextMenuItem>
+              <ContextMenuItem disabled onClick={() => setLastAction("Disabled")}>
+                Disabled Action
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+          <p className="text-sm text-foreground">Last action: {lastAction}</p>
+        </div>
+      )
+    }
+    return <DisabledDemo />
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByText(/disabled context action panel/i)
+    fireEvent.contextMenu(trigger, { clientX: 120, clientY: 120 })
+
+    const disabledItem = await waitFor(() =>
+      within(document.body).getByRole("menuitem", { name: /disabled action/i })
+    )
+    await expect(disabledItem).toBeDisabled()
+    fireEvent.click(disabledItem)
+
+    await waitFor(() => {
+      expect(canvas.getByText(/last action: none/i)).toBeInTheDocument()
+    })
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[760px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Pointer Trigger</p>
+        <InteractiveContextMenu />
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Controlled Trigger</p>
+        <ControlledContextMenuDemo />
+      </div>
+    </div>
+  ),
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect } from 'storybook/test'
+import { expect, fireEvent, waitFor } from 'storybook/test'
 import { Avatar } from './avatar'
 
 const meta = {
@@ -7,6 +7,12 @@ const meta = {
   component: Avatar,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Avatar supports image rendering with graceful fallback content for missing or failed image sources.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -173,4 +179,57 @@ export const SmokeTest: Story = {
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeTruthy()
   },
+}
+
+export const ImageErrorFallback: Story = {
+  render: () => (
+    <Avatar
+      src="https://invalid.local/avatar.png"
+      alt="Broken avatar"
+      fallback="ER"
+    />
+  ),
+  play: async ({ canvas }) => {
+    const image = canvas.getByRole('img', { name: /broken avatar/i })
+    fireEvent.error(image)
+
+    await waitFor(() => {
+      expect(canvas.getByText('ER')).toBeInTheDocument()
+    })
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Validates runtime image-error handling and fallback rendering.',
+      },
+    },
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[560px] gap-4 md:grid-cols-3">
+      <div className="space-y-2 rounded-xl border bg-card p-4 text-center">
+        <p className="text-xs font-medium text-muted-foreground">Image</p>
+        <div className="flex justify-center">
+          <Avatar
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
+            alt="Loaded avatar"
+          />
+        </div>
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4 text-center">
+        <p className="text-xs font-medium text-muted-foreground">Initials</p>
+        <div className="flex justify-center">
+          <Avatar fallback="JD" />
+        </div>
+      </div>
+      <div className="space-y-2 rounded-xl border bg-card p-4 text-center">
+        <p className="text-xs font-medium text-muted-foreground">No Content</p>
+        <div className="flex justify-center">
+          <Avatar />
+        </div>
+      </div>
+    </div>
+  ),
 }

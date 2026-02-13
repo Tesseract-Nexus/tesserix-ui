@@ -18,6 +18,12 @@ const meta = {
   component: Dialog,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Dialog provides modal overlays with focus trapping, escape handling, overlay dismiss, and controlled/uncontrolled usage.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -378,5 +384,71 @@ export const Glassmorphism: Story = {
         <DialogClose />
       </DialogContent>
     </Dialog>
+  ),
+}
+
+export const NoFocusableTabBehavior: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open no-focus dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>No focusable content</DialogTitle>
+          <DialogDescription>This dialog intentionally contains no focusable descendants.</DialogDescription>
+        </DialogHeader>
+        <div className="py-3 text-sm text-muted-foreground">Tab key should remain trapped on the dialog root.</div>
+      </DialogContent>
+    </Dialog>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /open no-focus dialog/i })
+    fireEvent.click(trigger)
+
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    dialog.focus()
+    fireEvent.keyDown(dialog, { key: 'Tab' })
+    await expect(dialog).toHaveFocus()
+
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    })
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[840px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Default</p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open Dialog</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Default modal</DialogTitle>
+              <DialogDescription>Standard card-style dialog.</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Glass</p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="glass">Open Glass</Button>
+          </DialogTrigger>
+          <DialogContent variant="glass">
+            <DialogHeader>
+              <DialogTitle>Glass modal</DialogTitle>
+              <DialogDescription>Backdrop-blur variant.</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
   ),
 }

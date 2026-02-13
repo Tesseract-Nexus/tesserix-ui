@@ -18,6 +18,12 @@ const meta = {
   component: Sheet,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Sheet provides side/top/bottom modal panels with focus management, keyboard dismissal, and overlay interactions.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -424,5 +430,40 @@ export const Glassmorphism: Story = {
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  ),
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[900px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Right (Default)</p>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline">Open Right Sheet</Button>
+          </SheetTrigger>
+          <SheetContent side="right">
+            <SheetHeader>
+              <SheetTitle>Right panel</SheetTitle>
+              <SheetDescription>Standard side drawer.</SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Left (Glass)</p>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="glass">Open Left Glass</Button>
+          </SheetTrigger>
+          <SheetContent side="left" variant="glass">
+            <SheetHeader>
+              <SheetTitle>Left glass panel</SheetTitle>
+              <SheetDescription>Alternative navigation style.</SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </div>
   ),
 }

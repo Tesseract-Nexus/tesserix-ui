@@ -66,6 +66,12 @@ const meta = {
   title: "Feedback/Toast",
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Toast supports transient status messaging, optional actions, configurable duration, and viewport positioning.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta
@@ -238,4 +244,40 @@ export const DurationAndControls: Story = {
       expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
     })
   },
+}
+
+export const TopLeftViewport: Story = {
+  render: () => (
+    <ToastProvider>
+      <ToastDemo />
+      <ToastViewport position="top-left" />
+    </ToastProvider>
+  ),
+  play: async ({ canvas }) => {
+    fireEvent.click(canvas.getByRole("button", { name: /warning toast/i }))
+    await waitFor(() => {
+      expect(within(document.body).getByRole("status")).toBeInTheDocument()
+    })
+  },
+}
+
+export const StateMatrix: Story = {
+  render: () => (
+    <div className="grid w-[820px] gap-4 md:grid-cols-2">
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Actions + Variants</p>
+        <ToastProvider>
+          <ToastDemo />
+          <ToastViewport />
+        </ToastProvider>
+      </div>
+      <div className="rounded-xl border bg-card p-4">
+        <p className="mb-2 text-xs font-medium text-muted-foreground">Durations + Controls</p>
+        <ToastProvider>
+          <ToastControlDemo />
+          <ToastViewport position="top-left" />
+        </ToastProvider>
+      </div>
+    </div>
+  ),
 }
