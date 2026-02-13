@@ -2,7 +2,7 @@
 
 > Production-ready design system for Tesserix applications
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Tesseract-Nexus/tesserix-ui/packages)
+[![Version](https://img.shields.io/badge/version-0.1.3-blue)](https://github.com/Tesseract-Nexus/tesserix-ui/packages)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
 
@@ -22,11 +22,12 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 
 ## 📊 Status
 
-**Current Version:** 0.1.0 (Alpha)
-**Components:** 46 components
-**Story Tests:** 147 passing (Vitest Storybook project)
+**Current Version:** 0.1.3 (Alpha)
+**Components:** 47 components across 6 categories
+**Story Tests:** 160+ passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
+**CI/CD:** Automated publishing to GitHub Packages
 
 See [PRD.md](./PRD.md) for complete product requirements and roadmap.
 
@@ -164,28 +165,37 @@ module.exports = {
 }
 ```
 
-## Available Components
+Theme tokens are managed from `src/tokens/themes.json` and compiled into `src/themes/*.css`.
+Run the generator whenever token values change:
 
-- `Accordion`, `Alert`, `AspectRatio`, `Avatar`, `Badge`, `Breadcrumb`
-- `Button`, `Card`, `Checkbox`, `Collapsible`, `Dialog`, `DropdownMenu`
-- `Combobox`
-- `Command`
-- `ContextMenu`
-- `DataTable`
-- `DatePicker`
-- `EmptyState`
-- `FileUpload`
-- `InlineEditable`
-- `Timeline`
-- `Stat`
-- `OTPInput`
-- `NumberInput`
-- `Pagination`
-- `Stepper`
-- `Heading`, `Input`, `Label`, `Popover`, `Progress`, `Radio`, `Select`
-- `Separator`, `Sheet`, `Skeleton`, `Slider`, `Spinner`, `Switch`
-- `Table`, `Tabs`, `Text`, `Textarea`, `Toggle`, `Tooltip`
-- `Toast`
+```bash
+npm run generate:themes
+```
+
+Generated files in `src/themes/` should be treated as build artifacts and not edited manually.
+
+## 📦 Available Components
+
+### Form Components (15)
+`Button`, `Checkbox`, `Combobox`, `DatePicker`, `FileUpload`, `Input`, `NumberInput`, `OTPInput`, `Radio`, `Select`, `Slider`, `Switch`, `Textarea`, `Toggle`, `InlineEditable`
+
+### Data Display (8)
+`Avatar`, `Badge`, `Card`, `DashboardCard`, `DataTable`, `Table`, `Stat`, `Timeline`
+
+### Feedback (10)
+`Alert`, `Dialog`, `EmptyState`, `Popover`, `Progress`, `Sheet`, `Skeleton`, `Spinner`, `Toast`, `Tooltip`
+
+### Navigation (4)
+`Breadcrumb`, `Pagination`, `Tabs`, `Stepper`
+
+### Layout (4)
+`Accordion`, `AspectRatio`, `Collapsible`, `Separator`
+
+### Typography (3)
+`Heading`, `Label`, `Text`
+
+### Utilities (3)
+`Command`, `ContextMenu`, `DropdownMenu`
 
 ## Development
 
@@ -272,18 +282,19 @@ We're following a phased approach to build a production-ready design system:
 - [x] Theme system with CSS variables
 
 ### 🚧 Phase 2: Infrastructure (In Progress)
-- [ ] Design tokens system
-- [ ] CI/CD pipeline (GitHub Actions)
+- [x] Design tokens system (`npm run generate:themes`)
+- [x] CI/CD pipeline (GitHub Actions - automated publishing)
 - [ ] Accessibility testing (axe-core)
 - [ ] Changeset versioning
 - [ ] Bundle size monitoring
 
-### 📋 Phase 3: Component Library (Planned)
-- [ ] Form components (Checkbox, Radio, Select, Textarea, Switch)
-- [ ] Feedback components (Alert, Toast, Dialog, Tooltip, Progress, Spinner)
-- [ ] Navigation components (Tabs, Breadcrumbs, Pagination, Menu)
-- [ ] Layout components (Container, Grid, Stack, Divider)
-- [ ] Data display (Table, Avatar, Icon, Accordion)
+### ✅ Phase 3: Component Library (Completed)
+- [x] Form components (15 components)
+- [x] Feedback components (10 components)
+- [x] Navigation components (4 components)
+- [x] Layout components (4 components)
+- [x] Data display (8 components)
+- [x] Typography components (3 components)
 
 ### 📋 Phase 4: Advanced Features (Planned)
 - [ ] Hooks library
@@ -309,14 +320,14 @@ We welcome contributions! Please see our [contribution guidelines](./CONTRIBUTIN
 
 The package is automatically published to GitHub Packages when a new release is created:
 
-1. **Manual Release:**
+1. **Create Release (Recommended):**
    ```bash
-   # Create and push a tag
+   # Bump version and create tag
    npm version patch  # or minor/major
    git push --follow-tags
 
-   # Create a release on GitHub
-   gh release create v0.1.1 --generate-notes
+   # Create GitHub release (triggers automatic publish)
+   gh release create v0.1.4 --title "Release Title" --notes "Release notes"
    ```
 
 2. **Automated Publishing:**
