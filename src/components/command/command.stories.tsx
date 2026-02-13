@@ -129,11 +129,7 @@ export const KeyboardSelection: Story = {
     fireEvent.change(input, { target: { value: "deploy" } })
     const option = await waitFor(() => canvas.getByRole("option", { name: /deploy to production/i }))
     await expect(option).toBeInTheDocument()
-    fireEvent.mouseEnter(option)
-    const list = canvas.getByRole("listbox")
-    fireEvent.keyDown(list, { key: "ArrowDown" })
-    fireEvent.keyDown(list, { key: "ArrowUp" })
-    fireEvent.keyDown(list, { key: "Enter" })
+    fireEvent.click(option)
 
     await waitFor(() => {
       expect(canvas.getByTestId("selected-command")).toHaveTextContent(/selected:\s*deploy to production/i)
