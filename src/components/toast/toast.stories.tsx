@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent, within } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { Button } from "../button"
 import { ToastProvider, ToastViewport, useToast } from "./toast"
@@ -102,11 +102,15 @@ export const Simple: Story = {
     const trigger = canvas.getByRole("button", { name: /success toast/i })
     fireEvent.click(trigger)
 
-    const status = within(document.body).getByRole("status")
-    await expect(status).toHaveTextContent(/profile updated/i)
+    const status = await waitFor(() => within(document.body).getByRole("status"))
+    await waitFor(() => {
+      expect(status).toHaveTextContent(/profile updated/i)
+    })
 
     const closeButton = within(status).getByRole("button", { name: /close notification/i })
     fireEvent.click(closeButton)
-    await expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(within(document.body).queryByRole("status")).not.toBeInTheDocument()
+    })
   },
 }

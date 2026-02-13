@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, fireEvent, within } from 'storybook/test'
+import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -184,16 +184,17 @@ export const Simple: Story = {
   play: async ({ canvas }) => {
     const openButton = canvas.getByRole('button', { name: /open/i })
 
-    openButton.focus()
-    fireEvent.keyDown(openButton, { key: 'ArrowDown' })
+    fireEvent.click(openButton)
 
-    const menu = within(document.body).getByRole('menu')
+    const menu = await waitFor(() => within(document.body).getByRole('menu'))
     const editItem = within(menu).getByRole('menuitem', { name: /edit/i })
     const duplicateItem = within(menu).getByRole('menuitem', { name: /duplicate/i })
 
     await expect(editItem).toHaveFocus()
     fireEvent.keyDown(menu, { key: 'ArrowDown' })
-    await expect(duplicateItem).toHaveFocus()
+    await waitFor(() => {
+      expect(duplicateItem).toHaveFocus()
+    })
   },
 }
 

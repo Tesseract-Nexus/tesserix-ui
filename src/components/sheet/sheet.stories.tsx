@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, fireEvent, within } from 'storybook/test'
+import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
   Sheet,
   SheetTrigger,
@@ -231,12 +231,18 @@ export const Simple: Story = {
     const openButton = canvas.getByRole('button', { name: /open/i })
 
     fireEvent.click(openButton)
-    const dialog = within(document.body).getByRole('dialog')
-    await expect(dialog).toBeInTheDocument()
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument()
+    })
 
     fireEvent.keyDown(dialog, { key: 'Escape' })
-    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
-    await expect(openButton).toHaveFocus()
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    })
+    await waitFor(() => {
+      expect(openButton).toHaveFocus()
+    })
   },
 }
 

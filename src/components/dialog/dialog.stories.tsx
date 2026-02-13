@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, fireEvent, within } from 'storybook/test'
+import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import {
   Dialog,
   DialogTrigger,
@@ -200,11 +200,13 @@ export const Simple: Story = {
     const openButton = canvas.getByRole('button', { name: /open/i })
 
     fireEvent.click(openButton)
-    const dialog = within(document.body).getByRole('dialog')
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
     await expect(dialog).toBeInTheDocument()
 
     fireEvent.keyDown(dialog, { key: 'Escape' })
-    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    })
     await expect(openButton).toHaveFocus()
   },
 }
@@ -236,12 +238,14 @@ export const WithFooter: Story = {
     const trigger = canvas.getByRole('button', { name: /confirm action/i })
     fireEvent.click(trigger)
 
-    const dialog = within(document.body).getByRole('dialog')
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
     await expect(dialog).toHaveAttribute('aria-modal', 'true')
     await expect(within(dialog).getByText(/confirm your action/i)).toBeInTheDocument()
 
     fireEvent.keyDown(dialog, { key: 'Escape' })
-    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    })
     await expect(trigger).toHaveFocus()
   },
 }

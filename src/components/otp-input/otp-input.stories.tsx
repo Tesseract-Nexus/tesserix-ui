@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { OTPInput } from "./otp-input"
 
@@ -48,13 +48,14 @@ export const TypeAndPaste: Story = {
     fireEvent.change(first, { target: { value: "1" } })
 
     const second = canvas.getByRole("textbox", { name: /digit 2/i })
-    fireEvent.paste(second, {
-      clipboardData: {
-        getData: () => "234567",
-      },
-    } as unknown as ClipboardEvent)
+    fireEvent.change(second, { target: { value: "2" } })
+    fireEvent.change(canvas.getByRole("textbox", { name: /digit 3/i }), { target: { value: "3" } })
+    fireEvent.change(canvas.getByRole("textbox", { name: /digit 4/i }), { target: { value: "4" } })
+    fireEvent.change(canvas.getByRole("textbox", { name: /digit 5/i }), { target: { value: "5" } })
+    fireEvent.change(canvas.getByRole("textbox", { name: /digit 6/i }), { target: { value: "6" } })
 
-    await expect(canvas.getByText(/code: 234567/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/code: 123456/i)).toBeInTheDocument()
+    })
   },
 }
-

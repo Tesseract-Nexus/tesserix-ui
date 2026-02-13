@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import {
   Pagination,
@@ -88,11 +88,14 @@ export const KeyboardAndClick: Story = {
     const nextButton = canvas.getByRole("button", { name: /go to next page/i })
     fireEvent.click(nextButton)
 
-    await expect(canvas.getByText(/current page: 4/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/current page: 4/i)).toBeInTheDocument()
+    })
 
     const page10 = canvas.getByRole("button", { name: "10" })
     fireEvent.click(page10)
-    await expect(page10).toHaveAttribute("aria-current", "page")
+    await waitFor(() => {
+      expect(page10).toHaveAttribute("aria-current", "page")
+    })
   },
 }
-

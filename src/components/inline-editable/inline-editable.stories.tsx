@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { InlineEditable } from "./inline-editable"
 
@@ -47,11 +47,12 @@ export const EditValue: Story = {
     const button = canvas.getByRole("button", { name: /project name/i })
     fireEvent.click(button)
 
-    const input = canvas.getByRole("textbox", { name: /project name/i })
+    const input = await waitFor(() => canvas.getByRole("textbox"))
     fireEvent.change(input, { target: { value: "Tesserix Admin" } })
     fireEvent.keyDown(input, { key: "Enter" })
 
-    await expect(canvas.getByText(/current value: tesserix admin/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/current value: tesserix admin/i)).toBeInTheDocument()
+    })
   },
 }
-

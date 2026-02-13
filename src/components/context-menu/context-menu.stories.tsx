@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import {
   ContextMenu,
@@ -38,7 +38,7 @@ const InteractiveContextMenu = () => {
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
-      <p className="text-sm text-muted-foreground">Last action: {lastAction}</p>
+      <p className="text-sm text-foreground">Last action: {lastAction}</p>
     </div>
   )
 }
@@ -74,12 +74,16 @@ export const RightClickAction: Story = {
   render: () => <InteractiveContextMenu />,
   play: async ({ canvas }) => {
     const trigger = canvas.getByText(/right-click this panel/i)
-    fireEvent.contextMenu(trigger, { clientX: 120, clientY: 120 })
+    trigger.focus()
+    fireEvent.keyDown(trigger, { key: "F10", shiftKey: true })
 
-    const rename = canvas.getByRole("menuitem", { name: /rename/i })
+    const rename = await waitFor(() =>
+      within(document.body).getByRole("menuitem", { name: /rename/i })
+    )
     fireEvent.click(rename)
 
-    await expect(canvas.getByText(/last action: rename/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/last action: rename/i)).toBeInTheDocument()
+    })
   },
 }
-

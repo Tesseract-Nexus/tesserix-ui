@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent, within } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { Combobox } from "./combobox"
 
@@ -66,8 +66,11 @@ export const KeyboardSelection: Story = {
     const input = canvas.getByRole("combobox")
 
     await expect(input).toHaveAttribute("aria-expanded", "false")
+    fireEvent.focus(input)
     fireEvent.keyDown(input, { key: "ArrowDown" })
-    await expect(input).toHaveAttribute("aria-expanded", "true")
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "true")
+    })
     fireEvent.keyDown(input, { key: "Enter" })
 
     await expect(input).toHaveValue("React")

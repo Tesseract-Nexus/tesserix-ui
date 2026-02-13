@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { FileUpload } from "./file-upload"
 
@@ -48,10 +48,15 @@ export const SelectAndRemove: Story = {
     const file = new File(["hello"], "hello.txt", { type: "text/plain" })
     fireEvent.change(input, { target: { files: [file] } })
 
-    await expect(canvas.getByText(/selected files: 1/i)).toBeInTheDocument()
-    const removeButton = canvas.getByRole("button", { name: /remove hello\.txt/i })
+    await waitFor(() => {
+      expect(canvas.getByText(/selected files: 1/i)).toBeInTheDocument()
+    })
+    const removeButton = await waitFor(() =>
+      canvas.getByRole("button", { name: /remove hello\.txt/i })
+    )
     fireEvent.click(removeButton)
-    await expect(canvas.getByText(/selected files: 0/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/selected files: 0/i)).toBeInTheDocument()
+    })
   },
 }
-

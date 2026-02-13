@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { Button } from "../button"
 import { Stepper, StepperItem } from "./stepper"
@@ -84,8 +84,12 @@ export const AdvanceStep: Story = {
     const nextButton = canvas.getByRole("button", { name: /next/i })
     fireEvent.click(nextButton)
 
-    await expect(canvas.getByText(/current step: 3/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/current step: 3/i)).toBeInTheDocument()
+    })
     const currentStepElement = canvas.getByRole("listitem", { current: "step" })
-    await expect(currentStepElement).toHaveTextContent(/review/i)
+    await waitFor(() => {
+      expect(currentStepElement).toHaveTextContent(/review/i)
+    })
   },
 }

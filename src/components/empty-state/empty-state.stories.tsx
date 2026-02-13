@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { Button } from "../button"
 import {
@@ -86,7 +86,8 @@ export const CreateAction: Story = {
   play: async ({ canvas }) => {
     const createButton = canvas.getByRole("button", { name: /create project/i })
     fireEvent.click(createButton)
-    await expect(canvas.getByText(/project created successfully/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/project created successfully/i)).toBeInTheDocument()
+    })
   },
 }
-

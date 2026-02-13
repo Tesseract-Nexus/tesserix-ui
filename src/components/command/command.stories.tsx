@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { Button } from "../button"
 import {
@@ -36,7 +36,7 @@ const InlineCommandDemo = () => {
   return (
     <div className="space-y-4">
       <Command className="w-full" onValueChange={(value) => setSelected(commandLabelByValue[value] ?? value)}>
-        <CommandInput placeholder="Search commands..." />
+        <CommandInput aria-label="Search commands" placeholder="Search commands..." />
         <CommandList>
           <CommandEmpty>No commands found.</CommandEmpty>
           <CommandGroup>
@@ -58,7 +58,7 @@ const InlineCommandDemo = () => {
           </CommandGroup>
         </CommandList>
       </Command>
-      <p className="text-sm text-muted-foreground">Selected: {selected || "None"}</p>
+      <p className="text-sm text-foreground">Selected: {selected || "None"}</p>
     </div>
   )
 }
@@ -71,7 +71,7 @@ const DialogCommandDemo = () => {
       <Button onClick={() => setOpen(true)}>Open Command Palette</Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <Command>
-          <CommandInput placeholder="Type a command..." />
+          <CommandInput aria-label="Type a command" placeholder="Type a command..." />
           <CommandList>
             <CommandEmpty>No results.</CommandEmpty>
             <CommandGroup>
@@ -129,12 +129,15 @@ export const KeyboardSelection: Story = {
     fireEvent.change(input, { target: { value: "deploy" } })
     const option = canvas.getByRole("option", { name: /deploy to production/i })
     await expect(option).toBeInTheDocument()
+    fireEvent.mouseEnter(option)
 
     const list = canvas.getByRole("listbox")
     list.focus()
     fireEvent.keyDown(list, { key: "ArrowDown" })
     fireEvent.keyDown(list, { key: "Enter" })
 
-    await expect(canvas.getByText(/selected: deploy to production/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/selected: deploy to production/i)).toBeInTheDocument()
+    })
   },
 }

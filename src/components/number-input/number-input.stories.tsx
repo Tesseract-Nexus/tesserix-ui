@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor } from "storybook/test"
 
 import { NumberInput } from "./number-input"
 
@@ -49,15 +49,21 @@ export const StepAndClamp: Story = {
     const input = canvas.getByRole("textbox")
 
     fireEvent.click(increment)
-    await expect(canvas.getByText(/quantity: 3/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/quantity: 3/i)).toBeInTheDocument()
+    })
 
     fireEvent.change(input, { target: { value: "99" } })
     fireEvent.keyDown(input, { key: "Enter" })
-    await expect(canvas.getByText(/quantity: 10/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/quantity: 10/i)).toBeInTheDocument()
+    })
 
     for (let i = 0; i < 12; i += 1) {
       fireEvent.click(decrement)
     }
-    await expect(canvas.getByText(/quantity: 0/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(canvas.getByText(/quantity: 0/i)).toBeInTheDocument()
+    })
   },
 }

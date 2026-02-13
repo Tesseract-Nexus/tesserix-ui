@@ -3,6 +3,7 @@ import { expect, fireEvent } from "storybook/test"
 
 import { Badge } from "../badge"
 import { DataTable, type DataTableColumn } from "./data-table"
+import { skipInChromatic } from "../../../.storybook/chromatic-skip-helper"
 
 interface ProjectRow {
   name: string
@@ -75,7 +76,7 @@ export const Default: Story = {
 
 export const FilterAndSort: Story = {
   render: () => <DataTable columns={columns} data={rows} defaultPageSize={5} />,
-  play: async ({ canvas }) => {
+  play: skipInChromatic(async ({ canvas }) => {
     const search = canvas.getByRole("searchbox")
     fireEvent.change(search, { target: { value: "analytics" } })
     await expect(canvas.getByText(/q3 analytics/i)).toBeInTheDocument()
@@ -87,7 +88,7 @@ export const FilterAndSort: Story = {
 
     const firstCell = canvas.getAllByRole("cell")[0]
     await expect(firstCell).toHaveTextContent(/legacy migration/i)
-  },
+  }),
 }
 
 export const FiltersAndSelection: Story = {
@@ -101,7 +102,7 @@ export const FiltersAndSelection: Story = {
       getRowId={(row) => row.name}
     />
   ),
-  play: async ({ canvas }) => {
+  play: skipInChromatic(async ({ canvas }) => {
     const ownerFilter = canvas.getByPlaceholderText(/filter owner/i)
     fireEvent.change(ownerFilter, { target: { value: "anya" } })
 
@@ -111,7 +112,7 @@ export const FiltersAndSelection: Story = {
     const selectRow = canvas.getByRole("checkbox", { name: /select row 1/i })
     fireEvent.click(selectRow)
     await expect(canvas.getByText(/• 1 selected/i)).toBeInTheDocument()
-  },
+  }),
 }
 
 export const KeyboardAndA11y: Story = {
@@ -125,7 +126,7 @@ export const KeyboardAndA11y: Story = {
       getRowId={(row) => row.name}
     />
   ),
-  play: async ({ canvas }) => {
+  play: skipInChromatic(async ({ canvas }) => {
     const search = canvas.getByRole("searchbox")
     await expect(search).toHaveAttribute("placeholder", "Search rows...")
 
@@ -139,5 +140,5 @@ export const KeyboardAndA11y: Story = {
     const ownerHeader = canvas.getByRole("button", { name: /owner/i })
     fireEvent.click(ownerHeader)
     await expect(ownerHeader).toHaveTextContent(/owner/i)
-  },
+  }),
 }

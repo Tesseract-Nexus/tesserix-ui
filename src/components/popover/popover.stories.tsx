@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, fireEvent, within } from 'storybook/test'
+import { expect, fireEvent, waitFor, within } from 'storybook/test'
 import { Popover, PopoverTrigger, PopoverContent } from './popover'
 import { Button } from '../button'
 
@@ -206,10 +206,14 @@ export const Simple: Story = {
     const openButton = canvas.getByRole('button', { name: /open/i })
 
     fireEvent.click(openButton)
-    await expect(within(document.body).getByText(/popover content goes here/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(within(document.body).getByText(/popover content goes here/i)).toBeInTheDocument()
+    })
 
     fireEvent.keyDown(document, { key: 'Escape' })
-    await expect(within(document.body).queryByText(/popover content goes here/i)).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(within(document.body).queryByText(/popover content goes here/i)).not.toBeInTheDocument()
+    })
   },
 }
 
