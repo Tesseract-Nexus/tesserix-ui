@@ -49,3 +49,26 @@ export const Dashboard: Story = {
     await expect(canvas.getByText(/\$182,420/i)).toBeInTheDocument()
   },
 }
+
+export const CompactMetrics: Story = {
+  render: () => (
+    <div className="mx-auto w-full max-w-4xl p-6">
+      <BentoGrid className="gap-3">
+        <BentoGridItem size="sm">
+          <BentoGridItemTitle>Trials</BentoGridItemTitle>
+          <BentoGridItemValue>128</BentoGridItemValue>
+          <BentoGridItemMeta>+8 this week</BentoGridItemMeta>
+        </BentoGridItem>
+        <BentoGridItem size="sm">
+          <BentoGridItemTitle>Churn Risk</BentoGridItemTitle>
+          <BentoGridItemValue>6</BentoGridItemValue>
+          <BentoGridItemMeta>High-priority accounts</BentoGridItemMeta>
+        </BentoGridItem>
+      </BentoGrid>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText(/trials/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/churn risk/i)).toBeInTheDocument()
+  },
+}

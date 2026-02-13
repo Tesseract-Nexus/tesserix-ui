@@ -53,3 +53,22 @@ export const Default: Story = {
     await expect(canvas.getByRole("button", { name: /create experiment/i })).toBeInTheDocument()
   },
 }
+
+export const Minimal: Story = {
+  render: () => (
+    <div className="w-full max-w-3xl">
+      <PageHeader>
+        <PageHeaderContent>
+          <PageHeaderHeading>
+            <PageHeaderTitle>Team Settings</PageHeaderTitle>
+            <PageHeaderDescription>Manage members, roles, and workspace defaults.</PageHeaderDescription>
+          </PageHeaderHeading>
+        </PageHeaderContent>
+      </PageHeader>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("heading", { name: /team settings/i })).toBeInTheDocument()
+    await expect(canvas.getByText(/manage members, roles/i)).toBeInTheDocument()
+  },
+}

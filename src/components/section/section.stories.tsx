@@ -58,3 +58,27 @@ export const MarketingSection: Story = {
     await expect(canvas.getByText(/faster delivery/i)).toBeInTheDocument()
   },
 }
+
+export const CompactSection: Story = {
+  render: () => (
+    <Section className="py-10">
+      <Container>
+        <SectionHeader className="mb-4">
+          <div className="space-y-1">
+            <SectionTitle>Compact Section</SectionTitle>
+            <SectionDescription>Used for shorter content blocks in dense pages.</SectionDescription>
+          </div>
+        </SectionHeader>
+        <Card>
+          <CardContent className="pt-6 text-sm text-muted-foreground">
+            This section uses tighter spacing for dashboard contexts.
+          </CardContent>
+        </Card>
+      </Container>
+    </Section>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("heading", { name: /compact section/i })).toBeInTheDocument()
+    await expect(canvas.getByText(/tighter spacing/i)).toBeInTheDocument()
+  },
+}

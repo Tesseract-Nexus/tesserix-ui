@@ -67,3 +67,30 @@ export const MarketingFeatures: Story = {
     await expect(canvas.getByText(/fast delivery/i)).toBeInTheDocument()
   },
 }
+
+export const TwoColumnFeatures: Story = {
+  render: () => (
+    <div className="w-full max-w-4xl">
+      <FeatureGrid className="md:grid-cols-2">
+        <FeatureCard>
+          <FeatureIcon>
+            <IconShield />
+          </FeatureIcon>
+          <FeatureTitle>Compliance Ready</FeatureTitle>
+          <FeatureDescription>Ship audited UI patterns for enterprise-grade controls.</FeatureDescription>
+        </FeatureCard>
+        <FeatureCard emphasis="highlighted">
+          <FeatureIcon>
+            <IconZap />
+          </FeatureIcon>
+          <FeatureTitle>Faster Adoption</FeatureTitle>
+          <FeatureDescription>Teams align quickly through shared UI contracts.</FeatureDescription>
+        </FeatureCard>
+      </FeatureGrid>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText(/compliance ready/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/faster adoption/i)).toBeInTheDocument()
+  },
+}

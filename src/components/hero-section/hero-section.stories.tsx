@@ -44,3 +44,22 @@ export const LandingHero: Story = {
     await expect(canvas.getByRole("button", { name: /get started/i })).toBeInTheDocument()
   },
 }
+
+export const CompactHero: Story = {
+  render: () => (
+    <div className="mx-auto w-full max-w-4xl p-6">
+      <HeroSection className="gap-4 p-6">
+        <HeroEyebrow>Release Notes</HeroEyebrow>
+        <HeroTitle>New analytics modules are now available.</HeroTitle>
+        <HeroDescription>Enable faster reporting with prebuilt charts and operational metrics.</HeroDescription>
+        <HeroActions>
+          <Button size="sm">Read update</Button>
+        </HeroActions>
+      </HeroSection>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("heading", { name: /new analytics modules are now available/i })).toBeInTheDocument()
+    await expect(canvas.getByRole("button", { name: /read update/i })).toBeInTheDocument()
+  },
+}
