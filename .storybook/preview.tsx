@@ -41,9 +41,6 @@ const preview: Preview = {
       test: 'error',
     },
     chromatic: {
-      // Disable play functions in Chromatic to focus on visual regression only
-      // Interaction tests run in Vitest locally via test:storybook
-      disableInteraction: true,
       pauseAnimationAtEnd: true,
     },
     controls: {

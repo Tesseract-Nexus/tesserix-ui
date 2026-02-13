@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { DatePicker } from "./date-picker"
 
@@ -48,14 +48,27 @@ export const SelectDate: Story = {
     const trigger = canvas.getByRole("button", { name: /select date/i })
     fireEvent.click(trigger)
 
-    const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date())
-    await expect(canvas.getByText(monthLabel)).toBeInTheDocument()
+    // Wait for popover to appear (renders in document.body as portal)
+    await waitFor(() => {
+      const popover = within(document.body).getByRole("dialog")
+      expect(popover).toBeInTheDocument()
+    })
 
+    // Check month label exists in the calendar
+    const monthLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date())
+    await waitFor(() => {
+      expect(within(document.body).getByText(monthLabel)).toBeInTheDocument()
+    })
+
+    // Click today's date
     const today = new Date().getDate().toString()
-    const todayButton = canvas.getAllByRole("gridcell", { name: today })[0]
+    const todayButton = within(document.body).getAllByRole("gridcell", { name: today })[0]
     fireEvent.click(todayButton)
 
-    await expect(canvas.getByText(/selected value: \d{4}-\d{2}-\d{2}/i)).toBeInTheDocument()
+    // Check selected value is displayed
+    await waitFor(() => {
+      expect(canvas.getByText(/selected value: \d{4}-\d{2}-\d{2}/i)).toBeInTheDocument()
+    })
   },
 }
 
