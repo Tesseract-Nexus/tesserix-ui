@@ -310,3 +310,39 @@ export const OutsideClickAndTriggerMode: Story = {
     })
   },
 }
+
+export const Glassmorphism: Story = {
+  render: () => (
+    <div
+      className="relative min-h-[400px] rounded-2xl bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-pink-500/30 p-12"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 40% 30%, rgba(59, 130, 246, 0.4), transparent 50%), radial-gradient(circle at 60% 70%, rgba(168, 85, 247, 0.4), transparent 50%)',
+      }}
+    >
+      <div className="flex items-center justify-center">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="glass">Open Glass Popover</Button>
+          </PopoverTrigger>
+          <PopoverContent variant="glass" className="w-80">
+            <div className="space-y-3">
+              <h4 className="font-medium leading-none">Glass Popover</h4>
+              <p className="text-sm text-muted-foreground">
+                Floating content with frosted glass effect. Perfect for tooltips, menus, and contextual actions.
+              </p>
+              <div className="flex gap-2">
+                <Button variant="glass" size="sm" className="flex-1">
+                  Action
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </div>
+  ),
+}

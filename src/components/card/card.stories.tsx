@@ -125,6 +125,37 @@ export const WithFooter: Story = {
   ),
 }
 
+export const Glassmorphism: Story = {
+  render: () => (
+    <div
+      className="relative min-h-[500px] rounded-2xl bg-gradient-to-br from-violet-500/30 via-pink-500/30 to-orange-500/30 p-12"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 30% 20%, rgba(168, 85, 247, 0.4), transparent 50%), radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.4), transparent 50%)',
+      }}
+    >
+      <div className="flex items-center justify-center">
+        <Card variant="glass" className="w-[380px]">
+          <CardHeader>
+            <CardTitle>Glass Card</CardTitle>
+            <CardDescription>Semi-transparent card with backdrop blur effect</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm">
+              Glass morphism creates a frosted glass effect using backdrop-filter: blur(). Perfect for modern,
+              premium UI designs.
+            </p>
+          </CardContent>
+          <CardFooter className="justify-between">
+            <Button variant="outline">Cancel</Button>
+            <Button variant="glass">Continue</Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  ),
+}
+
 export const SmokeTest: Story = {
   render: Default.render,
   play: async ({ canvasElement }) => {

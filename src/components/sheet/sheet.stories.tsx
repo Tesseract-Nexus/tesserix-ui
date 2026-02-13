@@ -398,3 +398,31 @@ export const FocusTrapAndOverlayClose: Story = {
     })
   },
 }
+
+export const Glassmorphism: Story = {
+  render: () => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="glass">Open Glass Sheet</Button>
+      </SheetTrigger>
+      <SheetContent variant="glass" side="right">
+        <SheetHeader>
+          <SheetTitle>Glass Sheet</SheetTitle>
+          <SheetDescription>Side panel with frosted glass effect</SheetDescription>
+        </SheetHeader>
+        <div className="py-6">
+          <p className="text-sm">
+            Glass morphism works beautifully for side panels and navigation drawers, creating a premium floating
+            appearance.
+          </p>
+        </div>
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button variant="outline">Close</Button>
+          </SheetClose>
+          <Button variant="glass">Apply</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  ),
+}

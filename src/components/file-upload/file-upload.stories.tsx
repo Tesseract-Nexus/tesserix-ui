@@ -107,6 +107,14 @@ const UncontrolledFileUploadDemo = () => (
   </div>
 )
 
+const dispatchDrop = (target: HTMLElement, files: File[]) => {
+  const dropEvent = new Event("drop", { bubbles: true, cancelable: true })
+  Object.defineProperty(dropEvent, "dataTransfer", {
+    value: { files },
+  })
+  target.dispatchEvent(dropEvent)
+}
+
 export const DragAndKeyboardUpload: Story = {
   render: () => <UncontrolledFileUploadDemo />,
   play: async ({ canvas }) => {
@@ -119,7 +127,7 @@ export const DragAndKeyboardUpload: Story = {
     fireEvent.dragLeave(dropzone)
 
     const dragFile = new File(["alpha"], "drag.txt", { type: "text/plain" })
-    fireEvent.drop(dropzone, { dataTransfer: { files: [dragFile] } })
+    dispatchDrop(dropzone, [dragFile])
     await waitFor(() => {
       expect(canvas.getByRole("button", { name: /remove drag\.txt/i })).toBeInTheDocument()
     })
@@ -142,7 +150,7 @@ export const DisabledDropzone: Story = {
     const dropzone = canvas.getByRole("button")
     const disabledFile = new File(["x"], "disabled.txt", { type: "text/plain" })
     fireEvent.dragOver(dropzone)
-    fireEvent.drop(dropzone, { dataTransfer: { files: [disabledFile] } })
+    dispatchDrop(dropzone, [disabledFile])
 
     await expect(dropzone).toHaveAttribute("aria-disabled", "true")
     await expect(canvas.queryByRole("button", { name: /remove disabled\.txt/i })).not.toBeInTheDocument()

@@ -33,7 +33,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link', 'glass'],
       description: 'The visual style variant of the button',
       table: {
         type: { summary: 'string' },
@@ -218,6 +218,37 @@ export const StateMatrix: Story = {
       <Button variant="destructive">Destructive</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="ghost">Ghost</Button>
+    </div>
+  ),
+}
+
+export const Glassmorphism: Story = {
+  render: () => (
+    <div
+      className="relative min-h-[400px] rounded-2xl bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 p-12"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%), radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.3), transparent 50%)',
+      }}
+    >
+      <div className="flex flex-col items-center justify-center gap-4">
+        <h3 className="text-xl font-semibold">Glass Effect Buttons</h3>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Semi-transparent with backdrop blur
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Button variant="glass">Primary Action</Button>
+          <Button variant="glass" size="sm">
+            Small Glass
+          </Button>
+          <Button variant="glass" size="lg">
+            Large Glass
+          </Button>
+          <Button variant="glass" disabled>
+            Disabled Glass
+          </Button>
+        </div>
+      </div>
     </div>
   ),
 }

@@ -351,3 +351,32 @@ export const FocusTrapAndOverlayClose: Story = {
     })
   },
 }
+
+export const Glassmorphism: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="glass">Open Glass Dialog</Button>
+      </DialogTrigger>
+      <DialogContent variant="glass">
+        <DialogHeader>
+          <DialogTitle>Glass Dialog</DialogTitle>
+          <DialogDescription>Semi-transparent dialog with frosted glass effect</DialogDescription>
+        </DialogHeader>
+        <div className="py-4">
+          <p className="text-sm">
+            This dialog uses glassmorphism for a modern, premium appearance. The backdrop blur creates depth and
+            visual hierarchy.
+          </p>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button variant="glass">Confirm</Button>
+        </DialogFooter>
+        <DialogClose />
+      </DialogContent>
+    </Dialog>
+  ),
+}

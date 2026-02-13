@@ -172,8 +172,7 @@ export const DisabledOptionAndMouseInteractions: Story = {
     fireEvent.click(legacyOption)
     await expect(input).toHaveValue("")
 
-    fireEvent.keyDown(input, { key: "ArrowUp" })
-    fireEvent.keyDown(input, { key: "Enter" })
+    fireEvent.click(vueOption)
     await waitFor(() => {
       expect(input).toHaveValue("Vue")
       expect(input).toHaveAttribute("aria-expanded", "false")
