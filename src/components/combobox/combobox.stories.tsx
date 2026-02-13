@@ -65,8 +65,9 @@ export const KeyboardSelection: Story = {
   play: async ({ canvas }) => {
     const input = canvas.getByRole("combobox")
 
-    fireEvent.focus(input)
+    await expect(input).toHaveAttribute("aria-expanded", "false")
     fireEvent.keyDown(input, { key: "ArrowDown" })
+    await expect(input).toHaveAttribute("aria-expanded", "true")
     fireEvent.keyDown(input, { key: "Enter" })
 
     await expect(input).toHaveValue("React")
@@ -74,6 +75,8 @@ export const KeyboardSelection: Story = {
     fireEvent.focus(input)
     fireEvent.change(input, { target: { value: "next" } })
     await expect(within(document.body).getByRole("option", { name: /next\.js/i })).toBeInTheDocument()
+
+    fireEvent.keyDown(input, { key: "Escape" })
+    await expect(input).toHaveAttribute("aria-expanded", "false")
   },
 }
-

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect } from 'storybook/test'
+import { expect, fireEvent } from 'storybook/test'
 import { Select } from './select'
 import { Label } from '../label'
 
@@ -164,5 +164,25 @@ export const SmokeTest: Story = {
   render: Default.render,
   play: async ({ canvasElement }) => {
     await expect(canvasElement).toBeTruthy()
+  },
+}
+
+export const KeyboardAndA11y: Story = {
+  render: () => (
+    <div className="w-[300px] space-y-2">
+      <Label htmlFor="a11y-select">Priority</Label>
+      <Select id="a11y-select" defaultValue="medium">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </Select>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const select = canvas.getByLabelText(/priority/i) as HTMLSelectElement
+    await expect(select).toHaveValue("medium")
+
+    fireEvent.change(select, { target: { value: "high" } })
+    await expect(select).toHaveValue("high")
   },
 }

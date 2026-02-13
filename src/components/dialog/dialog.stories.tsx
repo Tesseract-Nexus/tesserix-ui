@@ -232,4 +232,16 @@ export const WithFooter: Story = {
       </DialogContent>
     </Dialog>
   ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /confirm action/i })
+    fireEvent.click(trigger)
+
+    const dialog = within(document.body).getByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(within(dialog).getByText(/confirm your action/i)).toBeInTheDocument()
+
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }

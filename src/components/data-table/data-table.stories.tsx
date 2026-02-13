@@ -113,3 +113,31 @@ export const FiltersAndSelection: Story = {
     await expect(canvas.getByText(/• 1 selected/i)).toBeInTheDocument()
   },
 }
+
+export const KeyboardAndA11y: Story = {
+  render: () => (
+    <DataTable
+      columns={columns}
+      data={rows}
+      defaultPageSize={5}
+      enableRowSelection
+      columnFiltersEnabled
+      getRowId={(row) => row.name}
+    />
+  ),
+  play: async ({ canvas }) => {
+    const search = canvas.getByRole("searchbox")
+    await expect(search).toHaveAttribute("placeholder", "Search rows...")
+
+    fireEvent.change(search, { target: { value: "billing" } })
+    await expect(canvas.getByText(/billing v2/i)).toBeInTheDocument()
+
+    const selectAll = canvas.getByRole("checkbox", { name: /select all rows/i })
+    fireEvent.click(selectAll)
+    await expect(canvas.getByText(/• 1 selected/i)).toBeInTheDocument()
+
+    const ownerHeader = canvas.getByRole("button", { name: /owner/i })
+    fireEvent.click(ownerHeader)
+    await expect(ownerHeader).toHaveTextContent(/owner/i)
+  },
+}

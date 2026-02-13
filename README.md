@@ -340,6 +340,7 @@ The package uses Changesets for versioning and automated publishing to GitHub Pa
 Require these checks before merging PRs to `main`:
 - `Quality CI`
 - `Storybook CI`
+- Recommended: require at least 1 PR approval review before merge.
 
 ## 🏗️ Architecture
 
