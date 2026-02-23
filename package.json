@@ -66,9 +66,13 @@
   },
   "dependencies": {
     "@radix-ui/react-menubar": "^1.1.16",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "date-fns": "^4.1.0",
+    "react-day-picker": "^9.13.2",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

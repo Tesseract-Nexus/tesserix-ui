@@ -15,15 +15,15 @@
 
 | Component | Status | Priority | Description | Radix Primitive |
 |-----------|--------|----------|-------------|-----------------|
-| Menu/Menubar | 🔴 | P0 | Standard menu component | `@radix-ui/react-menubar` |
-| NavigationMenu | 🔴 | P0 | Complex navigation with mega menus | `@radix-ui/react-navigation-menu` |
+| Menu/Menubar | 🟢 | P0 | Standard menu component | `@radix-ui/react-menubar` |
+| NavigationMenu | 🟢 | P0 | Complex navigation with mega menus | `@radix-ui/react-navigation-menu` |
 | Drawer | 🔴 | P0 | Mobile-first side panel (alt to Sheet) | Custom or `@radix-ui/react-dialog` |
 | Form | 🔴 | P0 | Form wrapper with validation display | Custom wrapper |
-| ScrollArea | 🔴 | P0 | Custom scrollbars | `@radix-ui/react-scroll-area` |
+| ScrollArea | 🟢 | P0 | Custom scrollbars | `@radix-ui/react-scroll-area` |
 | Resizable | 🔴 | P0 | Resizable panels/panes | Custom or library |
 | Calendar | 🔴 | P0 | Full calendar component | `react-day-picker` or custom |
 | TimePicker | 🔴 | P0 | Time selection UI | Custom |
-| Rating | 🔴 | P0 | Star rating component | Custom |
+| Rating | 🟢 | P0 | Star rating component | Custom |
 | ColorPicker | 🔴 | P0 | Color selection UI | Custom or `react-colorful` |
 | RangeSlider | 🔴 | P0 | Two-handle range slider | `@radix-ui/react-slider` (enhanced) |
 | Modal | 🔴 | P0 | Alternative semantic to Dialog | `@radix-ui/react-dialog` |
