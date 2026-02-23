@@ -60,3 +60,4 @@ export * from './components/tooltip'
 // Export utilities
 export { cn } from './lib/utils'
 export * from './hooks'
+export * from './components/menubar'
