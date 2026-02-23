@@ -53,11 +53,13 @@
     "test:storybook:coverage": "vitest run --project storybook --coverage",
     "test:storybook:coverage:gate": "npm run test:storybook:coverage && node scripts/check-storybook-coverage.mjs",
     "test:coverage": "vitest run --coverage",
+    "test:coverage:ui": "vitest --coverage --ui",
     "prestorybook": "npm run generate:themes",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "npm run generate:themes",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic"
+    "chromatic": "chromatic",
+    "chromatic:build": "npm run build-storybook && chromatic --exit-zero-on-changes"
   },
   "peerDependencies": {
     "react": "^19.0.0",
