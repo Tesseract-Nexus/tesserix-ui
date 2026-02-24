@@ -37,13 +37,22 @@ jobs:
         id: chromatic_mode
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
         run: |
           if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-            echo "Chromatic token is not configured. Skipping publish."
+            exit 0
           fi
+
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "CHROMATIC_PROJECT_TOKEN must be configured for pushes to main."
+            exit 1
+          fi
+
+          # PRs from forks may not have access to secrets.
+          echo "enabled=false" >> "$GITHUB_OUTPUT"
+          echo "Chromatic token is not configured for this run. Skipping publish."
 
       - name: Chromatic not configured
         if: ${{ steps.chromatic_mode.outputs.enabled == 'false' }}
@@ -56,4 +65,4 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           onlyChanged: true
-          exitZeroOnChanges: true
+          exitZeroOnChanges: false

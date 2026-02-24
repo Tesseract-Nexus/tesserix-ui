@@ -149,3 +149,113 @@ export const MarketingRecipe: Story = {
     await expect(canvas.getByRole("button", { name: /start free trial/i })).toBeInTheDocument()
   },
 }
+
+export const AdminListDetailRecipe: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background p-4 md:p-6">
+      <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-[320px_1fr]">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Customers</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {["Acme Inc.", "Northwind", "Globex", "Initech"].map((customer) => (
+              <button key={customer} className="w-full rounded-md border px-3 py-2 text-left text-sm hover:bg-accent">
+                {customer}
+              </button>
+            ))}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Customer Detail</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm text-muted-foreground">
+            <p>Selected customer details, activity stream, and quick actions.</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <Button variant="outline">Suspend</Button>
+              <Button>Update plan</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("heading", { name: /customer detail/i })).toBeInTheDocument()
+  },
+}
+
+export const AdminSettingsShellRecipe: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background p-4 md:p-6">
+      <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-[240px_1fr]">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {["General", "Security", "Billing", "Integrations"].map((item) => (
+              <button key={item} className="w-full rounded-md border px-3 py-2 text-left text-sm hover:bg-accent">
+                {item}
+              </button>
+            ))}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">General Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <SkeletonRow />
+            <SkeletonRow />
+            <div className="pt-2">
+              <Button>Save changes</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole("button", { name: /save changes/i })).toBeInTheDocument()
+  },
+}
+
+const SkeletonRow = () => (
+  <div className="rounded-md border p-3">
+    <p className="text-foreground">Field label</p>
+    <p className="text-xs">Field value placeholder</p>
+  </div>
+)
+
+export const AdminDashboardShellRecipe: Story = {
+  render: () => (
+    <div className="min-h-screen bg-background p-4 md:p-6">
+      <div className="mx-auto max-w-6xl space-y-4">
+        <PageHeader>
+          <PageHeaderContent>
+            <PageHeaderHeading>
+              <PageHeaderTitle>Admin Dashboard Shell</PageHeaderTitle>
+              <PageHeaderDescription>Responsive shell for analytics-heavy operations teams.</PageHeaderDescription>
+            </PageHeaderHeading>
+            <Badge variant="secondary">Live</Badge>
+          </PageHeaderContent>
+        </PageHeader>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {["Revenue", "Orders", "Latency", "Errors"].map((kpi) => (
+            <Card key={kpi}>
+              <CardHeader>
+                <CardTitle className="text-sm">{kpi}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-2xl font-semibold">--</CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText(/admin dashboard shell/i)).toBeInTheDocument()
+  },
+}

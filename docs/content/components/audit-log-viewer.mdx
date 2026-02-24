@@ -1,0 +1,26 @@
+# Audit Log Viewer
+
+## Overview
+
+Audit Log Viewer renders actor/action/time entries for operational auditing.
+
+## Import
+
+~~~tsx
+import { AuditLogViewer } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { AuditLogViewer } from "./audit-log-viewer"
+export type { AuditLogViewerProps, AuditLogEntry } from "./audit-log-viewer"
+~~~
+
+## Usage
+
+~~~tsx
+<AuditLogViewer
+  entries={[{ id: "1", actor: "Admin", action: "updated", timestamp: "2026-02-24" }]}
+/>
+~~~

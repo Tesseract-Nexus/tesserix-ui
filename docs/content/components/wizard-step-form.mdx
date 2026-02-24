@@ -1,0 +1,27 @@
+# Wizard Step Form
+
+## Overview
+
+Wizard Step Form handles multi-step forms with guarded next-step navigation and final submit.
+
+## Import
+
+~~~tsx
+import { WizardStepForm } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { WizardStepForm } from "./wizard-step-form"
+export type { WizardStepFormProps, WizardStep } from "./wizard-step-form"
+~~~
+
+## Usage
+
+~~~tsx
+<WizardStepForm
+  steps={[{ id: "account", title: "Account", content: <div /> }]}
+  onSubmit={() => {}}
+/>
+~~~

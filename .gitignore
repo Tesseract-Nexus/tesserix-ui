@@ -13,6 +13,7 @@ coverage
 .vite
 .turbo
 .cache
+artifacts
 playwright-report
 test-results
 *.tsbuildinfo

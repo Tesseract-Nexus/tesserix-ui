@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { expect } from 'storybook/test'
-import { Skeleton } from './skeleton'
+import { DataGridSkeleton, DataTableSkeleton, PanelSkeleton, Skeleton } from './skeleton'
 
 const meta = {
   title: 'Feedback/Skeleton',
@@ -111,6 +111,18 @@ export const Card: Story = {
       <div className="space-y-2">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-4/5" />
+      </div>
+    </div>
+  ),
+}
+
+export const DataSurfaceVariants: Story = {
+  render: () => (
+    <div className="grid w-[700px] gap-4 md:grid-cols-2">
+      <DataTableSkeleton rows={4} />
+      <DataGridSkeleton rows={4} />
+      <div className="md:col-span-2">
+        <PanelSkeleton />
       </div>
     </div>
   ),

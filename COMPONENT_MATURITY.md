@@ -122,3 +122,6 @@ Status levels:
 | `json-editor` | `alpha` | Recently introduced; keep API flexible until broader product validation. |
 | `cron-builder` | `alpha` | Recently introduced; keep API flexible until broader product validation. |
 | `permissions-matrix` | `alpha` | Recently introduced; keep API flexible until broader product validation. |
+| `wizard-step-form` | `alpha` | Recently introduced; keep API flexible until broader product validation. |
+| `bulk-actions-bar` | `alpha` | Recently introduced; keep API flexible until broader product validation. |
+| `audit-log-viewer` | `alpha` | Recently introduced; keep API flexible until broader product validation. |

@@ -84,18 +84,18 @@ Priority 0:
 
 - [x] Publish a `COMPONENT_MATURITY.md` table (`alpha/beta/stable`) for all exported components
 - [x] Run and record baseline accessibility audit for top 30 most-used components
-- [ ] Add CI enforcement for visual regressions and bundle-size regression thresholds
+- [x] Add CI enforcement for visual regressions and bundle-size regression thresholds
 
 Priority 1:
 
-- [ ] Add enterprise workflow primitives: `WizardStepForm`, `BulkActionsBar`, `AuditLogViewer`
-- [ ] Add responsive layout recipes for admin: list-detail, settings, and dashboard shells
-- [ ] Add loading skeleton variants for complex data surfaces (`DataTable`, `DataGrid`, panels)
+- [x] Add enterprise workflow primitives: `WizardStepForm`, `BulkActionsBar`, `AuditLogViewer`
+- [x] Add responsive layout recipes for admin: list-detail, settings, and dashboard shells
+- [x] Add loading skeleton variants for complex data surfaces (`DataTable`, `DataGrid`, panels)
 
 Priority 2:
 
 - [x] Add browser/device matrix results to docs
-- [ ] Add performance budget dashboard to release process
+- [x] Add performance budget dashboard to release process
 
 ## 9) Suggested Operating Cadence
 

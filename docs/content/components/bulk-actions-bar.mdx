@@ -1,0 +1,28 @@
+# Bulk Actions Bar
+
+## Overview
+
+Bulk Actions Bar provides a compact action surface for selected rows/items.
+
+## Import
+
+~~~tsx
+import { BulkActionsBar } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { BulkActionsBar } from "./bulk-actions-bar"
+export type { BulkActionsBarProps, BulkAction } from "./bulk-actions-bar"
+~~~
+
+## Usage
+
+~~~tsx
+<BulkActionsBar
+  selectedCount={5}
+  actions={[{ id: "archive", label: "Archive" }]}
+  onAction={(id) => console.log(id)}
+/>
+~~~

@@ -27,3 +27,16 @@ jobs:
 
       - name: Run performance report
         run: npm run perf:report
+
+      - name: Upload performance report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report
+          path: artifacts/performance-report.json
+          if-no-files-found: error
+
+      - name: Add performance summary
+        run: |
+          echo "## Performance Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          cat artifacts/performance-report.json >> "$GITHUB_STEP_SUMMARY"
