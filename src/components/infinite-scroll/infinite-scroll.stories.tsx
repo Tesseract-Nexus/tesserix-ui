@@ -14,27 +14,29 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const baseItems = ["Item A", "Item B", "Item C"]
+const renderBaseItem = (item: unknown) => <div className="rounded border p-2">{String(item)}</div>
+const baseArgs = {
+  items: baseItems,
+  hasMore: false,
+  onLoadMore: () => {},
+  renderItem: renderBaseItem,
+}
 
 export const Default: Story = {
-  render: () => (
-    <InfiniteScroll
-      items={baseItems}
-      hasMore={false}
-      onLoadMore={() => {}}
-      renderItem={(item) => <div className="rounded border p-2">{item}</div>}
-    />
-  ),
+  args: baseArgs,
+  render: (args) => <InfiniteScroll {...args} />,
 }
 
 export const LoadingState: Story = {
-  render: () => (
+  args: {
+    ...baseArgs,
+    hasMore: true,
+    loading: true,
+    loader: <div className="rounded border border-dashed p-2 text-sm">Loading next page...</div>,
+  },
+  render: (args) => (
     <InfiniteScroll
-      items={baseItems}
-      hasMore
-      loading
-      loader={<div className="rounded border border-dashed p-2 text-sm">Loading next page...</div>}
-      onLoadMore={() => {}}
-      renderItem={(item) => <div className="rounded border p-2">{item}</div>}
+      {...args}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -44,13 +46,13 @@ export const LoadingState: Story = {
 }
 
 export const EndMessage: Story = {
-  render: () => (
+  args: {
+    ...baseArgs,
+    endMessage: <div className="text-sm text-muted-foreground">All items loaded</div>,
+  },
+  render: (args) => (
     <InfiniteScroll
-      items={baseItems}
-      hasMore={false}
-      endMessage={<div className="text-sm text-muted-foreground">All items loaded</div>}
-      onLoadMore={() => {}}
-      renderItem={(item) => <div className="rounded border p-2">{item}</div>}
+      {...args}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -60,6 +62,7 @@ export const EndMessage: Story = {
 }
 
 export const ControlledPagination: Story = {
+  args: baseArgs,
   render: () => {
     const [items, setItems] = React.useState(baseItems)
     const [hasMore, setHasMore] = React.useState(false)

@@ -46,10 +46,10 @@ export const Default: Story = {
     }
 
     globalThis.Image = MockImage as unknown as typeof Image
-    HTMLCanvasElement.prototype.getContext = (() => ({
+    HTMLCanvasElement.prototype.getContext = ((() => ({
       clearRect: () => {},
       drawImage: () => {},
-    })) as typeof HTMLCanvasElement.prototype.getContext
+    })) as unknown) as typeof HTMLCanvasElement.prototype.getContext
     HTMLCanvasElement.prototype.toDataURL = (() => "data:image/png;base64,mock") as typeof HTMLCanvasElement.prototype.toDataURL
 
     const canvas = within(canvasElement)

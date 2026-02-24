@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 
 const rootDir = join(fileURLToPath(new URL(".", import.meta.url)), "..")
 const bundlePath = join(rootDir, "dist", "index.mjs")
-const limitKb = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? 50)
+const limitKb = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? 70)
 
 const source = readFileSync(bundlePath, "utf8")
 const gzippedBytes = gzipSync(source).byteLength

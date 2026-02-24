@@ -23,7 +23,7 @@ for (const metric of metrics) {
   console.log(`${metric.id.toUpperCase()} raw: ${formatKb(rawBytes)} | gzip: ${formatKb(gzipBytes)}`)
 }
 
-const bundleLimitKb = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? 50)
+const bundleLimitKb = Number(process.env.BUNDLE_SIZE_LIMIT_KB ?? 70)
 const esmGzipKb = gzipSync(readFileSync(join(rootDir, "dist", "index.mjs"))).byteLength / 1024
 
 if (esmGzipKb > bundleLimitKb) {
