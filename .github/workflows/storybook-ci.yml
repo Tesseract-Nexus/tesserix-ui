@@ -33,11 +33,27 @@ jobs:
       - name: Run Storybook Vitest project
         run: npm run test:storybook
 
+      - name: Resolve Chromatic mode
+        id: chromatic_mode
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: |
+          if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Chromatic token is not configured. Skipping publish."
+          fi
+
+      - name: Chromatic not configured
+        if: ${{ steps.chromatic_mode.outputs.enabled == 'false' }}
+        run: echo "Skipping Chromatic publish because CHROMATIC_PROJECT_TOKEN is missing."
+
       - name: Publish to Chromatic
+        if: ${{ steps.chromatic_mode.outputs.enabled == 'true' }}
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
           onlyChanged: true
           exitZeroOnChanges: true
-        continue-on-error: true
