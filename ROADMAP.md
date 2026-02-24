@@ -108,13 +108,13 @@
 
 | Component | Status | Priority | Description |
 |-----------|--------|----------|-------------|
-| Multi-select | 🔴 | P1 | Enhanced select with multiple values |
+| Multi-select | 🟢 | P1 | Enhanced select with multiple values |
 | Autocomplete | 🟢 | P1 | Enhanced combobox |
 | Mentions | 🔴 | P2 | @mention input |
 | RichTextEditor | 🔴 | P2 | WYSIAG editor |
 | MarkdownEditor | 🔴 | P2 | Markdown support |
 | ImageCropper | 🔴 | P2 | Image manipulation |
-| DateRangePicker | 🔴 | P1 | Date range selection |
+| DateRangePicker | 🟢 | P1 | Date range selection |
 
 ### Data Visualization
 
