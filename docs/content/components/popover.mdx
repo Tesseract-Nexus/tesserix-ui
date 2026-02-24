@@ -1,0 +1,118 @@
+# Popover
+
+## Overview
+
+Popover is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Popover, PopoverTrigger, PopoverContent } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Popover, PopoverTrigger, PopoverContent } from './popover'
+~~~
+
+## Props
+
+~~~ts
+export interface PopoverProps {
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  children?: React.ReactNode
+}
+~~~
+
+## Variations
+
+~~~ts
+const popoverContentVariants = cva(
+  "absolute z-50 rounded-md p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+  {
+    variants: {
+      variant: {
+        default: "border bg-popover",
+        glass:
+          "border border-white/20 bg-white/10 backdrop-blur-md dark:border-white/10 dark:bg-black/20 supports-[backdrop-filter]:bg-white/10 supports-[backdrop-filter]:dark:bg-black/20",
+      },
+      side: {
+        top: "bottom-full mb-2",
+        right: "left-full ml-2",
+        bottom: "top-full mt-2",
+        left: "right-full mr-2",
+      },
+      align: {
+        start: "",
+        center: "",
+        end: "",
+      },
+    },
+    compoundVariants: [
+      { side: "top", align: "start", class: "left-0" },
+      { side: "top", align: "center", class: "left-1/2 -translate-x-1/2" },
+      { side: "top", align: "end", class: "right-0" },
+      { side: "bottom", align: "start", class: "left-0" },
+      { side: "bottom", align: "center", class: "left-1/2 -translate-x-1/2" },
+      { side: "bottom", align: "end", class: "right-0" },
+      { side: "left", align: "start", class: "top-0" },
+      { side: "left", align: "center", class: "top-1/2 -translate-y-1/2" },
+      { side: "left", align: "end", class: "bottom-0" },
+      { side: "right", align: "start", class: "top-0" },
+      { side: "right", align: "center", class: "top-1/2 -translate-y-1/2" },
+      { side: "right", align: "end", class: "bottom-0" },
+    ],
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Popover, PopoverTrigger, PopoverContent } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Popover />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Popover className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Popover className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

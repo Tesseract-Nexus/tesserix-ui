@@ -1,0 +1,64 @@
+# Hooks
+
+This page documents public hooks exported by `src/hooks/index.ts`.
+
+## Public hook API
+
+### `useClickOutside`
+
+Detect pointer interactions outside a target element.
+
+```tsx
+const ref = useClickOutside(() => setOpen(false))
+return <div ref={ref}>...</div>
+```
+
+### `useIntersectionObserver`
+
+Observe viewport intersection and optionally freeze once visible.
+
+```tsx
+const [ref, entry, isVisible] = useIntersectionObserver({ threshold: 0.25 })
+```
+
+### `useKeyPress`
+
+Track whether a key (or set of keys) is pressed.
+
+```tsx
+const isEscapePressed = useKeyPress("Escape")
+```
+
+### `useCopyToClipboard`
+
+Copy text with success/error state tracking.
+
+```tsx
+const { copy, copied, error } = useCopyToClipboard()
+```
+
+### `useAsync`
+
+Run async workflows with `idle/pending/success/error` state.
+
+```tsx
+const { execute, data, error, isLoading, status } = useAsync(fetchUsers)
+```
+
+## Important note
+
+`src/hooks` includes additional local hooks (`useDebounce`, `useLocalStorage`, `useMediaQuery`, `useToggle`) that are currently not exported via `src/hooks/index.ts`.
+
+## Best practices
+
+- Keep async functions passed to `useAsync` stable with `useCallback` when needed.
+- Use `useClickOutside` only in browser contexts (not during SSR-only execution paths).
+- Pair `useKeyPress` with clear keyboard affordances in UI and docs.
+
+## Hook reference pages
+
+- [useClickOutside](/hooks/use-click-outside)
+- [useIntersectionObserver](/hooks/use-intersection-observer)
+- [useKeyPress](/hooks/use-key-press)
+- [useCopyToClipboard](/hooks/use-copy-to-clipboard)
+- [useAsync](/hooks/use-async)

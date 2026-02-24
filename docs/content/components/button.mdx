@@ -1,0 +1,107 @@
+# Button
+
+## Overview
+
+Button is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Button, buttonVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Button, buttonVariants } from './button'
+export type { ButtonProps } from './button'
+~~~
+
+## Props
+
+~~~ts
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+~~~
+
+## Variations
+
+~~~ts
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.98]",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground shadow-md hover:bg-primary/90 hover:shadow-lg",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-md hover:bg-destructive/90 hover:shadow-lg",
+        outline:
+          "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-accent",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 hover:shadow-md",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+        glass:
+          "border border-white/20 bg-white/10 text-foreground shadow-lg backdrop-blur-md hover:bg-white/20 dark:border-white/10 dark:bg-black/20 dark:hover:bg-black/30 supports-[backdrop-filter]:bg-white/10 supports-[backdrop-filter]:dark:bg-black/20",
+      },
+      size: {
+        default: "h-11 px-5 py-2.5",
+        sm: "h-9 rounded-lg px-3.5 text-xs",
+        lg: "h-12 rounded-lg px-8 text-base",
+        icon: "h-11 w-11",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Button, buttonVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Button />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Button className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Button className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

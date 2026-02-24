@@ -1,0 +1,111 @@
+# Sidebar Nav
+
+## Overview
+
+Sidebar Nav is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { SidebarNav, SidebarNavSection, SidebarNavLabel, SidebarNavList, SidebarNavItem, sidebarNavItemVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export {
+  SidebarNav,
+  SidebarNavSection,
+  SidebarNavLabel,
+  SidebarNavList,
+  SidebarNavItem,
+  sidebarNavItemVariants,
+} from "./sidebar-nav"
+export type { SidebarNavItemData } from "./sidebar-nav"
+~~~
+
+## Props
+
+~~~ts
+interface SidebarNavListProps extends React.HTMLAttributes<HTMLUListElement> {}
+
+const SidebarNavList = React.forwardRef<HTMLUListElement, SidebarNavListProps>(({ className, ...props }, ref) => (
+  <ul ref={ref} className={cn("space-y-1", className)} {...props} />
+))
+SidebarNavList.displayName = "SidebarNavList"
+
+interface SidebarNavItemProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof sidebarNavItemVariants> {
+  icon?: React.ReactNode
+  badge?: React.ReactNode
+}
+~~~
+
+## Variations
+
+~~~ts
+const sidebarNavItemVariants = cva(
+  "group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  {
+    variants: {
+      active: {
+        true: "bg-primary/12 font-medium text-primary",
+        false: "text-muted-foreground hover:bg-muted hover:text-foreground",
+      },
+      compact: {
+        true: "justify-center px-2",
+        false: "",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { SidebarNav, SidebarNavSection, SidebarNavLabel, SidebarNavList, SidebarNavItem, sidebarNavItemVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <SidebarNav />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<SidebarNav className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<SidebarNav className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

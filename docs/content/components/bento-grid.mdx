@@ -1,0 +1,135 @@
+# Bento Grid
+
+## Overview
+
+Bento Grid is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { BentoGrid, BentoGridItem, BentoGridItemTitle, BentoGridItemValue, BentoGridItemMeta, bentoGridItemVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export {
+  BentoGrid,
+  BentoGridItem,
+  BentoGridItemTitle,
+  BentoGridItemValue,
+  BentoGridItemMeta,
+  bentoGridItemVariants,
+} from "./bento-grid"
+~~~
+
+## Props
+
+~~~ts
+interface BentoGridItemProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof bentoGridItemVariants> {}
+
+const BentoGridItem = React.forwardRef<HTMLDivElement, BentoGridItemProps>(
+  ({ className, size, ...props }, ref) => (
+    <article ref={ref} className={cn(bentoGridItemVariants({ size }), className)} {...props} />
+  )
+)
+BentoGridItem.displayName = "BentoGridItem"
+
+const BentoGridItemTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, ...props }, ref) => (
+    <h3 ref={ref} className={cn("text-sm font-semibold tracking-tight", className)} {...props} />
+  )
+)
+BentoGridItemTitle.displayName = "BentoGridItemTitle"
+
+const BentoGridItemValue = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("mt-2 text-2xl font-semibold tracking-tight", className)} {...props} />
+  )
+)
+BentoGridItemValue.displayName = "BentoGridItemValue"
+
+const BentoGridItemMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("mt-1 text-xs text-muted-foreground", className)} {...props} />
+  )
+)
+BentoGridItemMeta.displayName = "BentoGridItemMeta"
+
+export {
+  BentoGrid,
+  BentoGridItem,
+  BentoGridItemTitle,
+  BentoGridItemValue,
+  BentoGridItemMeta,
+  bentoGridItemVariants,
+}
+~~~
+
+## Variations
+
+~~~ts
+const bentoGridItemVariants = cva("rounded-2xl border bg-card text-card-foreground p-4 shadow-sm transition-shadow hover:shadow-md", {
+  variants: {
+    size: {
+      sm: "md:col-span-1 md:row-span-1",
+      md: "md:col-span-2 md:row-span-1",
+      lg: "md:col-span-2 md:row-span-2",
+      wide: "md:col-span-3 md:row-span-1",
+      tall: "md:col-span-1 md:row-span-2",
+      hero: "md:col-span-3 md:row-span-2",
+    },
+  },
+  defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { BentoGrid, BentoGridItem, BentoGridItemTitle, BentoGridItemValue, BentoGridItemMeta, bentoGridItemVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <BentoGrid />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<BentoGrid className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<BentoGrid className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

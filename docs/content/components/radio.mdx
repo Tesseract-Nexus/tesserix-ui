@@ -1,0 +1,103 @@
+# Radio
+
+## Overview
+
+Radio is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Radio } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Radio } from './radio'
+export type { RadioProps } from './radio'
+~~~
+
+## Props
+
+~~~ts
+export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {}
+
+const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <input
+        type="radio"
+        className={cn(
+          "peer h-5 w-5 shrink-0 rounded-full border-2 border-input bg-background shadow-sm transition-all duration-200",
+          "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20",
+          "checked:border-primary checked:bg-primary",
+          "checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-2 checked:after:w-2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:rounded-full checked:after:bg-primary-foreground checked:after:content-['']",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          "cursor-pointer relative",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Radio.displayName = "Radio"
+
+export { Radio }
+~~~
+
+## Variations
+
+~~~ts
+No explicit cva variant map found. Variations are primarily structural/compositional for this component.
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Radio } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Radio />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Radio className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Radio className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

@@ -1,0 +1,42 @@
+# Foundations
+
+This design system is built around reusable primitives, consistent tokens, and accessibility-first defaults.
+
+## Design principles
+
+- **Consistency over novelty**: shared patterns should behave and look the same across products.
+- **Composable primitives**: build complex UI by composing smaller, typed components.
+- **Accessible by default**: keyboard navigation, semantic structure, and screen-reader support are baseline requirements.
+- **Themeable at scale**: visual identity should be controlled by tokens, not one-off styles.
+
+## Architecture model
+
+- **Components**: reusable UI building blocks (`src/components/*`).
+- **Hooks**: cross-cutting behavior (`src/hooks/*`).
+- **Utilities**: runtime helpers for accessibility, themeing, layout, and loading (`src/utilities/*`).
+- **Tokens/Themes**: CSS variable contracts and generated theme files (`src/tokens`, `src/themes`).
+
+## Composition rules
+
+- Prefer library components before creating custom one-off variants.
+- Extend through composition and `className`, not by forking internal component logic.
+- Keep business logic in feature/app layers; keep design-system components product-agnostic.
+- Do not add framework-specific (`next/*`) imports to shared component modules.
+
+## Accessibility baseline
+
+- Use semantic HTML and labeled controls.
+- Ensure keyboard flows are complete for dialogs, menus, and forms.
+- Add visually hidden labels where visible labels are omitted.
+- Validate interaction patterns with Storybook and test coverage.
+
+## Token strategy
+
+- Keep color/radius/spacing contracts in tokens and global CSS variables.
+- Apply brand changes via token override and generated themes.
+- Avoid hardcoding raw color values directly in component implementations unless required.
+
+## Documentation policy
+
+- Nextra docs are the source of truth for architecture, setup, and usage guidance.
+- Storybook is for live demos, visual QA, and interaction testing.

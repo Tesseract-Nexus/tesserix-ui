@@ -1,0 +1,81 @@
+# Theming
+
+Comprehensive theming guide for tokens, theme CSS files, and runtime switching.
+
+## Built-in Themes
+
+- `default`
+- `emerald`
+- `sapphire`
+- `rose`
+- `amber`
+- `violet`
+- `teal`
+
+## Importing a specific theme
+
+```tsx
+import "@tesseract-nexus/tesserix-ui/themes/default"
+```
+
+## Token overrides
+
+Override CSS variables in your global stylesheet.
+
+```css
+:root {
+  --primary: 216 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --radius: 0.75rem;
+}
+```
+
+For dark mode:
+
+```css
+.dark {
+  --background: 224 71% 4%;
+  --foreground: 213 31% 91%;
+}
+```
+
+## Runtime theme switching
+
+Use utility exports from `ThemeProvider` and `useTheme`.
+
+```tsx
+import { ThemeProvider, useTheme } from "@tesseract-nexus/tesserix-ui"
+
+function ThemeSwitcher() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <select value={theme} onChange={(e) => setTheme(e.target.value as "light" | "dark" | "system")}>
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  )
+}
+```
+
+## Theme provider configuration
+
+`ThemeProvider` supports:
+
+- `defaultTheme`
+- `storageKey`
+- `enableSystem`
+- `attribute` (`class` or `data-theme`)
+- `lightValue`
+- `darkValue`
+
+## Regenerating theme artifacts
+
+Theme tokens are compiled into `src/themes/*.css`.
+
+```bash
+npm run generate:themes
+```
+
+Do not hand-edit generated files in `src/themes/`.

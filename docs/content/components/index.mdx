@@ -1,0 +1,185 @@
+# Components
+
+This page documents every component exported from `src/index.ts`.
+
+## Design-system usage model
+
+- Use these components as the default product UI primitives.
+- Build product-specific wrappers in app code when domain behavior is needed.
+- Keep visual consistency by using tokens and existing variants before adding new ones.
+
+## Import pattern
+
+```tsx
+import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
+```
+
+## Full component inventory (69)
+
+### Form and input
+
+- `button`
+- `input`
+- `textarea`
+- `label`
+- `checkbox`
+- `radio`
+- `select`
+- `combobox`
+- `number-input`
+- `otp-input`
+- `slider`
+- `range-slider`
+- `switch`
+- `toggle`
+- `date-picker`
+- `time-picker`
+- `calendar`
+- `color-picker`
+- `file-upload`
+- `inline-editable`
+- `form`
+
+### Navigation
+
+- `breadcrumb`
+- `pagination`
+- `tabs`
+- `menubar`
+- `navigation-menu`
+- `sidebar-nav`
+- `top-nav`
+
+### Overlay and feedback
+
+- `dialog`
+- `drawer`
+- `sheet`
+- `modal`
+- `popover`
+- `tooltip`
+- `toast`
+- `dropdown-menu`
+- `context-menu`
+- `alert`
+
+### Layout and structure
+
+- `accordion`
+- `collapsible`
+- `resizable`
+- `separator`
+- `scroll-area`
+- `aspect-ratio`
+- `app-shell`
+- `auth-layout`
+- `dashboard-layout`
+- `page-header`
+- `section`
+- `card`
+- `dashboard-card`
+- `bento-grid`
+- `feature-grid`
+- `hero-section`
+- `empty-state`
+
+### Data display and content
+
+- `table`
+- `data-table`
+- `stat`
+- `timeline`
+- `progress`
+- `rating`
+- `badge`
+- `avatar`
+- `skeleton`
+- `spinner`
+- `heading`
+- `text`
+- `command`
+- `stepper`
+
+## Usage notes
+
+- Prefer composition over extending internal styles directly.
+- Keep state in parent containers for `dialog`, `drawer`, `modal`, and other controlled overlays.
+- For data-heavy screens, combine `data-table`, `pagination`, `popover`, `dropdown-menu`, and `toast`.
+- For responsive shells, use `app-shell`/`dashboard-layout` with `sidebar-nav` and `top-nav`.
+
+## Next steps
+
+- Validate interactive behavior in [Storybook](https://ui.tesserix.app).
+- Pair with [Hooks](/hooks) and [Utilities](/utilities) for cross-cutting behavior.
+
+## Component reference pages
+
+- [Accordion](/components/accordion)
+- [Alert](/components/alert)
+- [App Shell](/components/app-shell)
+- [Aspect Ratio](/components/aspect-ratio)
+- [Auth Layout](/components/auth-layout)
+- [Avatar](/components/avatar)
+- [Badge](/components/badge)
+- [Bento Grid](/components/bento-grid)
+- [Breadcrumb](/components/breadcrumb)
+- [Button](/components/button)
+- [Calendar](/components/calendar)
+- [Card](/components/card)
+- [Checkbox](/components/checkbox)
+- [Collapsible](/components/collapsible)
+- [Color Picker](/components/color-picker)
+- [Combobox](/components/combobox)
+- [Command](/components/command)
+- [Context Menu](/components/context-menu)
+- [Dashboard Card](/components/dashboard-card)
+- [Dashboard Layout](/components/dashboard-layout)
+- [Data Table](/components/data-table)
+- [Date Picker](/components/date-picker)
+- [Dialog](/components/dialog)
+- [Drawer](/components/drawer)
+- [Dropdown Menu](/components/dropdown-menu)
+- [Empty State](/components/empty-state)
+- [Feature Grid](/components/feature-grid)
+- [File Upload](/components/file-upload)
+- [Form](/components/form)
+- [Heading](/components/heading)
+- [Hero Section](/components/hero-section)
+- [Inline Editable](/components/inline-editable)
+- [Input](/components/input)
+- [Label](/components/label)
+- [Menubar](/components/menubar)
+- [Modal](/components/modal)
+- [Navigation Menu](/components/navigation-menu)
+- [Number Input](/components/number-input)
+- [Otp Input](/components/otp-input)
+- [Page Header](/components/page-header)
+- [Pagination](/components/pagination)
+- [Popover](/components/popover)
+- [Progress](/components/progress)
+- [Radio](/components/radio)
+- [Range Slider](/components/range-slider)
+- [Rating](/components/rating)
+- [Resizable](/components/resizable)
+- [Scroll Area](/components/scroll-area)
+- [Section](/components/section)
+- [Select](/components/select)
+- [Separator](/components/separator)
+- [Sheet](/components/sheet)
+- [Sidebar Nav](/components/sidebar-nav)
+- [Skeleton](/components/skeleton)
+- [Slider](/components/slider)
+- [Spinner](/components/spinner)
+- [Stat](/components/stat)
+- [Stepper](/components/stepper)
+- [Switch](/components/switch)
+- [Table](/components/table)
+- [Tabs](/components/tabs)
+- [Text](/components/text)
+- [Textarea](/components/textarea)
+- [Time Picker](/components/time-picker)
+- [Timeline](/components/timeline)
+- [Toast](/components/toast)
+- [Toggle](/components/toggle)
+- [Tooltip](/components/tooltip)
+- [Top Nav](/components/top-nav)

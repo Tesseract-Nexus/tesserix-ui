@@ -1,0 +1,116 @@
+# Spinner
+
+## Overview
+
+Spinner is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Spinner, spinnerVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Spinner, spinnerVariants } from './spinner'
+export type { SpinnerProps } from './spinner'
+~~~
+
+## Props
+
+~~~ts
+export interface SpinnerProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof spinnerVariants> {}
+
+const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
+  ({ className, size, variant, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        role="status"
+        aria-label="Loading"
+        className={cn(spinnerVariants({ size, variant }), className)}
+        {...props}
+      >
+        <span className="sr-only">Loading...</span>
+      </div>
+    )
+  }
+)
+Spinner.displayName = "Spinner"
+
+export { Spinner, spinnerVariants }
+~~~
+
+## Variations
+
+~~~ts
+const spinnerVariants = cva(
+  "inline-block animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]",
+  {
+    variants: {
+      size: {
+        sm: "h-4 w-4",
+        default: "h-6 w-6",
+        lg: "h-8 w-8",
+        xl: "h-12 w-12",
+      },
+      variant: {
+        default: "text-primary",
+        secondary: "text-secondary-foreground",
+        muted: "text-muted-foreground",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Spinner, spinnerVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Spinner />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Spinner className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Spinner className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

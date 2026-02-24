@@ -1,0 +1,79 @@
+# Utilities
+
+This page documents utility exports from `src/lib/utils.ts` and `src/utilities/index.ts`.
+
+## Core helper
+
+### `cn`
+
+Class name merge helper based on `clsx` + `tailwind-merge`.
+
+```tsx
+import { cn } from "@tesseract-nexus/tesserix-ui"
+```
+
+## DOM and accessibility
+
+- `Portal`
+- `VisuallyHidden`
+- `FocusTrap`
+- `ErrorBoundary`
+
+## Theming
+
+- `ThemeProvider`
+- `useTheme`
+
+## Responsive helpers
+
+- `useBreakpoint`
+- `useMediaQuery`
+- `Show`
+- `Hide`
+
+## Animation helpers
+
+- `FadeIn`
+- `SlideIn`
+- `ScaleIn`
+- `useAnimatedValue`
+
+## Loading system
+
+- `LoadingProvider`
+- `useLoading`
+- `LoadingSpinner`
+- `LoadingDots`
+- `LoadingOverlay`
+- `LoadingSkeleton`
+
+## Example
+
+```tsx
+import {
+  ThemeProvider,
+  ErrorBoundary,
+  LoadingProvider,
+  LoadingOverlay,
+  FadeIn,
+} from "@tesseract-nexus/tesserix-ui"
+```
+
+## Implementation guidance
+
+- Wrap app roots with `ThemeProvider` and `LoadingProvider` when global behavior is needed.
+- Use `ErrorBoundary` at route/layout boundaries for localized fallback recovery.
+- Use `Portal` for overlays that must escape clipping/stacking contexts.
+- Prefer `VisuallyHidden` for screen-reader-only labels instead of `display: none`.
+
+## Utility reference pages
+
+- [cn](/utilities/cn)
+- [Portal](/utilities/portal)
+- [Visually Hidden](/utilities/visually-hidden)
+- [Focus Trap](/utilities/focus-trap)
+- [Error Boundary](/utilities/error-boundary)
+- [Theme Provider](/utilities/theme-provider)
+- [Responsive](/utilities/responsive)
+- [Animation](/utilities/animation)
+- [Loading](/utilities/loading)

@@ -1,0 +1,71 @@
+# Visually Hidden
+
+## Purpose
+
+Visually Hidden provides shared utility behavior for design-system usage.
+
+## Import
+
+~~~tsx
+import { VisuallyHidden } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## API reference
+
+~~~tsx
+import * as React from "react"
+import { cn } from "../lib/utils"
+
+export interface VisuallyHiddenProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+/**
+ * Component that hides content visually but keeps it accessible to screen readers
+ */
+const VisuallyHidden = React.forwardRef<HTMLSpanElement, VisuallyHiddenProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          "absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0",
+          className
+        )}
+        style={{
+          clip: "rect(0, 0, 0, 0)",
+          clipPath: "inset(50%)",
+        }}
+        {...props}
+      />
+    )
+  }
+)
+VisuallyHidden.displayName = "VisuallyHidden"
+
+export { VisuallyHidden }
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Use shared utility in app architecture for consistency
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid duplicating equivalent utility behavior in feature code
+~~~
+
+## Token / Theming Mapping
+
+- Utility UI should inherit system tokens: --primary, --foreground, --muted, --radius, --ring.
+- Theming/loading utilities should rely on provider config and CSS variables.
+
+## Interaction Test Checklist
+
+1. Functional behavior contract verification.
+2. Integration verification in at least one consuming screen.
+3. Accessibility verification for focus/visibility semantics where relevant.
+4. Error/fallback behavior verification.

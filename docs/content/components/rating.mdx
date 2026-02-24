@@ -1,0 +1,85 @@
+# Rating
+
+## Overview
+
+Rating is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Rating } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Rating } from "./rating"
+export type { RatingProps } from "./rating"
+~~~
+
+## Props
+
+~~~ts
+export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value?: number
+  max?: number
+  onChange?: (value: number) => void
+  readonly?: boolean
+  size?: "sm" | "md" | "lg"
+}
+~~~
+
+## Variations
+
+~~~ts
+10:  size?: "sm" | "md" | "lg"
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Rating } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Rating />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Rating className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Rating className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

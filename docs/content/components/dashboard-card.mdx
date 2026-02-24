@@ -1,0 +1,177 @@
+# Dashboard Card
+
+## Overview
+
+Dashboard Card is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { DashboardCard, DashboardCardHeader, DashboardCardTitle, DashboardCardDescription, DashboardCardValue, DashboardCardTrend, DashboardCardBody, DashboardCardFooter, dashboardCardVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export {
+  DashboardCard,
+  DashboardCardHeader,
+  DashboardCardTitle,
+  DashboardCardDescription,
+  DashboardCardValue,
+  DashboardCardTrend,
+  DashboardCardBody,
+  DashboardCardFooter,
+  dashboardCardVariants,
+} from "./dashboard-card"
+export type { DashboardCardProps } from "./dashboard-card"
+~~~
+
+## Props
+
+~~~ts
+export interface DashboardCardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof dashboardCardVariants> {}
+
+const DashboardCard = React.forwardRef<HTMLDivElement, DashboardCardProps>(
+  ({ className, tone, ...props }, ref) => (
+    <article ref={ref} className={cn(dashboardCardVariants({ tone }), className)} {...props} />
+  )
+)
+DashboardCard.displayName = "DashboardCard"
+
+const DashboardCardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <header
+      ref={ref}
+      className={cn("flex items-start justify-between gap-3 border-b px-5 py-4", className)}
+      {...props}
+    />
+  )
+)
+DashboardCardHeader.displayName = "DashboardCardHeader"
+
+const DashboardCardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, ...props }, ref) => (
+    <h3 ref={ref} className={cn("text-sm font-semibold tracking-tight", className)} {...props} />
+  )
+)
+DashboardCardTitle.displayName = "DashboardCardTitle"
+
+const DashboardCardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("mt-1 text-xs text-muted-foreground", className)} {...props} />
+))
+DashboardCardDescription.displayName = "DashboardCardDescription"
+
+const DashboardCardValue = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("text-2xl font-semibold tracking-tight", className)} {...props} />
+  )
+)
+DashboardCardValue.displayName = "DashboardCardValue"
+
+const DashboardCardTrend = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+  ({ className, ...props }, ref) => (
+    <span
+      ref={ref}
+      className={cn("inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium", className)}
+      {...props}
+    />
+  )
+)
+DashboardCardTrend.displayName = "DashboardCardTrend"
+
+const DashboardCardBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => <div ref={ref} className={cn("space-y-2 px-5 py-4", className)} {...props} />
+)
+DashboardCardBody.displayName = "DashboardCardBody"
+
+const DashboardCardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <footer ref={ref} className={cn("border-t px-5 py-3 text-xs text-muted-foreground", className)} {...props} />
+  )
+)
+DashboardCardFooter.displayName = "DashboardCardFooter"
+
+export {
+  DashboardCard,
+  DashboardCardHeader,
+  DashboardCardTitle,
+  DashboardCardDescription,
+  DashboardCardValue,
+  DashboardCardTrend,
+  DashboardCardBody,
+  DashboardCardFooter,
+  dashboardCardVariants,
+}
+~~~
+
+## Variations
+
+~~~ts
+const dashboardCardVariants = cva(
+  "rounded-2xl border bg-card text-card-foreground shadow-sm transition-colors",
+  {
+    variants: {
+      tone: {
+        default: "border-border",
+        success: "border-emerald-300/60 bg-emerald-50/40 dark:bg-emerald-950/20",
+        warning: "border-amber-300/60 bg-amber-50/40 dark:bg-amber-950/20",
+        critical: "border-rose-300/60 bg-rose-50/40 dark:bg-rose-950/20",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { DashboardCard, DashboardCardHeader, DashboardCardTitle, DashboardCardDescription, DashboardCardValue, DashboardCardTrend, DashboardCardBody, DashboardCardFooter, dashboardCardVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <DashboardCard />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<DashboardCard className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<DashboardCard className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

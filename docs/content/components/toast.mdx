@@ -1,0 +1,144 @@
+# Toast
+
+## Overview
+
+Toast is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { ToastProvider, ToastViewport, Toast, ToastTitle, ToastDescription, ToastClose, useToast, toastVariants, toastViewportVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  useToast,
+  toastVariants,
+  toastViewportVariants,
+} from "./toast"
+~~~
+
+## Props
+
+~~~ts
+export interface ToastProviderProps {
+  children: React.ReactNode
+}
+export interface ToastViewportProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof toastViewportVariants> {}
+
+const ToastViewport = React.forwardRef<HTMLDivElement, ToastViewportProps>(
+  ({ className, position, ...props }, ref) => {
+    const { toasts, dismiss } = useToastContext()
+
+    return (
+      <div ref={ref} className={cn(toastViewportVariants({ position }), className)} {...props}>
+        {toasts.map(({ id, ...item }) => (
+          <Toast key={id} id={id} onDismiss={dismiss} {...item} />
+        ))}
+      </div>
+    )
+  }
+)
+ToastViewport.displayName = "ToastViewport"
+
+export {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  useToast,
+  toastVariants,
+  toastViewportVariants,
+}
+~~~
+
+## Variations
+
+~~~ts
+const toastVariants = cva(
+  "group pointer-events-auto relative flex w-full items-start gap-3 rounded-xl border bg-card p-4 shadow-lg transition-all duration-200",
+  {
+    variants: {
+      variant: {
+        default: "border-border text-card-foreground",
+        success: "border-emerald-500/30 bg-emerald-50 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200",
+        warning: "border-amber-500/30 bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-200",
+        destructive: "border-destructive/40 bg-destructive/10 text-destructive",
+        info: "border-primary/30 bg-primary/10 text-primary",
+      },
+    },
+    defaultVariants: {
+const toastViewportVariants = cva(
+  "fixed z-[100] flex max-h-screen w-full flex-col gap-2 p-4 sm:max-w-md",
+  {
+    variants: {
+      position: {
+        "top-right": "right-0 top-0",
+        "top-left": "left-0 top-0",
+        "bottom-right": "bottom-0 right-0",
+        "bottom-left": "bottom-0 left-0",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { ToastProvider, ToastViewport, Toast, ToastTitle, ToastDescription, ToastClose, useToast, toastVariants, toastViewportVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <ToastProvider />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<ToastProvider className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<ToastProvider className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

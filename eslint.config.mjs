@@ -29,4 +29,26 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
+  {
+    files: ['src/components/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'next',
+              message: 'Components in src/components must stay framework-agnostic.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['next/*'],
+              message: 'Components in src/components must stay framework-agnostic.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]

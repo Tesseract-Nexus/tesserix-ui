@@ -1,0 +1,113 @@
+# Getting Started
+
+Complete setup guide for integrating Tesserix UI in Next.js and React apps.
+
+## Installation
+
+```bash
+npm install @tesseract-nexus/tesserix-ui
+```
+
+Configure `.npmrc` for GitHub Packages:
+
+```bash filename=".npmrc"
+@tesseract-nexus:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+## Required setup
+
+### 1. Tailwind configuration
+
+```js filename="tailwind.config.js"
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  presets: [require("@tesseract-nexus/tesserix-ui/tailwind")],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./node_modules/@tesseract-nexus/tesserix-ui/dist/**/*.{js,mjs}",
+  ],
+}
+```
+
+### 2. PostCSS configuration
+
+```js filename="postcss.config.js"
+module.exports = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+}
+```
+
+### 3. Import package styles once at app root
+
+```tsx
+import "@tesseract-nexus/tesserix-ui/styles"
+```
+
+## Next.js integration
+
+### App Router (`app/`)
+
+```tsx filename="app/layout.tsx"
+import "@tesseract-nexus/tesserix-ui/styles"
+import "./globals.css"
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+### Pages Router (`pages/`)
+
+```tsx filename="pages/_app.tsx"
+import type { AppProps } from "next/app"
+import "@tesseract-nexus/tesserix-ui/styles"
+import "../styles/globals.css"
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
+}
+```
+
+## Does this library require App Router?
+
+No. Tesserix UI components are framework-agnostic React components and work with both App Router and Pages Router.
+
+## First component example
+
+```tsx
+import { Button, Card, CardContent, CardHeader, CardTitle, Input } from "@tesseract-nexus/tesserix-ui"
+
+export function LoginCard() {
+  return (
+    <Card className="max-w-sm">
+      <CardHeader>
+        <CardTitle>Sign in</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <Input placeholder="Email" />
+        <Button className="w-full">Continue</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Framework boundary rule
+
+`src/components/*` should not depend on `next` imports. Use framework-specific wrappers in your app layer (`app/`, `pages/`, or feature modules), not inside shared UI primitives.
+
+## Verification checklist
+
+- Styles are loaded once in app root.
+- Tailwind content includes package `dist` files.
+- Components render in both server and client routes.
+- No `next` imports are introduced in shared component source.

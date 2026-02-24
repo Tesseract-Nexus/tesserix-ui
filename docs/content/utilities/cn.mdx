@@ -1,0 +1,40 @@
+# cn
+
+## Purpose
+
+cn merges conditional class names and resolves Tailwind utility conflicts.
+
+## Import
+
+~~~tsx
+import { cn } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Example
+
+~~~tsx
+<div className={cn("p-4", isActive && "bg-primary", className)} />
+~~~
+
+## Do and Don't
+
+### Do
+
+- Use shared utilities across products to keep behavior consistent.
+- Place provider utilities at app/layout boundaries.
+
+### Don't
+
+- Don't duplicate equivalent utility behavior in feature code.
+- Don't bypass accessibility helpers when equivalent utility exists.
+
+## Token Mapping
+
+- Utilities that render UI should inherit tokenized colors and spacing.
+- For theme/loading utilities, prefer global variables and provider settings over inline styles.
+
+## Testing Checklist
+
+- Unit test core behavior and error paths.
+- Validate integration with one representative component/page.
+- Include accessibility checks for utilities affecting focus/visibility.

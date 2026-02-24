@@ -1,0 +1,96 @@
+# Heading
+
+## Overview
+
+Heading is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Heading, headingVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Heading, headingVariants } from './heading'
+export type { HeadingProps } from './heading'
+~~~
+
+## Props
+
+~~~ts
+export interface HeadingProps
+  extends React.HTMLAttributes<HTMLHeadingElement>,
+    VariantProps<typeof headingVariants> {
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+}
+~~~
+
+## Variations
+
+~~~ts
+const headingVariants = cva(
+  "font-bold tracking-tight text-foreground",
+  {
+    variants: {
+      size: {
+        h1: "text-4xl md:text-5xl lg:text-6xl",
+        h2: "text-3xl md:text-4xl lg:text-5xl",
+        h3: "text-2xl md:text-3xl lg:text-4xl",
+        h4: "text-xl md:text-2xl lg:text-3xl",
+        h5: "text-lg md:text-xl",
+        h6: "text-base md:text-lg",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Heading, headingVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Heading />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Heading className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Heading className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

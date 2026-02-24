@@ -1,0 +1,89 @@
+# Stepper
+
+## Overview
+
+Stepper is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Stepper, StepperItem } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Stepper, StepperItem } from "./stepper"
+export type { StepperProps, StepperItemProps } from "./stepper"
+~~~
+
+## Props
+
+~~~ts
+export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
+  currentStep: number
+  totalSteps: number
+  orientation?: "horizontal" | "vertical"
+}
+export interface StepperItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  step: number
+  title: string
+  description?: string
+  orientation?: "horizontal" | "vertical"
+}
+~~~
+
+## Variations
+
+~~~ts
+No explicit cva variant map found. Variations are primarily structural/compositional for this component.
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Stepper, StepperItem } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Stepper />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Stepper className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Stepper className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

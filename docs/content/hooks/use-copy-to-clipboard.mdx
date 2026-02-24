@@ -1,0 +1,99 @@
+# useCopyToClipboard
+
+## Purpose
+
+useCopyToClipboard provides reusable behavior for common interaction patterns.
+
+## Import
+
+~~~tsx
+import { useCopyToClipboard } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## API reference
+
+~~~ts
+import { useState } from "react"
+
+interface CopyToClipboardResult {
+  /**
+   * The value that was copied
+   */
+  value: string | null
+  /**
+   * Function to copy text to clipboard
+   */
+  copy: (text: string) => Promise<void>
+  /**
+   * Error if copy failed
+   */
+  error: Error | null
+  /**
+   * Whether the copy was successful
+   */
+  copied: boolean
+}
+
+/**
+ * Hook that provides copy to clipboard functionality
+ * @returns Object with copy function, copied state, value, and error
+ */
+export function useCopyToClipboard(): CopyToClipboardResult {
+  const [value, setValue] = useState<string | null>(null)
+  const [error, setError] = useState<Error | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const copy = async (text: string) => {
+    if (!navigator?.clipboard) {
+      setError(new Error("Clipboard not supported"))
+      setCopied(false)
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setValue(text)
+      setError(null)
+      setCopied(true)
+
+      // Reset copied state after 2 seconds
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error("Failed to copy"))
+      setValue(null)
+      setCopied(false)
+    }
+  }
+
+  return { value, copy, error, copied }
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+const stableCallback = useCallback(() => {}, [])
+~~~
+
+### Don't
+
+~~~tsx
+const unstableCallback = () => {}
+~~~
+
+## Token / Theming Mapping
+
+- Hooks do not directly map to visual tokens.
+- Apply tokenized classes in consuming components based on hook outputs.
+
+## Interaction Test Checklist
+
+1. Initial state assertions.
+2. Primary state transition assertions.
+3. Cleanup behavior assertions (events/timers/observers).
+4. Error and edge path assertions where applicable.
+5. Integration test in one real component flow.

@@ -1,0 +1,179 @@
+# Form
+
+## Overview
+
+Form is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Form } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Form } from "./form"
+export type { FormProps } from "./form"
+~~~
+
+## Props
+
+~~~ts
+export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
+
+const Form = React.forwardRef<HTMLFormElement, FormProps>(
+  ({ className, ...props }, ref) => (
+    <form ref={ref} className={cn("space-y-6", className)} {...props} />
+  )
+)
+Form.displayName = "Form"
+
+export interface FormFieldProps {
+  name: string
+  children: React.ReactNode
+  error?: string
+}
+export interface FormItemProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const FormItem = React.forwardRef<HTMLDivElement, FormItemProps>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("space-y-2", className)} {...props} />
+  )
+)
+FormItem.displayName = "FormItem"
+
+export interface FormLabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  required?: boolean
+}
+export interface FormControlProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const FormControl = React.forwardRef<HTMLDivElement, FormControlProps>(
+  ({ ...props }, ref) => {
+    const { id, invalid } = useFormField()
+
+    return (
+      <div ref={ref} {...props}>
+        {React.Children.map(props.children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<any>, {
+              id,
+              "aria-invalid": invalid,
+              "aria-describedby": invalid ? `${id}-error` : undefined,
+            })
+          }
+          return child
+        })}
+      </div>
+    )
+  }
+)
+FormControl.displayName = "FormControl"
+
+export interface FormDescriptionProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {}
+
+const FormDescription = React.forwardRef<
+  HTMLParagraphElement,
+  FormDescriptionProps
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+FormDescription.displayName = "FormDescription"
+
+export interface FormMessageProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {}
+
+const FormMessage = React.forwardRef<HTMLParagraphElement, FormMessageProps>(
+  ({ className, children, ...props }, ref) => {
+    const { id, error } = useFormField()
+
+    if (!error && !children) {
+      return null
+    }
+
+    return (
+      <p
+        ref={ref}
+        id={`${id}-error`}
+        className={cn("text-sm font-medium text-destructive", className)}
+        {...props}
+      >
+        {error || children}
+      </p>
+    )
+  }
+)
+FormMessage.displayName = "FormMessage"
+
+export {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  useFormField,
+}
+~~~
+
+## Variations
+
+~~~ts
+No explicit cva variant map found. Variations are primarily structural/compositional for this component.
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Form } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Form />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Form className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Form className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

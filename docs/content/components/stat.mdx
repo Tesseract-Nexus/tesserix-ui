@@ -1,0 +1,157 @@
+# Stat
+
+## Overview
+
+Stat is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Stat, StatLabel, StatValue, StatTrend, StatMeta, statVariants, trendVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export {
+  Stat,
+  StatLabel,
+  StatValue,
+  StatTrend,
+  StatMeta,
+  statVariants,
+  trendVariants,
+} from "./stat"
+export type { StatProps, StatTrendProps } from "./stat"
+~~~
+
+## Props
+
+~~~ts
+export interface StatProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof statVariants> {}
+
+const Stat = React.forwardRef<HTMLDivElement, StatProps>(({ className, size, ...props }, ref) => (
+  <div ref={ref} className={cn(statVariants({ size }), className)} {...props} />
+))
+Stat.displayName = "Stat"
+
+const StatLabel = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("text-sm font-medium text-muted-foreground", className)} {...props} />
+  )
+)
+StatLabel.displayName = "StatLabel"
+
+const StatValue = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("mt-2 text-2xl font-semibold tracking-tight text-card-foreground", className)} {...props} />
+  )
+)
+StatValue.displayName = "StatValue"
+
+const trendVariants = cva("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium", {
+  variants: {
+    trend: {
+      up: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+      down: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+      neutral: "bg-muted text-muted-foreground",
+    },
+  },
+  defaultVariants: {
+    trend: "neutral",
+  },
+})
+export interface StatTrendProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof trendVariants> {}
+
+const StatTrend = React.forwardRef<HTMLSpanElement, StatTrendProps>(({ className, trend, ...props }, ref) => (
+  <span ref={ref} className={cn(trendVariants({ trend }), className)} {...props} />
+))
+StatTrend.displayName = "StatTrend"
+
+const StatMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn("mt-2 text-xs text-muted-foreground", className)} {...props} />
+  )
+)
+StatMeta.displayName = "StatMeta"
+
+export { Stat, StatLabel, StatValue, StatTrend, StatMeta, statVariants, trendVariants }
+~~~
+
+## Variations
+
+~~~ts
+const statVariants = cva(
+  "rounded-2xl border bg-card p-5 shadow-sm",
+  {
+    variants: {
+      size: {
+        sm: "p-4",
+        md: "p-5",
+        lg: "p-6",
+      },
+    },
+    defaultVariants: {
+const trendVariants = cva("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium", {
+  variants: {
+    trend: {
+      up: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+      down: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+      neutral: "bg-muted text-muted-foreground",
+    },
+  },
+  defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Stat, StatLabel, StatValue, StatTrend, StatMeta, statVariants, trendVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Stat />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Stat className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Stat className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

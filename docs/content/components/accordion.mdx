@@ -1,0 +1,92 @@
+# Accordion
+
+## Overview
+
+Accordion is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './accordion'
+export type { AccordionProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from './accordion'
+~~~
+
+## Props
+
+~~~ts
+export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
+  type?: "single" | "multiple"
+  defaultValue?: string | string[]
+  collapsible?: boolean
+}
+export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: string
+}
+export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  value: string
+}
+export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: string
+}
+~~~
+
+## Variations
+
+~~~ts
+No explicit cva variant map found. Variations are primarily structural/compositional for this component.
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Accordion />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Accordion className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Accordion className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

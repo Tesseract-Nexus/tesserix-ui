@@ -1,0 +1,94 @@
+# Skeleton
+
+## Overview
+
+Skeleton is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Skeleton } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Skeleton } from './skeleton'
+export type { SkeletonProps } from './skeleton'
+~~~
+
+## Props
+
+~~~ts
+export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn("animate-pulse rounded-md bg-muted", className)}
+        {...props}
+      />
+    )
+  }
+)
+Skeleton.displayName = "Skeleton"
+
+export { Skeleton }
+~~~
+
+## Variations
+
+~~~ts
+No explicit cva variant map found. Variations are primarily structural/compositional for this component.
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Skeleton } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Skeleton />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Skeleton className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Skeleton className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.

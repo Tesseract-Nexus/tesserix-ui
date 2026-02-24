@@ -1,0 +1,95 @@
+# Tooltip
+
+## Overview
+
+Tooltip is a design-system component intended for reusable, product-agnostic UI composition.
+
+## Import
+
+~~~tsx
+import { Tooltip, tooltipVariants } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Tooltip, tooltipVariants } from './tooltip'
+export type { TooltipProps } from './tooltip'
+~~~
+
+## Props
+
+~~~ts
+export interface TooltipProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "content" | "children">,
+    VariantProps<typeof tooltipVariants> {
+  content?: React.ReactNode
+  children?: React.ReactNode
+}
+~~~
+
+## Variations
+
+~~~ts
+const tooltipVariants = cva(
+  "absolute z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-md animate-in fade-in-0 zoom-in-95 pointer-events-none",
+  {
+    variants: {
+      side: {
+        top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+        bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+        left: "right-full top-1/2 -translate-y-1/2 mr-2",
+        right: "left-full top-1/2 -translate-y-1/2 ml-2",
+      },
+    },
+    defaultVariants: {
+~~~
+
+## Usage Patterns
+
+### Basic
+
+~~~tsx
+import { Tooltip, tooltipVariants } from "@tesseract-nexus/tesserix-ui"
+
+export function Example() {
+  return <Tooltip />
+}
+~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+// Compose with domain wrappers in product code
+<Tooltip className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+// Avoid one-off hardcoded values that bypass tokens
+<Tooltip className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+
+## Token / Theming Mapping
+
+- Color tokens: --primary, --secondary, --muted, --destructive, --foreground, --background
+- Shape tokens: --radius
+- Border/input tokens: --border, --input, --ring
+- Spacing and typography: Tailwind scale via design-system preset
+
+## Interaction Test Checklist
+
+1. Interaction: click/keyboard activation for primary paths.
+2. Focus: visible focus styles and logical tab order.
+3. Variants: core variants and sizes render correctly.
+4. Disabled/error states: behavior and ARIA attributes are correct.
+5. Regression: Storybook visual check for primary states.
+
+## Accessibility
+
+- Verify keyboard behavior for all interactive states.
+- Ensure labels and semantic roles are present in consuming screens.
+- Validate focus treatment and screen-reader output during QA.
