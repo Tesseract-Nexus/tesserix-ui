@@ -51,4 +51,33 @@ describe("AuthLayout", () => {
 
     expect(screen.getByRole("button", { name: /continue with github/i })).toBeDisabled()
   })
+
+  it("supports icon-only, text-only and icon+text social button modes", () => {
+    const onClick = vi.fn()
+
+    render(
+      <AuthSocialProviders>
+        <AuthSocialButton
+          provider="Google"
+          icon={<span aria-hidden="true">G</span>}
+          display="icon-only"
+          onClick={onClick}
+        />
+        <AuthSocialButton provider="GitHub" display="text-only">
+          Continue with GitHub
+        </AuthSocialButton>
+        <AuthSocialButton provider="Google" icon={<span aria-hidden="true">G</span>} display="icon-text">
+          Continue with Google
+        </AuthSocialButton>
+      </AuthSocialProviders>
+    )
+
+    const [iconOnlyButton] = screen.getAllByRole("button", { name: /continue with google/i })
+    expect(iconOnlyButton).toBeInTheDocument()
+    fireEvent.click(iconOnlyButton)
+    expect(onClick).toHaveBeenCalledTimes(1)
+
+    expect(screen.getByRole("button", { name: /continue with github/i })).toBeInTheDocument()
+    expect(screen.getAllByRole("button", { name: /continue with google/i })).toHaveLength(2)
+  })
 })

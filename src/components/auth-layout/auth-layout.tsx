@@ -98,27 +98,65 @@ const AuthSocialProviders = React.forwardRef<HTMLDivElement, React.HTMLAttribute
 )
 AuthSocialProviders.displayName = "AuthSocialProviders"
 
-interface AuthSocialButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AuthSocialButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   provider: string
   icon?: React.ReactNode
+  display?: "icon-only" | "text-only" | "icon-text"
+  iconPosition?: "left" | "right"
 }
 
 const AuthSocialButton = React.forwardRef<HTMLButtonElement, AuthSocialButtonProps>(
-  ({ className, provider, icon, children, type, ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type ?? "button"}
-      className={cn(
-        "inline-flex w-full items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-        className
-      )}
-      aria-label={`Continue with ${provider}`}
-      {...props}
-    >
-      {icon ? <span aria-hidden="true">{icon}</span> : null}
-      <span>{children ?? `Continue with ${provider}`}</span>
-    </button>
-  )
+  (
+    {
+      className,
+      provider,
+      icon,
+      display,
+      iconPosition = "left",
+      children,
+      type,
+      "aria-label": ariaLabel,
+      ...props
+    },
+    ref
+  ) => {
+    const resolvedDisplay =
+      display ?? (icon && children ? "icon-text" : icon ? "icon-only" : "text-only")
+    const defaultLabel = `Continue with ${provider}`
+    const labelContent = children ?? defaultLabel
+    const computedAriaLabel =
+      ariaLabel ?? (resolvedDisplay === "icon-only" ? defaultLabel : undefined)
+
+    return (
+      <button
+        ref={ref}
+        type={type ?? "button"}
+        className={cn(
+          "inline-flex h-10 w-full items-center justify-center rounded-md border bg-background px-3 text-sm font-medium text-foreground shadow-sm transition-colors",
+          "hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "disabled:pointer-events-none disabled:opacity-50",
+          resolvedDisplay === "icon-only" ? "px-0" : "gap-2",
+          className
+        )}
+        aria-label={computedAriaLabel}
+        {...props}
+      >
+        {resolvedDisplay !== "text-only" && iconPosition === "left" && icon ? (
+          <span aria-hidden="true" className="flex shrink-0 items-center justify-center">
+            {icon}
+          </span>
+        ) : null}
+        {resolvedDisplay !== "icon-only" ? (
+          <span className="block min-w-0 truncate whitespace-nowrap">{labelContent}</span>
+        ) : null}
+        {resolvedDisplay !== "text-only" && iconPosition === "right" && icon ? (
+          <span aria-hidden="true" className="flex shrink-0 items-center justify-center">
+            {icon}
+          </span>
+        ) : null}
+      </button>
+    )
+  }
 )
 AuthSocialButton.displayName = "AuthSocialButton"
 

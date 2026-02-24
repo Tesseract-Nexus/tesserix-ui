@@ -30,7 +30,12 @@ export {
 ## Props
 
 ~~~ts
-No dedicated Props interface found in this module. Refer to exported types and composed primitive props.
+export interface AuthSocialButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  provider: string
+  icon?: React.ReactNode
+  display?: "icon-only" | "text-only" | "icon-text"
+  iconPosition?: "left" | "right"
+}
 ~~~
 
 ## Variations
@@ -76,8 +81,12 @@ export function SocialAuthExample() {
             <AuthCardDescription>Continue with your identity provider.</AuthCardDescription>
           </AuthCardHeader>
           <AuthSocialProviders>
-            <AuthSocialButton provider="Google">Continue with Google</AuthSocialButton>
-            <AuthSocialButton provider="GitHub">Continue with GitHub</AuthSocialButton>
+            <AuthSocialButton provider="Google" icon={<span aria-hidden="true">G</span>} display="icon-text">
+              Continue with Google
+            </AuthSocialButton>
+            <AuthSocialButton provider="GitHub" icon={<span aria-hidden="true">GH</span>} display="icon-text">
+              Continue with GitHub
+            </AuthSocialButton>
           </AuthSocialProviders>
           <AuthCardDivider label="or continue with email" />
         </AuthCard>

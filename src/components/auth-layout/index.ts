@@ -10,3 +10,4 @@ export {
   AuthSocialProviders,
   AuthSocialButton,
 } from "./auth-layout"
+export type { AuthSocialButtonProps } from "./auth-layout"
