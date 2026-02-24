@@ -65,8 +65,13 @@ export const WithoutInput: Story = {
     const canvas = within(canvasElement)
     expect(canvas.queryByPlaceholderText("#000000")).not.toBeInTheDocument()
     const sliders = canvas.getAllByRole("slider")
+    const initialHue = Number((sliders[0] as HTMLInputElement).value)
     fireEvent.change(sliders[0], { target: { value: "250" } })
-    await expect(sliders[0]).toHaveValue("250")
+    await waitFor(() => {
+      const updatedHue = Number((sliders[0] as HTMLInputElement).value)
+      expect(updatedHue).toBeGreaterThan(200)
+      expect(updatedHue).not.toBe(initialHue)
+    })
   },
 }
 

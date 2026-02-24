@@ -72,6 +72,56 @@ const AuthCardDescription = React.forwardRef<
 ))
 AuthCardDescription.displayName = "AuthCardDescription"
 
+const AuthCardDivider = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { label?: string }
+>(({ className, label = "or", ...props }, ref) => (
+  <div ref={ref} className={cn("relative my-6", className)} {...props}>
+    <div className="absolute inset-0 flex items-center">
+      <span className="w-full border-t" />
+    </div>
+    <span className="relative mx-auto block w-fit bg-card px-2 text-xs uppercase tracking-wide text-muted-foreground">
+      {label}
+    </span>
+  </div>
+))
+AuthCardDivider.displayName = "AuthCardDivider"
+
+const AuthSocialProviders = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("grid gap-2 sm:grid-cols-2", className)}
+      {...props}
+    />
+  )
+)
+AuthSocialProviders.displayName = "AuthSocialProviders"
+
+interface AuthSocialButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  provider: string
+  icon?: React.ReactNode
+}
+
+const AuthSocialButton = React.forwardRef<HTMLButtonElement, AuthSocialButtonProps>(
+  ({ className, provider, icon, children, type, ...props }, ref) => (
+    <button
+      ref={ref}
+      type={type ?? "button"}
+      className={cn(
+        "inline-flex w-full items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        className
+      )}
+      aria-label={`Continue with ${provider}`}
+      {...props}
+    >
+      {icon ? <span aria-hidden="true">{icon}</span> : null}
+      <span>{children ?? `Continue with ${provider}`}</span>
+    </button>
+  )
+)
+AuthSocialButton.displayName = "AuthSocialButton"
+
 export {
   AuthLayout,
   AuthLayoutBrand,
@@ -80,4 +130,7 @@ export {
   AuthCardHeader,
   AuthCardTitle,
   AuthCardDescription,
+  AuthCardDivider,
+  AuthSocialProviders,
+  AuthSocialButton,
 }

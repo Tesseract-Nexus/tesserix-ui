@@ -7,7 +7,7 @@ Auth Layout is a design-system component intended for reusable, product-agnostic
 ## Import
 
 ~~~tsx
-import { AuthLayout, AuthLayoutBrand, AuthLayoutContent, AuthCard, AuthCardHeader, AuthCardTitle, AuthCardDescription } from "@tesseract-nexus/tesserix-ui"
+import { AuthLayout, AuthLayoutBrand, AuthLayoutContent, AuthCard, AuthCardHeader, AuthCardTitle, AuthCardDescription, AuthCardDivider, AuthSocialProviders, AuthSocialButton } from "@tesseract-nexus/tesserix-ui"
 ~~~
 
 ## Exports
@@ -21,6 +21,9 @@ export {
   AuthCardHeader,
   AuthCardTitle,
   AuthCardDescription,
+  AuthCardDivider,
+  AuthSocialProviders,
+  AuthSocialButton,
 } from "./auth-layout"
 ~~~
 
@@ -45,6 +48,42 @@ import { AuthLayout, AuthLayoutBrand, AuthLayoutContent, AuthCard, AuthCardHeade
 
 export function Example() {
   return <AuthLayout />
+}
+~~~
+
+### Social Login
+
+~~~tsx
+import {
+  AuthCard,
+  AuthCardDescription,
+  AuthCardDivider,
+  AuthCardHeader,
+  AuthCardTitle,
+  AuthLayout,
+  AuthLayoutContent,
+  AuthSocialButton,
+  AuthSocialProviders,
+} from "@tesseract-nexus/tesserix-ui"
+
+export function SocialAuthExample() {
+  return (
+    <AuthLayout className="lg:grid-cols-1">
+      <AuthLayoutContent>
+        <AuthCard>
+          <AuthCardHeader>
+            <AuthCardTitle>Sign in</AuthCardTitle>
+            <AuthCardDescription>Continue with your identity provider.</AuthCardDescription>
+          </AuthCardHeader>
+          <AuthSocialProviders>
+            <AuthSocialButton provider="Google">Continue with Google</AuthSocialButton>
+            <AuthSocialButton provider="GitHub">Continue with GitHub</AuthSocialButton>
+          </AuthSocialProviders>
+          <AuthCardDivider label="or continue with email" />
+        </AuthCard>
+      </AuthLayoutContent>
+    </AuthLayout>
+  )
 }
 ~~~
 

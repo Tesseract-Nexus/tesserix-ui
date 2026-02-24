@@ -1,5 +1,11 @@
 # @tesseract-nexus/tesserix-ui
 
+## 1.2.0
+
+### Minor Changes
+
+- Add social login composition primitives to AuthLayout (`AuthSocialProviders`, `AuthSocialButton`, `AuthCardDivider`), expand auth docs, add auth-layout tests, and harden Storybook interaction stability for ColorPicker, RangeSlider, Resizable, and TimePicker.
+
 ## 1.1.0
 
 ### Minor Changes

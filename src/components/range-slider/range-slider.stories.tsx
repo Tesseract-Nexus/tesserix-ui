@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, fireEvent, waitFor, within } from "storybook/test"
+import { expect, fireEvent, userEvent, waitFor, within } from "storybook/test"
 
 import { RangeSlider } from "./range-slider"
 
@@ -140,10 +140,10 @@ export const UncontrolledEdgeCases: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const minHandle = canvas.getByLabelText("Minimum value")
-    const maxHandle = canvas.getByLabelText("Maximum value")
+    const minHandle = await canvas.findByLabelText("Minimum value")
+    const maxHandle = await canvas.findByLabelText("Maximum value")
     const track = minHandle.parentElement as HTMLDivElement
-    const fill = track.querySelector(".bg-primary") as HTMLDivElement
+    const fill = track.querySelector("div.absolute.h-full.rounded-full.bg-primary") as HTMLDivElement | null
 
     track.getBoundingClientRect = () =>
       ({ left: 0, width: 200, top: 0, right: 200, bottom: 10, height: 10 }) as DOMRect
@@ -151,13 +151,13 @@ export const UncontrolledEdgeCases: Story = {
     fireEvent.mouseDown(maxHandle, { clientX: 120 })
     fireEvent.mouseMove(document, { clientX: 180 })
 
-    fireEvent.click(canvas.getByRole("button", { name: "Toggle disabled" }))
+    await userEvent.click(canvas.getByRole("button", { name: "Toggle disabled" }))
     fireEvent.mouseMove(document, { clientX: 160 })
     fireEvent.mouseUp(document)
 
-    fireEvent.click(track, { clientX: 50, target: fill })
+    fireEvent.click(track, { clientX: 50, target: fill ?? track })
     fireEvent.mouseDown(minHandle, { clientX: 40 })
-    fireEvent.click(canvas.getByRole("button", { name: "Unmount slider" }))
+    await userEvent.click(canvas.getByRole("button", { name: "Unmount slider" }))
     fireEvent.mouseMove(document, { clientX: 10 })
     fireEvent.mouseUp(document)
 

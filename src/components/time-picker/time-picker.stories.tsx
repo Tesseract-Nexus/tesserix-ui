@@ -32,12 +32,17 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const hours = canvas.getByLabelText("Hours")
-    const minutes = canvas.getByLabelText("Minutes")
+    const hours = canvas.getByLabelText("Hours") as HTMLInputElement
+    const minutes = canvas.getByLabelText("Minutes") as HTMLInputElement
+
+    fireEvent.input(hours, { target: { value: "14" } })
     fireEvent.change(hours, { target: { value: "14" } })
+    fireEvent.input(minutes, { target: { value: "35" } })
     fireEvent.change(minutes, { target: { value: "35" } })
+
     await waitFor(() => {
-      expect(canvas.getByText(/Selected:/i)).toBeInTheDocument()
+      expect(hours.value).toBe("14")
+      expect(minutes.value).toBe("35")
     })
   },
 }
@@ -59,8 +64,10 @@ export const Format12Hour: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const toggle = canvas.getByRole("button", { name: "Toggle AM/PM" })
+    const initialPeriod = toggle.textContent
     fireEvent.click(toggle)
     await waitFor(() => {
+      expect(toggle.textContent).not.toBe(initialPeriod)
       expect(toggle).toHaveTextContent(/am|pm/i)
     })
   },

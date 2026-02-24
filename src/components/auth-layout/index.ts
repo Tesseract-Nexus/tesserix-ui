@@ -6,4 +6,7 @@ export {
   AuthCardHeader,
   AuthCardTitle,
   AuthCardDescription,
+  AuthCardDivider,
+  AuthSocialProviders,
+  AuthSocialButton,
 } from "./auth-layout"

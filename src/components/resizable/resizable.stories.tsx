@@ -260,8 +260,9 @@ export const ImperativeRefHandle: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    await waitFor(() => expect(canvas.getByTestId("ref-handle")).toBeInTheDocument())
     fireEvent.click(canvas.getByRole("button", { name: "Check handle ref" }))
-    await expect(canvas.getByText("attached")).toBeInTheDocument()
+    await waitFor(() => expect(canvas.getByText("attached")).toBeInTheDocument())
   },
 }
 
