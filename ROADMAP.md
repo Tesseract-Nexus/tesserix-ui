@@ -38,12 +38,12 @@
 |-----------|--------|----------|-------------|
 | Tree | 🔴 | P1 | Hierarchical data display |
 | Transfer | 🔴 | P1 | Move items between lists |
-| Steps | 🔴 | P1 | Alternative to Stepper |
+| Steps | 🟢 | P1 | Alternative to Stepper |
 | Carousel | 🔴 | P1 | Image/content carousel |
 | InfiniteScroll | 🔴 | P1 | Auto-loading pagination |
 | VirtualList | 🔴 | P1 | Performance for large lists |
 | Chip/Tag | 🟢 | P1 | Input tags component |
-| Divider | 🔴 | P1 | Semantic separator |
+| Divider | 🟢 | P1 | Semantic separator |
 
 ### Enhanced Feedback
 
@@ -98,7 +98,7 @@
 | VisuallyHidden | 🟢 | P0 | Screen reader only content |
 | ThemeProvider | 🟢 | P0 | Runtime theme switching |
 | IconLibrary | 🔴 | P1 | Common icon set or integration |
-| Grid/Flex | 🔴 | P1 | Layout primitives |
+| Grid/Flex | 🟢 | P1 | Layout primitives |
 
 ---
 
@@ -137,12 +137,12 @@
 
 | Pattern | Status | Priority | Description |
 |---------|--------|----------|-------------|
-| SearchBar | 🔴 | P1 | Pre-composed search |
-| UserMenu | 🔴 | P1 | Profile dropdown pattern |
+| SearchBar | 🟢 | P1 | Pre-composed search |
+| UserMenu | 🟢 | P1 | Profile dropdown pattern |
 | NotificationCenter | 🔴 | P1 | Notification panel |
 | SettingsPanel | 🔴 | P1 | Settings layout |
 | FilterPanel | 🔴 | P1 | Advanced filtering UI |
-| CommandPalette | 🔴 | P1 | Enhanced command component |
+| CommandPalette | 🟢 | P1 | Enhanced command component |
 | Masonry | 🔴 | P2 | Pinterest-style layout |
 
 ---
