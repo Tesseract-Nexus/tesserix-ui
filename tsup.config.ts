@@ -10,6 +10,9 @@ export default defineConfig({
   clean: true,
   external: ['react', 'react-dom', 'tailwindcss'],
   outDir: 'dist',
+  banner: {
+    js: '"use client";',
+  },
   async onSuccess() {
     // Copy theme files to dist/themes
     const themesDir = join('dist', 'themes')

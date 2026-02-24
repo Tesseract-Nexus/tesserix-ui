@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
@@ -6,9 +7,17 @@ import 'nextra-theme-docs/style.css'
 import './globals.css'
 import themeConfig from '../theme.config'
 
-export const metadata = {
-  title: 'Tesserix UI',
+export const metadata: Metadata = {
+  title: {
+    default: 'Tesserix UI Docs',
+    template: '%s | Tesserix UI Docs',
+  },
   description: 'Design system documentation for Tesserix UI',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+  },
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {

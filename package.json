@@ -8,6 +8,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "react-server": "./dist/index.mjs",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
@@ -34,9 +35,6 @@
     "generate:themes": "node scripts/generate-themes.mjs",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "perf:report": "npm run build && node scripts/performance-report.mjs",
-    "docs:dev": "vite --config docs-site/vite.config.mjs",
-    "docs:build": "vite build --config docs-site/vite.config.mjs",
-    "docs:preview": "vite preview --config docs-site/vite.config.mjs",
     "prebuild": "npm run generate:themes",
     "build": "tsup",
     "predev": "npm run generate:themes",
