@@ -1,5 +1,5 @@
 ---
-"tesserix-ui": minor
+"@tesseract-nexus/tesserix-ui": minor
 ---
 
 # New Hooks and Utilities Library

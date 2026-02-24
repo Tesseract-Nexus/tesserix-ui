@@ -1,5 +1,5 @@
 ---
-"tesserix-ui": minor
+"@tesseract-nexus/tesserix-ui": minor
 ---
 
 # New Components: Drawer, Resizable, and Modal
