@@ -320,6 +320,11 @@ CI behavior:
 - **Docs Site Source** - `docs-site/` (build with `npm run docs:build`)
 - **[Support Policy](./SUPPORT_POLICY.md)** - supported dependency/runtime matrix and accessibility expectations
 - **[Release Policy](./RELEASE_POLICY.md)** - semantic versioning, deprecation, and release gates
+- **[Production Readiness Checklist](./PRODUCTION_READINESS_CHECKLIST.md)** - release gates, maturity rubric, and hardening backlog
+- **[Component Maturity Matrix](./COMPONENT_MATURITY.md)** - current `alpha`/`beta`/`stable` status by exported component
+- **[Accessibility Audit Log](./ACCESSIBILITY_AUDIT_LOG.md)** - top-component accessibility status and findings
+- **[Browser/Device Matrix](./BROWSER_DEVICE_MATRIX.md)** - verification coverage and remaining browser/device gaps
+- **[Performance Budget](./PERFORMANCE_BUDGET.md)** - bundle budget, guardrails, and monitoring
 
 ## 🤝 Contributing
 
