@@ -23,6 +23,13 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+export const FixedWidth: Story = {
+  render: (args) => (
+    <div className="w-[420px]">
+      <MultiSelect {...args} />
+    </div>
+  ),
+}
 
 export const WithDefaults: Story = {
   args: {

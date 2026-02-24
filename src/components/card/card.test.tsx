@@ -18,7 +18,7 @@ describe('Card', () => {
   it('applies default card styles', () => {
     render(<Card data-testid="card">Content</Card>)
     const card = screen.getByTestId('card')
-    expect(card).toHaveClass('rounded-lg', 'border', 'bg-card')
+    expect(card).toHaveClass('rounded-xl', 'border', 'bg-card')
   })
 
   it('applies custom className to card', () => {
@@ -54,7 +54,7 @@ describe('CardTitle', () => {
   it('applies default title styles', () => {
     render(<CardTitle data-testid="card-title">Title</CardTitle>)
     const title = screen.getByTestId('card-title')
-    expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none')
+    expect(title).toHaveClass('text-2xl', 'font-bold', 'leading-tight')
   })
 
   it('applies custom className to title', () => {

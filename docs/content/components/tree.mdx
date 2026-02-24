@@ -1,0 +1,61 @@
+# Tree
+
+## Overview
+
+Tree displays hierarchical data with optional expansion, selection, and disabled node support.
+
+## Import
+
+~~~tsx
+import { Tree } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Tree } from "./tree"
+export type { TreeProps, TreeNode } from "./tree"
+~~~
+
+## Props
+
+~~~ts
+export interface TreeNode {
+  id: string
+  label: string
+  children?: TreeNode[]
+  disabled?: boolean
+}
+
+export interface TreeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
+  data: TreeNode[]
+  defaultExpandedIds?: string[]
+  selectedId?: string
+  onSelect?: (id: string) => void
+}
+~~~
+
+## Usage
+
+~~~tsx
+const data = [
+  {
+    id: "src",
+    label: "src",
+    children: [
+      { id: "components", label: "components" },
+      { id: "hooks", label: "hooks", disabled: true },
+    ],
+  },
+]
+
+export function Example() {
+  return <Tree data={data} defaultExpandedIds={["src"]} />
+}
+~~~
+
+## Accessibility
+
+- Uses `tree`, `treeitem`, and `group` roles.
+- Supports expand/collapse controls per parent node.
+- Disabled nodes should not be selectable.

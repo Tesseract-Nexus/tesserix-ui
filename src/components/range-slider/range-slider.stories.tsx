@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { RangeSlider } from "./range-slider"
 
@@ -22,14 +22,27 @@ export const Default: Story = {
     return (
       <div className="w-96 space-y-4">
         <RangeSlider value={range} onChange={setRange} />
-        <p className="text-sm text-center text-muted-foreground">
-          Range: {range[0]} - {range[1]}
-        </p>
+        <p className="text-sm text-center text-muted-foreground">Range: {range[0]} - {range[1]}</p>
       </div>
     )
   },
   play: async ({ canvasElement }) => {
-    await expect(canvasElement).toBeTruthy()
+    const canvas = within(canvasElement)
+    const minHandle = canvas.getByLabelText("Minimum value")
+    const track = minHandle.parentElement as HTMLDivElement
+
+    track.getBoundingClientRect = () =>
+      ({ left: 0, width: 200, top: 0, right: 200, bottom: 10, height: 10 }) as DOMRect
+
+    fireEvent.mouseDown(minHandle, { clientX: 40 })
+    fireEvent.mouseMove(document, { clientX: 80 })
+    fireEvent.mouseUp(document)
+
+    fireEvent.click(track, { clientX: 170, target: track })
+
+    await waitFor(() => {
+      expect(canvas.getByText(/Range:/i)).toBeInTheDocument()
+    })
   },
 }
 
@@ -39,9 +52,7 @@ export const CustomRange: Story = {
     return (
       <div className="w-96 space-y-4">
         <RangeSlider min={0} max={1000} value={range} onChange={setRange} />
-        <p className="text-sm text-center text-muted-foreground">
-          Range: {range[0]} - {range[1]}
-        </p>
+        <p className="text-sm text-center text-muted-foreground">Range: {range[0]} - {range[1]}</p>
       </div>
     )
   },
@@ -53,9 +64,7 @@ export const WithStep: Story = {
     return (
       <div className="w-96 space-y-4">
         <RangeSlider min={0} max={100} step={10} value={range} onChange={setRange} />
-        <p className="text-sm text-center text-muted-foreground">
-          Range: {range[0]} - {range[1]} (Step: 10)
-        </p>
+        <p className="text-sm text-center text-muted-foreground">Range: {range[0]} - {range[1]} (Step: 10)</p>
       </div>
     )
   },
@@ -68,13 +77,7 @@ export const PriceRange: Story = {
       <div className="w-96 space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">Price Range</label>
-          <RangeSlider
-            min={0}
-            max={1000}
-            step={10}
-            value={range}
-            onChange={setRange}
-          />
+          <RangeSlider min={0} max={1000} step={10} value={range} onChange={setRange} />
         </div>
         <div className="flex justify-between text-sm">
           <span>${range[0]}</span>
@@ -104,5 +107,60 @@ export const Disabled: Story = {
         <RangeSlider value={range} disabled />
       </div>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const minHandle = canvas.getByLabelText("Minimum value")
+    expect(minHandle).toHaveAttribute("tabindex", "-1")
+    fireEvent.mouseDown(minHandle, { clientX: 10 })
+    fireEvent.mouseMove(document, { clientX: 80 })
+    fireEvent.mouseUp(document)
+    await expect(canvas.getByText("40")).toBeInTheDocument()
+  },
+}
+
+export const UncontrolledEdgeCases: Story = {
+  render: () => {
+    const [mounted, setMounted] = React.useState(true)
+    const [disabled, setDisabled] = React.useState(false)
+
+    return (
+      <div className="w-96 space-y-3">
+        <div className="flex gap-2">
+          <button type="button" onClick={() => setDisabled((prev) => !prev)}>
+            Toggle disabled
+          </button>
+          <button type="button" onClick={() => setMounted(false)}>
+            Unmount slider
+          </button>
+        </div>
+        {mounted ? <RangeSlider defaultValue={[30, 60]} disabled={disabled} /> : <p>Unmounted</p>}
+      </div>
+    )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const minHandle = canvas.getByLabelText("Minimum value")
+    const maxHandle = canvas.getByLabelText("Maximum value")
+    const track = minHandle.parentElement as HTMLDivElement
+    const fill = track.querySelector(".bg-primary") as HTMLDivElement
+
+    track.getBoundingClientRect = () =>
+      ({ left: 0, width: 200, top: 0, right: 200, bottom: 10, height: 10 }) as DOMRect
+
+    fireEvent.mouseDown(maxHandle, { clientX: 120 })
+    fireEvent.mouseMove(document, { clientX: 180 })
+
+    fireEvent.click(canvas.getByRole("button", { name: "Toggle disabled" }))
+    fireEvent.mouseMove(document, { clientX: 160 })
+    fireEvent.mouseUp(document)
+
+    fireEvent.click(track, { clientX: 50, target: fill })
+    fireEvent.mouseDown(minHandle, { clientX: 40 })
+    fireEvent.click(canvas.getByRole("button", { name: "Unmount slider" }))
+    fireEvent.mouseMove(document, { clientX: 10 })
+    fireEvent.mouseUp(document)
+
+    await expect(canvas.getByText("Unmounted")).toBeInTheDocument()
   },
 }

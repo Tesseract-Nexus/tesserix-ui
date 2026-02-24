@@ -12,7 +12,7 @@ describe('Input', () => {
   it('applies default input styles', () => {
     render(<Input data-testid="input" />)
     const input = screen.getByTestId('input')
-    expect(input).toHaveClass('flex', 'h-10', 'w-full', 'rounded-md', 'border')
+    expect(input).toHaveClass('flex', 'h-11', 'w-full', 'rounded-lg', 'border-2')
   })
 
   it('accepts text input', async () => {

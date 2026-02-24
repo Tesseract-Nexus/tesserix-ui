@@ -1,0 +1,64 @@
+# Autocomplete
+
+## Overview
+
+Autocomplete provides typeahead suggestions from a local options list with keyboard and mouse selection support.
+
+## Import
+
+~~~tsx
+import { Autocomplete } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Autocomplete } from "./autocomplete"
+export type { AutocompleteProps, AutocompleteOption } from "./autocomplete"
+~~~
+
+## Props
+
+~~~ts
+export interface AutocompleteOption {
+  value: string
+  label: string
+  keywords?: string[]
+}
+
+export interface AutocompleteProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> {
+  options: AutocompleteOption[]
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+  onOptionSelect?: (option: AutocompleteOption) => void
+  emptyText?: string
+  maxResults?: number
+}
+~~~
+
+## Usage
+
+~~~tsx
+const options = [
+  { value: "react", label: "React", keywords: ["frontend"] },
+  { value: "next", label: "Next.js", keywords: ["framework"] },
+]
+
+export function Example() {
+  return (
+    <Autocomplete
+      options={options}
+      placeholder="Search..."
+      onOptionSelect={(option) => console.log(option.value)}
+    />
+  )
+}
+~~~
+
+## Accessibility
+
+- Uses `combobox`, `listbox`, and `option` roles.
+- Supports arrow-key navigation, Enter to select, and Escape to close.
+- Verify visible focus and text contrast in your app theme.

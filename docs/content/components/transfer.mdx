@@ -1,0 +1,59 @@
+# Transfer
+
+## Overview
+
+Transfer moves items between source and target lists, useful for assignment and selection flows.
+
+## Import
+
+~~~tsx
+import { Transfer } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { Transfer } from "./transfer"
+export type { TransferProps, TransferItem } from "./transfer"
+~~~
+
+## Props
+
+~~~ts
+export interface TransferItem {
+  id: string
+  label: string
+}
+
+export interface TransferProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  sourceItems: TransferItem[]
+  targetItems?: TransferItem[]
+  onItemsChange?: (payload: { sourceItems: TransferItem[]; targetItems: TransferItem[] }) => void
+}
+~~~
+
+## Usage
+
+~~~tsx
+const sourceItems = [
+  { id: "1", label: "Apple" },
+  { id: "2", label: "Banana" },
+]
+
+export function Example() {
+  return (
+    <Transfer
+      sourceItems={sourceItems}
+      onItemsChange={({ sourceItems, targetItems }) => {
+        console.log(sourceItems, targetItems)
+      }}
+    />
+  )
+}
+~~~
+
+## Accessibility
+
+- Ensure list labels/context are provided nearby for assistive tech.
+- Validate keyboard navigation in consuming screens.
+- Confirm selected-state styling has clear contrast.

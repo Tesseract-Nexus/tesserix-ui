@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect } from "storybook/test"
+import * as React from "react"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { Autocomplete } from "./autocomplete"
 
@@ -25,15 +26,67 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 
+export const Controlled: Story = {
+  render: () => {
+    const [value, setValue] = React.useState("")
+    const [selected, setSelected] = React.useState("")
+    return (
+      <div className="w-96 space-y-2">
+        <Autocomplete
+          options={options}
+          value={value}
+          onValueChange={setValue}
+          onOptionSelect={(option) => setSelected(option.value)}
+          placeholder="Search stack..."
+        />
+        <p className="text-xs text-muted-foreground">Value: {value || "none"}</p>
+        <p className="text-xs text-muted-foreground">Selected: {selected || "none"}</p>
+      </div>
+    )
+  },
+}
+
+export const KeyboardSelection: Story = {
+  render: Controlled.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole("combobox")
+
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "re" } })
+    fireEvent.keyDown(input, { key: "ArrowDown" })
+    fireEvent.keyDown(input, { key: "Enter" })
+
+    await waitFor(() => {
+      expect(canvas.getByText(/selected:/i)).toBeInTheDocument()
+      expect(canvas.getByText(/value:/i)).toBeInTheDocument()
+    })
+  },
+}
+
 export const EmptyState: Story = {
   args: {
     defaultValue: "zzzz",
   },
 }
 
-export const SmokeTest: Story = {
-  render: Default.render,
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    defaultValue: "React",
+  },
+}
+
+export const KeywordMatch: Story = {
+  render: Controlled.render,
   play: async ({ canvasElement }) => {
-    await expect(canvasElement).toBeTruthy()
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole("combobox")
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: "framework" } })
+
+    await waitFor(() => {
+      expect(canvas.getByRole("option", { name: "Next.js" })).toBeInTheDocument()
+    })
   },
 }

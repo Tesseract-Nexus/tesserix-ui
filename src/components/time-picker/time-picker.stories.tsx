@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect } from "storybook/test"
+import { expect, fireEvent, waitFor, within } from "storybook/test"
 
 import { TimePicker } from "./time-picker"
 
@@ -31,7 +31,14 @@ export const Default: Story = {
     )
   },
   play: async ({ canvasElement }) => {
-    await expect(canvasElement).toBeTruthy()
+    const canvas = within(canvasElement)
+    const hours = canvas.getByLabelText("Hours")
+    const minutes = canvas.getByLabelText("Minutes")
+    fireEvent.change(hours, { target: { value: "14" } })
+    fireEvent.change(minutes, { target: { value: "35" } })
+    await waitFor(() => {
+      expect(canvas.getByText(/Selected:/i)).toBeInTheDocument()
+    })
   },
 }
 
@@ -49,6 +56,14 @@ export const Format12Hour: Story = {
       </div>
     )
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const toggle = canvas.getByRole("button", { name: "Toggle AM/PM" })
+    fireEvent.click(toggle)
+    await waitFor(() => {
+      expect(toggle).toHaveTextContent(/am|pm/i)
+    })
+  },
 }
 
 export const WithSeconds: Story = {
@@ -64,6 +79,13 @@ export const WithSeconds: Story = {
         )}
       </div>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    fireEvent.change(canvas.getByLabelText("Seconds"), { target: { value: "45" } })
+    await waitFor(() => {
+      expect(canvas.getByText(/Selected:/i)).toBeInTheDocument()
+    })
   },
 }
 
@@ -81,6 +103,16 @@ export const Format12HourWithSeconds: Story = {
       </div>
     )
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    fireEvent.change(canvas.getByLabelText("Hours"), { target: { value: "11" } })
+    fireEvent.change(canvas.getByLabelText("Minutes"), { target: { value: "58" } })
+    fireEvent.change(canvas.getByLabelText("Seconds"), { target: { value: "59" } })
+    fireEvent.click(canvas.getByRole("button", { name: "Toggle AM/PM" }))
+    await waitFor(() => {
+      expect(canvas.getByText(/Selected:/i)).toBeInTheDocument()
+    })
+  },
 }
 
 export const Disabled: Story = {
@@ -91,5 +123,10 @@ export const Disabled: Story = {
         <TimePicker value={time} disabled />
       </div>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    expect(canvas.getByLabelText("Hours")).toBeDisabled()
+    expect(canvas.getByLabelText("Minutes")).toBeDisabled()
   },
 }

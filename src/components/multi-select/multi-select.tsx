@@ -89,7 +89,7 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       .map((option) => option.label)
 
     return (
-      <div ref={rootRef} className={cn("relative w-full", className)} {...props}>
+      <div ref={rootRef} className={cn("relative w-full min-w-0", className)} {...props}>
         <button
           type="button"
           disabled={disabled}
@@ -101,19 +101,19 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
             }
           }}
           className={cn(
-            "flex h-11 w-full items-center justify-between rounded-lg border-2 border-input bg-background px-3 py-2 text-sm shadow-sm transition-all duration-200",
+            "flex h-11 w-full min-w-0 items-center justify-between rounded-lg border-2 border-input bg-background px-3 py-2 text-sm shadow-sm transition-all duration-200",
             "focus-visible:outline-none focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/20",
             "disabled:cursor-not-allowed disabled:opacity-50"
           )}
         >
-          <span className={cn("truncate text-left", selectedLabels.length === 0 && "text-muted-foreground")}>
+          <span className={cn("flex-1 truncate text-left", selectedLabels.length === 0 && "text-muted-foreground")}>
             {selectedLabels.length > 0 ? selectedLabels.join(", ") : placeholder}
           </span>
-          <span className="ml-2 text-xs text-muted-foreground">{selectedValues.length}</span>
+          <span className="ml-2 w-6 text-right text-xs text-muted-foreground">{selectedValues.length}</span>
         </button>
 
         {open ? (
-          <div className="absolute z-50 mt-2 w-full rounded-lg border bg-popover p-2 text-popover-foreground shadow-lg">
+          <div className="absolute left-0 right-0 z-50 mt-2 min-w-full rounded-lg border bg-popover p-2 text-popover-foreground shadow-lg">
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}

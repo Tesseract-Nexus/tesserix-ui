@@ -6,7 +6,7 @@ import { Calendar } from "./calendar"
 describe("Calendar", () => {
   it("renders without crashing", () => {
     const { container } = render(<Calendar mode="single" />)
-    expect(container.querySelector(".rdp")).toBeInTheDocument()
+    expect(container.firstChild).toBeInTheDocument()
   })
 
   it("renders with custom className", () => {

@@ -45,6 +45,19 @@ Run async workflows with `idle/pending/success/error` state.
 const { execute, data, error, isLoading, status } = useAsync(fetchUsers)
 ```
 
+### Additional exported hooks
+
+- `usePrevious`
+- `useWindowSize`
+- `useScrollPosition`
+- `useTimeout`
+- `useInterval`
+- `useOnMount`
+- `useOnUnmount`
+- `useHover`
+- `useFocus`
+- `useForm`
+
 ## Important note
 
 `src/hooks` includes additional local hooks (`useDebounce`, `useLocalStorage`, `useMediaQuery`, `useToggle`) that are currently not exported via `src/hooks/index.ts`.
@@ -62,3 +75,13 @@ const { execute, data, error, isLoading, status } = useAsync(fetchUsers)
 - [useKeyPress](/hooks/use-key-press)
 - [useCopyToClipboard](/hooks/use-copy-to-clipboard)
 - [useAsync](/hooks/use-async)
+- [usePrevious](/hooks/use-previous)
+- [useWindowSize](/hooks/use-window-size)
+- [useScrollPosition](/hooks/use-scroll-position)
+- [useTimeout](/hooks/use-timeout)
+- [useInterval](/hooks/use-interval)
+- [useOnMount](/hooks/use-on-mount)
+- [useOnUnmount](/hooks/use-on-unmount)
+- [useHover](/hooks/use-hover)
+- [useFocus](/hooks/use-focus)
+- [useForm](/hooks/use-form)

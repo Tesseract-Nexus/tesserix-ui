@@ -9,4 +9,6 @@ export default {
   responsive: 'Responsive',
   animation: 'Animation',
   loading: 'Loading',
+  'mock-data': 'Mock Data',
+  'performance-monitor': 'Performance Monitor',
 }

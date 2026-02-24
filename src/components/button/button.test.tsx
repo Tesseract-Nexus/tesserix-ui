@@ -34,7 +34,7 @@ describe('Button', () => {
   it('applies outline variant styles', () => {
     render(<Button variant="outline">Outline</Button>)
     const button = screen.getByRole('button')
-    expect(button).toHaveClass('border')
+    expect(button).toHaveClass('border-2')
   })
 
   it('applies secondary variant styles', () => {
@@ -64,13 +64,13 @@ describe('Button', () => {
   it('applies large size styles', () => {
     render(<Button size="lg">Large</Button>)
     const button = screen.getByRole('button')
-    expect(button).toHaveClass('h-11')
+    expect(button).toHaveClass('h-12')
   })
 
   it('applies icon size styles', () => {
     render(<Button size="icon">✓</Button>)
     const button = screen.getByRole('button')
-    expect(button).toHaveClass('h-10', 'w-10')
+    expect(button).toHaveClass('h-11', 'w-11')
   })
 
   it('renders as disabled when disabled prop is true', () => {

@@ -29,6 +29,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta property="og:title" content="Tesserix UI" />
         <meta property="og:description" content="Production-ready React component library" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </Head>
       <body>
         <Layout

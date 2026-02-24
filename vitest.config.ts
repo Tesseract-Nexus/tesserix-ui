@@ -23,6 +23,9 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     css: true,
     coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary', 'html'],
+      include: ['src/**/*.{ts,tsx}'],
       exclude: [
         '.storybook/**',
         'src/test/**',
@@ -33,6 +36,14 @@ export default defineConfig({
       ],
     },
     projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['src/**/*.test.{ts,tsx}'],
+          exclude: ['src/**/*.stories.{ts,tsx}'],
+        },
+      },
       {
         extends: true,
         plugins: [

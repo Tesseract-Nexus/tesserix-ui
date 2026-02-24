@@ -14,7 +14,7 @@ This page documents every component exported from `src/index.ts`.
 import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 ```
 
-## Full component inventory (69)
+## Full component inventory (103)
 
 ### Form and input
 
@@ -26,6 +26,8 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `radio`
 - `select`
 - `combobox`
+- `autocomplete`
+- `multi-select`
 - `number-input`
 - `otp-input`
 - `slider`
@@ -36,6 +38,10 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `time-picker`
 - `calendar`
 - `color-picker`
+- `date-range-picker`
+- `rich-text-editor`
+- `markdown-editor`
+- `image-cropper`
 - `file-upload`
 - `inline-editable`
 - `form`
@@ -56,12 +62,15 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `drawer`
 - `sheet`
 - `modal`
+- `callout`
 - `popover`
 - `tooltip`
 - `toast`
 - `dropdown-menu`
 - `context-menu`
 - `alert`
+- `notification-center`
+- `command-palette`
 
 ### Layout and structure
 
@@ -69,7 +78,10 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `collapsible`
 - `resizable`
 - `separator`
+- `divider`
 - `scroll-area`
+- `grid`
+- `flex`
 - `aspect-ratio`
 - `app-shell`
 - `auth-layout`
@@ -80,6 +92,8 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `dashboard-card`
 - `bento-grid`
 - `feature-grid`
+- `settings-panel`
+- `filter-panel`
 - `hero-section`
 - `empty-state`
 
@@ -92,13 +106,32 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - `progress`
 - `rating`
 - `badge`
+- `tag`
 - `avatar`
 - `skeleton`
 - `spinner`
 - `heading`
 - `text`
+- `blockquote`
+- `code`
+- `kbd`
+- `icon-library`
+- `charts`
+- `kanban`
 - `command`
 - `stepper`
+- `steps`
+- `tree`
+- `transfer`
+- `carousel`
+- `masonry`
+- `infinite-scroll`
+- `virtual-list`
+- `search-bar`
+- `user-menu`
+- `mentions`
+- `tour`
+- `component-playground`
 
 ## Usage notes
 
@@ -122,35 +155,58 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - [Avatar](/components/avatar)
 - [Badge](/components/badge)
 - [Bento Grid](/components/bento-grid)
+- [Blockquote](/components/blockquote)
 - [Breadcrumb](/components/breadcrumb)
 - [Button](/components/button)
 - [Calendar](/components/calendar)
+- [Callout](/components/callout)
 - [Card](/components/card)
+- [Carousel](/components/carousel)
+- [Charts](/components/charts)
 - [Checkbox](/components/checkbox)
 - [Collapsible](/components/collapsible)
 - [Color Picker](/components/color-picker)
+- [Code](/components/code)
 - [Combobox](/components/combobox)
+- [Autocomplete](/components/autocomplete)
 - [Command](/components/command)
+- [Command Palette](/components/command-palette)
 - [Context Menu](/components/context-menu)
+- [Component Playground](/components/component-playground)
 - [Dashboard Card](/components/dashboard-card)
 - [Dashboard Layout](/components/dashboard-layout)
 - [Data Table](/components/data-table)
 - [Date Picker](/components/date-picker)
+- [Date Range Picker](/components/date-range-picker)
 - [Dialog](/components/dialog)
+- [Divider](/components/divider)
 - [Drawer](/components/drawer)
 - [Dropdown Menu](/components/dropdown-menu)
 - [Empty State](/components/empty-state)
+- [Filter Panel](/components/filter-panel)
 - [Feature Grid](/components/feature-grid)
+- [Flex](/components/flex)
 - [File Upload](/components/file-upload)
 - [Form](/components/form)
+- [Grid](/components/grid)
 - [Heading](/components/heading)
 - [Hero Section](/components/hero-section)
 - [Inline Editable](/components/inline-editable)
 - [Input](/components/input)
+- [Infinite Scroll](/components/infinite-scroll)
+- [Icon Library](/components/icon-library)
+- [Image Cropper](/components/image-cropper)
+- [Kanban](/components/kanban)
+- [Kbd](/components/kbd)
 - [Label](/components/label)
 - [Menubar](/components/menubar)
+- [Masonry](/components/masonry)
+- [Markdown Editor](/components/markdown-editor)
+- [Mentions](/components/mentions)
 - [Modal](/components/modal)
+- [Multi Select](/components/multi-select)
 - [Navigation Menu](/components/navigation-menu)
+- [Notification Center](/components/notification-center)
 - [Number Input](/components/number-input)
 - [Otp Input](/components/otp-input)
 - [Page Header](/components/page-header)
@@ -161,25 +217,35 @@ import { Button, Card, Dialog } from "@tesseract-nexus/tesserix-ui"
 - [Range Slider](/components/range-slider)
 - [Rating](/components/rating)
 - [Resizable](/components/resizable)
+- [Rich Text Editor](/components/rich-text-editor)
 - [Scroll Area](/components/scroll-area)
+- [Search Bar](/components/search-bar)
 - [Section](/components/section)
 - [Select](/components/select)
 - [Separator](/components/separator)
+- [Settings Panel](/components/settings-panel)
 - [Sheet](/components/sheet)
 - [Sidebar Nav](/components/sidebar-nav)
 - [Skeleton](/components/skeleton)
 - [Slider](/components/slider)
 - [Spinner](/components/spinner)
 - [Stat](/components/stat)
+- [Steps](/components/steps)
 - [Stepper](/components/stepper)
 - [Switch](/components/switch)
 - [Table](/components/table)
 - [Tabs](/components/tabs)
 - [Text](/components/text)
 - [Textarea](/components/textarea)
+- [Tag](/components/tag)
 - [Time Picker](/components/time-picker)
 - [Timeline](/components/timeline)
 - [Toast](/components/toast)
 - [Toggle](/components/toggle)
+- [Tour](/components/tour)
+- [Transfer](/components/transfer)
+- [Tree](/components/tree)
 - [Tooltip](/components/tooltip)
 - [Top Nav](/components/top-nav)
+- [User Menu](/components/user-menu)
+- [Virtual List](/components/virtual-list)
