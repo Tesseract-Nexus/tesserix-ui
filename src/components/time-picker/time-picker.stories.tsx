@@ -16,15 +16,34 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const DEFAULT_TIME = new Date(2024, 0, 1, 23, 56, 20)
+const FORMAT_12H_TIME = new Date(2024, 0, 1, 11, 56, 23)
+const WITH_SECONDS_TIME = new Date(2024, 0, 1, 8, 12, 5)
+const FORMAT_12H_WITH_SECONDS_TIME = new Date(2024, 0, 1, 10, 32, 2)
+
+const formatTime = (value: Date, format: "12h" | "24h", showSeconds = false) => {
+  const hours24 = value.getHours()
+  const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12
+  const hours = format === "12h" ? hours12 : hours24
+  const minutes = value.getMinutes()
+  const seconds = value.getSeconds()
+  const period = hours24 >= 12 ? "PM" : "AM"
+  const hh = String(hours).padStart(2, "0")
+  const mm = String(minutes).padStart(2, "0")
+  const ss = String(seconds).padStart(2, "0")
+
+  return `${hh}:${mm}${showSeconds ? `:${ss}` : ""}${format === "12h" ? ` ${period}` : ""}`
+}
+
 export const Default: Story = {
   render: () => {
-    const [time, setTime] = React.useState<Date | undefined>(new Date())
+    const [time, setTime] = React.useState<Date | undefined>(new Date(DEFAULT_TIME))
     return (
       <div className="space-y-2">
         <TimePicker value={time} onChange={setTime} />
         {time && (
           <p className="text-sm text-muted-foreground">
-            Selected: {time.toLocaleTimeString()}
+            Selected: {formatTime(time, "24h")}
           </p>
         )}
       </div>
@@ -49,13 +68,13 @@ export const Default: Story = {
 
 export const Format12Hour: Story = {
   render: () => {
-    const [time, setTime] = React.useState<Date | undefined>(new Date())
+    const [time, setTime] = React.useState<Date | undefined>(new Date(FORMAT_12H_TIME))
     return (
       <div className="space-y-2">
         <TimePicker value={time} onChange={setTime} format="12h" />
         {time && (
           <p className="text-sm text-muted-foreground">
-            Selected: {time.toLocaleTimeString()}
+            Selected: {formatTime(time, "12h")}
           </p>
         )}
       </div>
@@ -75,13 +94,13 @@ export const Format12Hour: Story = {
 
 export const WithSeconds: Story = {
   render: () => {
-    const [time, setTime] = React.useState<Date | undefined>(new Date())
+    const [time, setTime] = React.useState<Date | undefined>(new Date(WITH_SECONDS_TIME))
     return (
       <div className="space-y-2">
         <TimePicker value={time} onChange={setTime} showSeconds />
         {time && (
           <p className="text-sm text-muted-foreground">
-            Selected: {time.toLocaleTimeString()}
+            Selected: {formatTime(time, "24h", true)}
           </p>
         )}
       </div>
@@ -98,13 +117,13 @@ export const WithSeconds: Story = {
 
 export const Format12HourWithSeconds: Story = {
   render: () => {
-    const [time, setTime] = React.useState<Date | undefined>(new Date())
+    const [time, setTime] = React.useState<Date | undefined>(new Date(FORMAT_12H_WITH_SECONDS_TIME))
     return (
       <div className="space-y-2">
         <TimePicker value={time} onChange={setTime} format="12h" showSeconds />
         {time && (
           <p className="text-sm text-muted-foreground">
-            Selected: {time.toLocaleTimeString()}
+            Selected: {formatTime(time, "12h", true)}
           </p>
         )}
       </div>
@@ -124,7 +143,7 @@ export const Format12HourWithSeconds: Story = {
 
 export const Disabled: Story = {
   render: () => {
-    const [time] = React.useState<Date | undefined>(new Date())
+    const [time] = React.useState<Date | undefined>(new Date(DEFAULT_TIME))
     return (
       <div className="space-y-2">
         <TimePicker value={time} disabled />

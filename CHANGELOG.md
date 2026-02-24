@@ -1,5 +1,11 @@
 # @tesseract-nexus/tesserix-ui
 
+## 1.2.1
+
+### Patch Changes
+
+- Stabilize `TimePicker` Storybook snapshots by using deterministic seed times and stable formatted output in stories.
+
 ## 1.2.0
 
 ### Minor Changes
