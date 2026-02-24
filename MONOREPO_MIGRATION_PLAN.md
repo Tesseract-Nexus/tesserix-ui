@@ -5,10 +5,11 @@ Migrate `tesserix-ui` to a monorepo structure supporting both web and React Nati
 
 ## Goals
 - ✅ Share design tokens across web and native platforms
-- ✅ Maintain backward compatibility with existing `tesserix-ui` package
-- ✅ Support independent versioning and publishing
+- ✅ Establish an Expo-first React Native package that also works in bare RN apps
+- ✅ Use independent versioning with Changesets-managed releases
 - ✅ Unified documentation with platform-specific guides
 - ✅ Separate Storybook instances for web and native
+- ✅ Keep a lightweight `tesserix-ui` alias package for future migration compatibility
 
 ---
 
@@ -168,6 +169,7 @@ Create alias package for `tesserix-ui`:
 - [ ] Re-export everything from `@tesserix/web`
 - [ ] Add deprecation notice in README
 - [ ] Publish with notice: "This package is deprecated. Use @tesserix/web instead."
+- [ ] Document that there are currently no external consumers, so this alias is preventive for future migrations
 
 ### 3.4 Update Documentation & Storybook
 - [ ] Update Storybook stories paths
@@ -186,6 +188,11 @@ Create alias package for `tesserix-ui`:
   - `react-native`
   - `@tesserix/tokens`
   - Platform-specific libs (if needed)
+- [ ] Expo-first compatibility baseline:
+  - Add Expo example app under `apps/` for real-consumer testing
+  - Ensure Metro workspace resolution works with monorepo packages
+  - Avoid native modules that require ejecting unless explicitly planned
+  - Keep package compatible with bare React Native consumers
 
 ### 4.2 Create Core Components
 Start with essentials (reimplement using RN primitives):
@@ -208,6 +215,7 @@ Start with essentials (reimplement using RN primitives):
 - [ ] Implement platform-specific component variants
 - [ ] Add gesture handling (if needed)
 - [ ] Test on both iOS and Android
+- [ ] Validate both Expo app and bare RN app consumption paths before publish
 
 ---
 
@@ -275,15 +283,15 @@ Create `.github/workflows/storybook-native-ci.yml`:
 
 ### 6.3 Publishing Workflow
 Create `.github/workflows/publish.yml`:
-- [ ] Trigger on version tags or manual dispatch
+- [ ] Trigger via Changesets release flow (release PR + publish step), with optional manual dispatch
 - [ ] Build all packages
 - [ ] Run tests
-- [ ] Publish to npm (using Changesets)
+- [ ] Publish changed packages to npm using Changesets
 - [ ] Create GitHub release
 
 ### 6.4 Changesets Integration
 - [ ] Configure `.changeset/config.json`
-- [ ] Setup versioning strategy (linked vs independent)
+- [x] Setup versioning strategy: independent
 - [ ] Add changeset bot to PRs
 - [ ] Document how to add changesets
 
@@ -297,6 +305,8 @@ Create `.github/workflows/publish.yml`:
 - [ ] Storybook builds for both platforms
 - [ ] Documentation site builds
 - [ ] Local testing of published packages (use `npm link` or `pnpm link`)
+- [ ] Validate Expo sample app installs and runs with workspace packages
+- [ ] Validate bare RN sample app installs and runs with published `@tesserix/native`
 
 ### 7.2 Initial Publish
 Publish in order:
@@ -343,25 +353,13 @@ For web consumers:
 
 ## Package Versioning Strategy
 
-### Option A: Independent Versioning (Recommended)
+### Selected: Independent Versioning
 Each package has its own version:
 - `@tesserix/tokens@1.0.0`
 - `@tesserix/web@2.0.0`
 - `@tesserix/native@1.0.0`
 
-**Pros**: Flexibility, smaller version bumps
-**Cons**: Need to manage compatibility
-
-### Option B: Fixed Versioning
-All packages share same version:
-- `@tesserix/tokens@2.0.0`
-- `@tesserix/web@2.0.0`
-- `@tesserix/native@2.0.0`
-
-**Pros**: Simpler to understand, guaranteed compatibility
-**Cons**: Unnecessary version bumps
-
-**Recommendation**: Use **Independent Versioning** with Changesets.
+Release orchestration will be handled by Changesets.
 
 ---
 
@@ -399,8 +397,9 @@ All packages share same version:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Breaking changes for consumers | High | Provide clear migration guide, maintain `tesserix-ui` alias |
+| Breaking changes for future consumers | Medium | Keep `tesserix-ui` alias package, maintain migration guide from day one |
 | Native component parity delays | Medium | Start with core components, add more iteratively |
+| Expo and bare RN compatibility drift | High | Maintain both Expo and bare RN sample apps in CI smoke checks |
 | CI/CD complexity increases | Medium | Use Turborepo caching, optimize builds |
 | Documentation maintenance overhead | Low | Use automated tools, share content where possible |
 | NPM scope name conflicts | Low | Already verified `@tesserix` is available |
@@ -421,20 +420,20 @@ All packages share same version:
 
 ## Questions to Resolve
 
-1. **Versioning**: Independent or fixed versioning?
-   - **Recommendation**: Independent
-
-2. **Monorepo Tool**: Turborepo, Nx, or plain pnpm workspaces?
+1. **Monorepo Tool**: Turborepo, Nx, or plain pnpm workspaces?
    - **Recommendation**: Turborepo (balance of features and simplicity)
 
-3. **Native Storybook Deployment**: Deploy separately or within main docs?
+2. **Native Storybook Deployment**: Deploy separately or within main docs?
    - **Recommendation**: Deploy separately, link from docs
 
-4. **Component Parity**: Should native match web 1:1 or adapt to platform?
+3. **Component Parity**: Should native match web 1:1 or adapt to platform?
    - **Recommendation**: Adapt to platform conventions
 
-5. **TypeScript**: Strict mode for all packages?
+4. **TypeScript**: Strict mode for all packages?
    - **Recommendation**: Yes, enable strict mode
+
+5. **Native baseline**: Is Expo sample app required in CI for every publish?
+   - **Recommendation**: Yes (plus periodic bare RN compatibility checks)
 
 ---
 
