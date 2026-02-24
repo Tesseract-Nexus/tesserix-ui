@@ -1,0 +1,27 @@
+# Permissions Matrix
+
+## Overview
+
+Permissions Matrix manages role-based permissions in a role x permission grid.
+
+## Import
+
+~~~tsx
+import { PermissionsMatrix } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { PermissionsMatrix } from "./permissions-matrix"
+export type { PermissionsMatrixProps, PermissionsMatrixValue } from "./permissions-matrix"
+~~~
+
+## Usage
+
+~~~tsx
+<PermissionsMatrix
+  roles={["Admin", "Editor"]}
+  permissions={[{ id: "users.read", label: "Read users" }]}
+/>
+~~~

@@ -1,0 +1,27 @@
+# Data Grid
+
+## Overview
+
+Data Grid is an interactive tabular component with row selection, column visibility controls, and inline editing.
+
+## Import
+
+~~~tsx
+import { DataGrid } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { DataGrid } from "./data-grid"
+export type { DataGridProps, DataGridColumn } from "./data-grid"
+~~~
+
+## Usage
+
+~~~tsx
+<DataGrid
+  columns={[{ id: "name", header: "Name", accessor: "name", editable: true }]}
+  data={[{ name: "Alpha" }]}
+/>
+~~~

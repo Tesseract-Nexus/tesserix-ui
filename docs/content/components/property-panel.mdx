@@ -1,0 +1,27 @@
+# Property Panel
+
+## Overview
+
+Property Panel renders grouped editable and read-only fields for an inspector sidebar.
+
+## Import
+
+~~~tsx
+import { PropertyPanel } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { PropertyPanel } from "./property-panel"
+export type { PropertyPanelProps, PropertyPanelSection, PropertyPanelField } from "./property-panel"
+~~~
+
+## Usage
+
+~~~tsx
+<PropertyPanel
+  value={{ title: "Hero" }}
+  sections={[{ id: "general", title: "General", fields: [{ id: "title", label: "Title", editable: true }] }]}
+/>
+~~~

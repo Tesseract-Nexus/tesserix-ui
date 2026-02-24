@@ -1,0 +1,27 @@
+# Filter Builder
+
+## Overview
+
+Filter Builder composes structured query rules with AND/OR combinators.
+
+## Import
+
+~~~tsx
+import { FilterBuilder } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { FilterBuilder } from "./filter-builder"
+export type { FilterBuilderProps, FilterBuilderField, FilterBuilderValue } from "./filter-builder"
+~~~
+
+## Usage
+
+~~~tsx
+<FilterBuilder
+  fields={[{ id: "status", label: "Status" }]}
+  onValueChange={(value) => console.log(value)}
+/>
+~~~

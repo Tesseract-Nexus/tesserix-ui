@@ -1,0 +1,29 @@
+# Split Button
+
+## Overview
+
+Split Button combines a primary action with a secondary action menu.
+
+## Import
+
+~~~tsx
+import { SplitButton } from "@tesseract-nexus/tesserix-ui"
+~~~
+
+## Exports
+
+~~~ts
+export { SplitButton } from "./split-button"
+export type { SplitButtonProps, SplitButtonOption } from "./split-button"
+~~~
+
+## Usage
+
+~~~tsx
+<SplitButton
+  primaryLabel="Create"
+  options={[{ id: "draft", label: "New Draft" }]}
+  onPrimaryClick={() => {}}
+  onOptionSelect={(id) => console.log(id)}
+/>
+~~~

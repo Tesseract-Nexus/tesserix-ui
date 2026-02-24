@@ -23,7 +23,7 @@ A comprehensive design system built with React 19, TypeScript 5.7, and Tailwind 
 ## 📊 Status
 
 **Current Version:** 0.1.3 (Alpha)
-**Components:** 57 components across 6 categories
+**Components:** 65 components across 7 categories
 **Story Tests:** 219+ passing (Vitest Storybook project)
 **Coverage:** `npm run test:storybook:coverage` enabled
 **Documentation:** Storybook + API Reference
@@ -194,6 +194,9 @@ Generated files in `src/themes/` should be treated as build artifacts and not ed
 
 ### Utilities (3)
 `Command`, `ContextMenu`, `DropdownMenu`
+
+### Advanced/Admin (8)
+`SplitButton`, `DataGrid`, `FilterBuilder`, `PropertyPanel`, `DiffViewer`, `JsonEditor`, `CronBuilder`, `PermissionsMatrix`
 
 ## Development
 
