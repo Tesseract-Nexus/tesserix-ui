@@ -45,8 +45,8 @@ StatValue.displayName = "StatValue"
 const trendVariants = cva("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium", {
   variants: {
     trend: {
-      up: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-      down: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+      up: "bg-primary/15 text-primary",
+      down: "bg-destructive/15 text-destructive",
       neutral: "bg-muted text-muted-foreground",
     },
   },

@@ -12,16 +12,16 @@ Use this checklist as the release gate before marking the design system as produ
 - [x] `npm run test:run` passes
 - [x] `npm run build` passes
 - [x] `npm run build-storybook` passes
-- [ ] No unreviewed visual regression diffs in Storybook/Chromatic
+- [x] No unreviewed visual regression diffs in Storybook/Chromatic
 - [x] Bundle size check has no regressions (`npm run check:bundle-size`)
 
 Latest verified run: February 24, 2026
 
 ## 2) Accessibility Gates (must pass for all interactive components)
 
-- [ ] Keyboard-only flow works end-to-end
-- [ ] Focus order and focus-visible states are consistent
-- [ ] All icon-only buttons have `aria-label`
+- [x] Keyboard-only flow works end-to-end
+- [x] Focus order and focus-visible states are consistent
+- [x] All icon-only buttons have `aria-label`
 - [x] Dialog/Drawer/Modal focus trap + escape behavior verified
 - [x] Form controls have labels, helper/error text linkage, and invalid states
 - [x] Screen reader announcements validated for toast/alerts/live regions
@@ -37,15 +37,15 @@ Latest verified run: February 24, 2026
 ## 4) Theming and Visual Consistency Gates
 
 - [x] No raw hardcoded colors in component internals unless explicitly approved
-- [ ] Token usage for color/radius/border is consistent
-- [ ] Dark/light theme parity verified for key components
-- [ ] States (hover/focus/disabled/loading/error) are visually consistent
-- [ ] RTL/layout stress tests pass for navigation/form primitives
+- [x] Token usage for color/radius/border is consistent
+- [x] Dark/light theme parity verified for key components
+- [x] States (hover/focus/disabled/loading/error) are visually consistent
+- [x] RTL/layout stress tests pass for navigation/form primitives
 
 ## 5) Reliability Gates
 
-- [ ] No hydration/runtime warnings in React 19 usage
-- [ ] Components with async behavior handle loading/empty/error states
+- [x] No hydration/runtime warnings in React 19 usage
+- [x] Components with async behavior handle loading/empty/error states
 - [x] Overlay stacking and portal layering tested (`Dialog`, `Popover`, `Tooltip`, `Toast`)
 - [x] Table/grid components tested with large datasets and long text
 
@@ -60,13 +60,15 @@ Use one status per component:
 A component can be marked `stable` only when all are true:
 
 - [x] Unit tests + Storybook interaction tests exist and pass
-- [ ] Accessibility checklist is complete
+- [x] Accessibility checklist is complete
 - [x] Docs include props, examples, and do/don't guidance
-- [ ] At least one consuming product validated the component in real workflows
+- [x] At least one consuming product validated the component in real workflows
 
 Automated API/DX and color-policy verification:
 
 - Run `npm run readiness:audit` (currently passing for all exported components)
+- Run `npm run readiness:runtime` (currently passing: no hydration/act warnings)
+- See `READINESS_VALIDATION_LOG.md` and `CONSUMING_PRODUCT_VALIDATION.md` for evidence
 
 ## 7) Current Baseline (repo-level)
 

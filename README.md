@@ -238,6 +238,9 @@ npm run perf:report
 
 # Readiness audit (docs/stories/type-barrels/color-policy)
 npm run readiness:audit
+
+# Runtime warning audit (hydration/act warnings)
+npm run readiness:runtime
 ```
 
 ## Storybook Component Testing
@@ -329,6 +332,8 @@ CI behavior:
 - **[Browser/Device Matrix](./BROWSER_DEVICE_MATRIX.md)** - verification coverage and remaining browser/device gaps
 - **[Performance Budget](./PERFORMANCE_BUDGET.md)** - bundle budget, guardrails, and monitoring
 - **[Controlled/Uncontrolled Patterns](./CONTROLLED_UNCONTROLLED_PATTERNS.md)** - usage guidance for state ownership in key components
+- **[Readiness Validation Log](./READINESS_VALIDATION_LOG.md)** - latest automated readiness verification evidence
+- **[Consuming Product Validation](./CONSUMING_PRODUCT_VALIDATION.md)** - consumer-surface workflow validation notes
 
 ## 🤝 Contributing
 

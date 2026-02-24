@@ -40,9 +40,9 @@ const getDiffLines = (oldValue: string, newValue: string): DiffLine[] => {
 }
 
 const lineClassName = (type: DiffLine["type"]) => {
-  if (type === "added") return "bg-emerald-100/70 dark:bg-emerald-950/30"
-  if (type === "removed") return "bg-rose-100/70 dark:bg-rose-950/30"
-  if (type === "modified") return "bg-amber-100/70 dark:bg-amber-950/30"
+  if (type === "added") return "bg-primary/10"
+  if (type === "removed") return "bg-destructive/10"
+  if (type === "modified") return "bg-accent"
   return ""
 }
 

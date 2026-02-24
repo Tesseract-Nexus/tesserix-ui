@@ -9,9 +9,9 @@ const dashboardCardVariants = cva(
     variants: {
       tone: {
         default: "border-border",
-        success: "border-emerald-300/60 bg-emerald-50/40 dark:bg-emerald-950/20",
-        warning: "border-amber-300/60 bg-amber-50/40 dark:bg-amber-950/20",
-        critical: "border-rose-300/60 bg-rose-50/40 dark:bg-rose-950/20",
+        success: "border-primary/40 bg-primary/10",
+        warning: "border-accent bg-accent",
+        critical: "border-destructive/40 bg-destructive/10",
       },
     },
     defaultVariants: {

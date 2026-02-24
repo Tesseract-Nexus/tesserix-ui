@@ -91,7 +91,7 @@ const JsonEditor = React.forwardRef<HTMLDivElement, JsonEditorProps>(
           aria-label="JSON editor"
         />
 
-        <p className={cn("text-xs", error ? "text-destructive" : "text-emerald-700")}>{error ?? "Valid JSON"}</p>
+        <p className={cn("text-xs", error ? "text-destructive" : "text-primary")}>{error ?? "Valid JSON"}</p>
       </div>
     )
   }

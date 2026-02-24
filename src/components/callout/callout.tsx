@@ -8,8 +8,8 @@ const calloutVariants = cva("rounded-lg border p-4", {
     variant: {
       default: "border-border bg-card text-card-foreground",
       info: "border-primary/30 bg-primary/10 text-primary",
-      success: "border-green-500/40 bg-green-500/10 text-green-800 dark:text-green-300",
-      warning: "border-yellow-500/40 bg-yellow-500/10 text-yellow-900 dark:text-yellow-300",
+      success: "border-primary/30 bg-primary/10 text-primary",
+      warning: "border-accent bg-accent text-accent-foreground",
       destructive: "border-destructive/40 bg-destructive/10 text-destructive",
     },
   },

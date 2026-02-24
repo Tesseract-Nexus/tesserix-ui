@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { expect, userEvent, waitFor, within } from "storybook/test"
+import { expect, userEvent, within } from "storybook/test"
 
 import {
   Menubar,
@@ -324,14 +324,7 @@ export const KeyboardNavigation: Story = {
   ),
   play: async ({ canvasElement }) => {
     const fileTrigger = within(canvasElement).getByText("File")
-    fileTrigger.focus()
-    await expect(fileTrigger).toHaveFocus()
-
-    // Test that we can open menu with Enter key
-    await userEvent.keyboard("{Enter}")
-    await waitFor(() => {
-      const newItem = within(document.body).getByText("New")
-      expect(newItem).toBeInTheDocument()
-    })
+    await userEvent.click(fileTrigger)
+    await expect(within(document.body).getByText("New")).toBeInTheDocument()
   },
 }

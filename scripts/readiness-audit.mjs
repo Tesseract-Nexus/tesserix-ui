@@ -47,6 +47,7 @@ for (const component of components) {
 const allowedHexInternalFiles = new Set([
   join(root, "src", "components", "color-picker", "color-picker.tsx"),
 ])
+const allowedPaletteInternalFiles = new Set()
 
 const walk = (dir, out = []) => {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -62,13 +63,73 @@ const walk = (dir, out = []) => {
 }
 
 const hexPattern = /#[0-9a-fA-F]{3,8}\b/g
+const paletteClassPattern =
+  /\b(?:bg|text|border|ring|fill|stroke)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/g
 for (const file of walk(join(root, "src", "components"))) {
   if (file.endsWith(".stories.tsx") || file.endsWith(".test.tsx")) continue
-  if (allowedHexInternalFiles.has(file)) continue
 
   const source = readFileSync(file, "utf8")
-  if (hexPattern.test(source)) {
+  if (!allowedHexInternalFiles.has(file) && hexPattern.test(source)) {
     issues.push(`Raw hex color found in component source: ${file.replace(`${root}/`, "")}`)
+  }
+
+  if (!allowedPaletteInternalFiles.has(file) && paletteClassPattern.test(source)) {
+    issues.push(`Hardcoded Tailwind palette color found in component source: ${file.replace(`${root}/`, "")}`)
+  }
+}
+
+const findIconOnlyButtonsWithoutLabels = (source) => {
+  const violations = []
+  const buttonPattern = /<button\b([^>]*)>([\s\S]*?)<\/button>/gm
+
+  for (const match of source.matchAll(buttonPattern)) {
+    const attributes = match[1] ?? ""
+    const body = match[2] ?? ""
+    const hasSvg = /<svg\b/i.test(body)
+    const text = body
+      .replace(/<[^>]+>/g, "")
+      .replace(/&[a-zA-Z0-9#]+;/g, "")
+      .trim()
+    const hasText = text.length > 0
+    const hasAriaLabel = /\baria-label\s*=/.test(attributes) || /\baria-labelledby\s*=/.test(attributes)
+    const hasTitle = /\btitle\s*=/.test(attributes)
+
+    if (hasSvg && !hasText && !hasAriaLabel && !hasTitle) {
+      violations.push(match[0].slice(0, 120).replace(/\s+/g, " "))
+    }
+  }
+
+  return violations
+}
+
+for (const file of walk(join(root, "src", "components"))) {
+  if (file.endsWith(".stories.tsx") || file.endsWith(".test.tsx")) continue
+  const source = readFileSync(file, "utf8")
+  const violations = findIconOnlyButtonsWithoutLabels(source)
+  if (violations.length > 0) {
+    issues.push(`Icon-only button missing accessible label: ${file.replace(`${root}/`, "")}`)
+  }
+}
+
+const focusStateChecks = [
+  "button/button.tsx",
+  "input/input.tsx",
+  "textarea/textarea.tsx",
+  "select/select.tsx",
+  "number-input/number-input.tsx",
+  "dropdown-menu/dropdown-menu.tsx",
+]
+
+for (const relative of focusStateChecks) {
+  const file = join(root, "src", "components", relative)
+  if (!existsSync(file)) {
+    issues.push(`Missing focus-state reference file: src/components/${relative}`)
+    continue
+  }
+
+  const source = readFileSync(file, "utf8")
+  if (!/focus-visible:|focus:/.test(source)) {
+    issues.push(`Missing focus styles in key primitive: src/components/${relative}`)
   }
 }
 
