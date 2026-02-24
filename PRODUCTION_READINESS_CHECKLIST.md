@@ -22,9 +22,9 @@ Latest verified run: February 24, 2026
 - [ ] Keyboard-only flow works end-to-end
 - [ ] Focus order and focus-visible states are consistent
 - [ ] All icon-only buttons have `aria-label`
-- [ ] Dialog/Drawer/Modal focus trap + escape behavior verified
-- [ ] Form controls have labels, helper/error text linkage, and invalid states
-- [ ] Screen reader announcements validated for toast/alerts/live regions
+- [x] Dialog/Drawer/Modal focus trap + escape behavior verified
+- [x] Form controls have labels, helper/error text linkage, and invalid states
+- [x] Screen reader announcements validated for toast/alerts/live regions
 
 ## 3) API and DX Gates
 
@@ -46,7 +46,7 @@ Latest verified run: February 24, 2026
 
 - [ ] No hydration/runtime warnings in React 19 usage
 - [ ] Components with async behavior handle loading/empty/error states
-- [ ] Overlay stacking and portal layering tested (`Dialog`, `Popover`, `Tooltip`, `Toast`)
+- [x] Overlay stacking and portal layering tested (`Dialog`, `Popover`, `Tooltip`, `Toast`)
 - [x] Table/grid components tested with large datasets and long text
 
 ## 6) Component Maturity Rubric

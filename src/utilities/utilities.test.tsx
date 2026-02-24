@@ -98,7 +98,9 @@ describe("utilities", () => {
     fireEvent.click(screen.getByRole("button", { name: "dark" }))
     expect(document.documentElement.className).toContain("dark")
     fireEvent.click(screen.getByRole("button", { name: "system" }))
-    listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    act(() => {
+      listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    })
   })
 
   it("covers loading utilities", () => {
@@ -152,7 +154,9 @@ describe("utilities", () => {
 
     render(<Harness />)
     fireEvent(window, new Event("resize"))
-    listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    act(() => {
+      listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    })
     expect(screen.getByText(/showhide/)).toBeInTheDocument()
     expect(screen.getByText("xl")).toBeInTheDocument()
   })

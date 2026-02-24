@@ -50,7 +50,9 @@ describe("hooks", () => {
     }
 
     const view = render(<Harness />)
-    await vi.runAllTimersAsync()
+    await act(async () => {
+      await vi.runAllTimersAsync()
+    })
     expect(onMount).toHaveBeenCalledTimes(1)
     expect(fn).toHaveBeenCalled()
     view.unmount()
@@ -192,7 +194,9 @@ describe("hooks", () => {
     expect(onSubmit).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole("button", { name: "set" }))
     fireEvent.click(screen.getByRole("button", { name: "submit" }))
-    await vi.runAllTimersAsync()
+    await act(async () => {
+      await vi.runAllTimersAsync()
+    })
     expect(onSubmit).toHaveBeenCalled()
     fireEvent.click(screen.getByRole("button", { name: "toggle" }))
     expect(screen.getByText("on")).toBeInTheDocument()
@@ -251,7 +255,9 @@ describe("hooks", () => {
     fireEvent(window, new Event("resize"))
     Object.defineProperty(window, "scrollY", { configurable: true, value: 64 })
     fireEvent(window, new Event("scroll"))
-    listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    act(() => {
+      listeners.get("change")?.({ matches: true } as MediaQueryListEvent)
+    })
     await act(async () => {
       await vi.runAllTimersAsync()
     })
