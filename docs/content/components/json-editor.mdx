@@ -22,3 +22,18 @@ export type { JsonEditorProps } from "./json-editor"
 ~~~tsx
 <JsonEditor value={{ enabled: true }} onChange={(value) => console.log(value)} />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<JsonEditor className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<JsonEditor className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

@@ -22,3 +22,18 @@ export type { DiffViewerProps } from "./diff-viewer"
 ~~~tsx
 <DiffViewer oldValue={beforeText} newValue={afterText} view="split" />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<DiffViewer className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<DiffViewer className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

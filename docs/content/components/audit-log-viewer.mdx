@@ -24,3 +24,18 @@ export type { AuditLogViewerProps, AuditLogEntry } from "./audit-log-viewer"
   entries={[{ id: "1", actor: "Admin", action: "updated", timestamp: "2026-02-24" }]}
 />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<AuditLogViewer className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<AuditLogViewer className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

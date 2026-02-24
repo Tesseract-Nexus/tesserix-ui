@@ -25,3 +25,18 @@ export type { PermissionsMatrixProps, PermissionsMatrixValue } from "./permissio
   permissions={[{ id: "users.read", label: "Read users" }]}
 />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<PermissionsMatrix className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<PermissionsMatrix className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

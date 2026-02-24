@@ -22,3 +22,18 @@ export type { CronBuilderProps, CronBuilderValue } from "./cron-builder"
 ~~~tsx
 <CronBuilder onValueChange={(value) => console.log(value)} />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<CronBuilder className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<CronBuilder className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

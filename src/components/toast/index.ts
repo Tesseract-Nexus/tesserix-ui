@@ -9,3 +9,4 @@ export {
   toastVariants,
   toastViewportVariants,
 } from "./toast"
+export type * from "./toast"

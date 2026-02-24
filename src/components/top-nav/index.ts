@@ -6,3 +6,4 @@ export {
   TopNavLink,
   TopNavActions,
 } from "./top-nav"
+export type * from "./top-nav"

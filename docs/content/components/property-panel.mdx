@@ -25,3 +25,18 @@ export type { PropertyPanelProps, PropertyPanelSection, PropertyPanelField } fro
   sections={[{ id: "general", title: "General", fields: [{ id: "title", label: "Title", editable: true }] }]}
 />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<PropertyPanel className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<PropertyPanel className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

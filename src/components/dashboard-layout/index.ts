@@ -5,3 +5,4 @@ export {
   DashboardLayoutMain,
   DashboardLayoutRail,
 } from "./dashboard-layout"
+export type * from "./dashboard-layout"

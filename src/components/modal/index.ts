@@ -8,3 +8,4 @@ export {
   ModalDescription,
   ModalClose,
 } from "./modal"
+export type * from "./modal"

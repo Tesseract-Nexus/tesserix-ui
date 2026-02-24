@@ -8,3 +8,4 @@ export {
   DialogDescription,
   DialogClose,
 } from './dialog'
+export type * from "./dialog"

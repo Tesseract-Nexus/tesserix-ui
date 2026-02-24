@@ -235,6 +235,9 @@ npm run docs:preview
 
 # Performance report
 npm run perf:report
+
+# Readiness audit (docs/stories/type-barrels/color-policy)
+npm run readiness:audit
 ```
 
 ## Storybook Component Testing
@@ -325,6 +328,7 @@ CI behavior:
 - **[Accessibility Audit Log](./ACCESSIBILITY_AUDIT_LOG.md)** - top-component accessibility status and findings
 - **[Browser/Device Matrix](./BROWSER_DEVICE_MATRIX.md)** - verification coverage and remaining browser/device gaps
 - **[Performance Budget](./PERFORMANCE_BUDGET.md)** - bundle budget, guardrails, and monitoring
+- **[Controlled/Uncontrolled Patterns](./CONTROLLED_UNCONTROLLED_PATTERNS.md)** - usage guidance for state ownership in key components
 
 ## 🤝 Contributing
 

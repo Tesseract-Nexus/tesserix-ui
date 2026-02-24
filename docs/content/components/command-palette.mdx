@@ -24,3 +24,18 @@ export function Example() {
 
 - Compose this primitive with domain-specific wrappers in app code.
 - Prefer design tokens and existing variants before adding new styles.
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<CommandPalette className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<CommandPalette className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

@@ -7,3 +7,4 @@ export {
   DropdownMenuLabel,
   DropdownMenuShortcut,
 } from './dropdown-menu'
+export type * from "./dropdown-menu"

@@ -8,3 +8,4 @@ export {
   TableCell,
   TableCaption,
 } from './table'
+export type * from "./table"

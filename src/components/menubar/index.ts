@@ -16,3 +16,4 @@ export {
   MenubarSub,
   MenubarShortcut,
 } from "./menubar"
+export type * from "./menubar"

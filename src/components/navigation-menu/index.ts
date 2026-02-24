@@ -9,3 +9,4 @@ export {
   NavigationMenuIndicator,
   NavigationMenuViewport,
 } from "./navigation-menu"
+export type * from "./navigation-menu"

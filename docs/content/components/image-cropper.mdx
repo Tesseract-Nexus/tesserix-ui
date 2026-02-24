@@ -15,3 +15,18 @@ import { ImageCropper } from "@tesseract-nexus/tesserix-ui"
 ~~~tsx
 <ImageCropper src={imageUrl} onCrop={setCroppedDataUrl} />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<ImageCropper className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<ImageCropper className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

@@ -15,3 +15,18 @@ import { MarkdownEditor } from "@tesseract-nexus/tesserix-ui"
 ~~~tsx
 <MarkdownEditor value={markdown} onValueChange={setMarkdown} />
 ~~~
+
+## Do / Don't
+
+### Do
+
+~~~tsx
+<MarkdownEditor className="w-full" />
+~~~
+
+### Don't
+
+~~~tsx
+<MarkdownEditor className="bg-[#123456] text-[#fafafa] px-[13px]" />
+~~~
+

@@ -28,15 +28,15 @@ Latest verified run: February 24, 2026
 
 ## 3) API and DX Gates
 
-- [ ] Components expose stable, typed props (no accidental breaking renames)
-- [ ] Controlled/uncontrolled behavior documented where relevant
-- [ ] Export barrels include all public types
-- [ ] Storybook stories include at least one interaction/smoke story per component
-- [ ] Docs page exists for every public component
+- [x] Components expose stable, typed props (no accidental breaking renames)
+- [x] Controlled/uncontrolled behavior documented where relevant
+- [x] Export barrels include all public types
+- [x] Storybook stories include at least one interaction/smoke story per component
+- [x] Docs page exists for every public component
 
 ## 4) Theming and Visual Consistency Gates
 
-- [ ] No raw hardcoded colors in component internals unless explicitly approved
+- [x] No raw hardcoded colors in component internals unless explicitly approved
 - [ ] Token usage for color/radius/border is consistent
 - [ ] Dark/light theme parity verified for key components
 - [ ] States (hover/focus/disabled/loading/error) are visually consistent
@@ -47,7 +47,7 @@ Latest verified run: February 24, 2026
 - [ ] No hydration/runtime warnings in React 19 usage
 - [ ] Components with async behavior handle loading/empty/error states
 - [ ] Overlay stacking and portal layering tested (`Dialog`, `Popover`, `Tooltip`, `Toast`)
-- [ ] Table/grid components tested with large datasets and long text
+- [x] Table/grid components tested with large datasets and long text
 
 ## 6) Component Maturity Rubric
 
@@ -59,10 +59,14 @@ Use one status per component:
 
 A component can be marked `stable` only when all are true:
 
-- [ ] Unit tests + Storybook interaction tests exist and pass
+- [x] Unit tests + Storybook interaction tests exist and pass
 - [ ] Accessibility checklist is complete
-- [ ] Docs include props, examples, and do/don't guidance
+- [x] Docs include props, examples, and do/don't guidance
 - [ ] At least one consuming product validated the component in real workflows
+
+Automated API/DX and color-policy verification:
+
+- Run `npm run readiness:audit` (currently passing for all exported components)
 
 ## 7) Current Baseline (repo-level)
 

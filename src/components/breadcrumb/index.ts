@@ -7,3 +7,4 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 } from './breadcrumb'
+export type * from "./breadcrumb"

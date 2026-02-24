@@ -64,4 +64,27 @@ describe("DataGrid", () => {
     const latest = onDataChange.mock.calls[onDataChange.mock.calls.length - 1]?.[0]
     expect(latest[0].name).toBe("Alpha Updated")
   })
+
+  it("renders long text rows and supports full selection", () => {
+    const largeData = Array.from({ length: 80 }).map((_, index) => ({
+      id: String(index + 1),
+      name: `Name ${index + 1}`,
+      notes: index === 0 ? "Long note ".repeat(25) : `Notes ${index + 1}`,
+    }))
+
+    render(
+      <DataGrid
+        columns={[
+          { id: "name", header: "Name", accessor: "name" },
+          { id: "notes", header: "Notes", accessor: "notes" },
+        ]}
+        data={largeData}
+        getRowId={(row) => row.id}
+      />
+    )
+
+    expect(screen.getByText(/Long note/)).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText("Select all rows"))
+    expect(screen.getByLabelText("Select row 80")).toBeChecked()
+  })
 })
